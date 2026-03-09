@@ -1,0 +1,10 @@
+# Auth/session snapshots and reusable state
+states/
+**/*auth*.json
+**/*state*.json
+
+# Local evidence artifacts
+artifacts/
+recordings/
+cypress/screenshots/
+cypress/videos/

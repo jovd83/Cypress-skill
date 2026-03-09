@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Orchestrator"
+  short_description: "acts as the primary contact point for Cypress testing"
+  default_prompt: "Use $cypress-orchestrator to act as the primary contact point for Cypress testing."
+
+policy:
+  allow_implicit_invocation: true

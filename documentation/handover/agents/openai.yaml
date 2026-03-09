@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Handover"
+  short_description: "perform a structured handover to a human-in-the-loop after"
+  default_prompt: "Use $cypress-handover to perform a structured handover to a human-in-the-loop after completing Cypress tasks."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Core"
+  short_description: "Battle-tested Cypress patterns for E2E"
+  default_prompt: "Use $cypress-core to help with battle-tested Cypress patterns for E2E."
+
+policy:
+  allow_implicit_invocation: true

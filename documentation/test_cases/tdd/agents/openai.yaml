@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Documentation Tdd"
+  short_description: "document Cypress test cases in a standard TDD (Test-Driven"
+  default_prompt: "Use $cypress-documentation-tdd to document Cypress test cases in a standard TDD (Test-Driven Development) format."
+
+policy:
+  allow_implicit_invocation: true

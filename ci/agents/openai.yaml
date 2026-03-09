@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Ci"
+  short_description: "Production-ready CI/CD patterns for Cypress including GitHub"
+  default_prompt: "Use $cypress-ci to help with production-ready CI/CD patterns for Cypress including GitHub Actions."
+
+policy:
+  allow_implicit_invocation: true

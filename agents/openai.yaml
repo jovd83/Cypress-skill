@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Skill"
+  short_description: "Battle-tested Cypress v13+ patterns for E2E"
+  default_prompt: "Use $cypress-skill to help with battle-tested Cypress v13+ patterns for E2E."
+
+policy:
+  allow_implicit_invocation: true

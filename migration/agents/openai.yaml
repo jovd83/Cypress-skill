@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Migration"
+  short_description: "Step-by-step migration guides for moving to Cypress from"
+  default_prompt: "Use $cypress-migration to help with step-by-step migration guides for moving to Cypress from Playwright or Selenium/WebDriver."
+
+policy:
+  allow_implicit_invocation: true

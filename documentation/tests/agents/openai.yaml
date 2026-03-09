@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Documentation Tests"
+  short_description: "add human-readable documentation to existing Cypress tests"
+  default_prompt: "Use $cypress-documentation-tests to add human-readable documentation to existing Cypress tests."
+
+policy:
+  allow_implicit_invocation: true

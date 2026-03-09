@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Reporting Stakeholder"
+  short_description: "draft human-readable Cypress workflow guidance"
+  default_prompt: "Use $cypress-reporting-stakeholder to draft human-readable."
+
+policy:
+  allow_implicit_invocation: true

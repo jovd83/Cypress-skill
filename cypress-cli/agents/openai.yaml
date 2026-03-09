@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Cli"
+  short_description: "Automates browser interactions for web testing"
+  default_prompt: "Use $cypress-cli to help with automates browser interactions for web testing."
+
+policy:
+  allow_implicit_invocation: true

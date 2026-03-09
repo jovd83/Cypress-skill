@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Mapper Testlink"
+  short_description: "map TestLink unique IDs back to local Cypress test"
+  default_prompt: "Use $cypress-mapper-testlink to map TestLink unique IDs back to local Cypress test documentation."
+
+policy:
+  allow_implicit_invocation: true

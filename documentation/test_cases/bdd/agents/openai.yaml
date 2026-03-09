@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Documentation Bdd"
+  short_description: "document Cypress test cases using the BDD (Behavior-Driven"
+  default_prompt: "Use $cypress-documentation-bdd to document Cypress test cases using the BDD (Behavior-Driven Development) Gherkin syntax."
+
+policy:
+  allow_implicit_invocation: true

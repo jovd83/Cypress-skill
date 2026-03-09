@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Mapper Zephyr"
+  short_description: "map Zephyr unique IDs back to local Cypress test documentation"
+  default_prompt: "Use $cypress-mapper-zephyr to map Zephyr unique IDs back to local Cypress test documentation."
+
+policy:
+  allow_implicit_invocation: true

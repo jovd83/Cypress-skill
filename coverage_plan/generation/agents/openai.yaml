@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Coverage Plan Generation"
+  short_description: "generate a functional coverage plan mapping the confirmed"
+  default_prompt: "Use $cypress-coverage-plan-generation to generate a functional coverage plan mapping the confirmed requirements to necessary Cypress test scenarios."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Analysis Requirements"
+  short_description: "find and analyze Cypress test requirements (epics"
+  default_prompt: "Use $cypress-analysis-requirements to find and analyze Cypress test requirements (epics."
+
+policy:
+  allow_implicit_invocation: true
