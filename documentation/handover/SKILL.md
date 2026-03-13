@@ -1,63 +1,48 @@
-﻿---
-name: cypress-handover
-description: A skill to perform a structured handover to a human-in-the-loop after completing Cypress tasks.
 ---
+name: cypress-handover-compat
+description: Use when you need the legacy Cypress handover entrypoint path; follow the canonical Cypress handover workflow in documentation/cypress-handover.
+--- 
 
-# Handover to Human-in-the-Loop
+# Handover
 
-Create a clear handover document at task completion summarizing changes, patterns, risks, and follow-up opportunities.
+This compatibility entrypoint exists for structural parity with the sibling skill tree.
 
-## 1. Storage and Naming
+Use the canonical handover workflow in [../cypress-handover/SKILL.md](../cypress-handover/SKILL.md).
 
-- **Directory**: `<test_documentation_root>/handovers/`
-  - Default root: `docs/tests/`
-- **Filename format**: `YYYYMMDD_HHmm_CypressSkillHandover.md`
-  - On Windows, do not use `:` in filenames.
+## Why This Path Exists
 
-## 2. Content Structure
+Use this path only when an older workflow, a parity check, or an external reference still points to `documentation/handover/`.
 
-The handover must include:
+## Canonical Status
 
-### What was done
-Summary of completed actions.
+- Canonical package: [../cypress-handover/SKILL.md](../cypress-handover/SKILL.md)
+- Compatibility path: `documentation/handover/`
+- Long-term intent: keep this path as a thin alias until both framework trees share the same stable layout
 
-### Skills and subskills used
-List all skills used and why.
+## Mapping to the Canonical Package
 
-### Non-skill actions and suggestions
-Actions not covered by skills, plus proposals for new skills/subskills.
+1. Legacy handover entrypoint: `documentation/handover/SKILL.md`
+2. Canonical implementation: [../cypress-handover/SKILL.md](../cypress-handover/SKILL.md)
+3. Legacy template pointer: [references/template.md](references/template.md)
+4. Canonical template: [../cypress-handover/assets/handover-template.md](../cypress-handover/assets/handover-template.md)
+5. Legacy conflict guidance: [references/conflict-resolution.md](references/conflict-resolution.md)
+6. Canonical multi-scope guidance: [../cypress-handover/references/multi-scope-conflicts.md](../cypress-handover/references/multi-scope-conflicts.md)
 
-### Patterns used
-Architecture or implementation patterns used (for example: POM, custom commands, fixtures).
+## Commands
 
-### Anti-patterns used
-Any unavoidable anti-patterns and justification.
+1. Find the latest handover for one scope:
+   ```text
+   powershell -NoProfile -File .\documentation\cypress-handover\scripts\find-handover.ps1 -TaskLabel checkout-auth-fix -WorkspaceRoot <repo-root> -Branch main -Format summary
+   ```
+2. Create a new handover checkpoint:
+   ```text
+   powershell -NoProfile -File .\documentation\cypress-handover\scripts\new-handover.ps1 -TaskLabel checkout-auth-fix -DocsRoot docs/tests
+   ```
+3. Resume a paused scope:
+   ```text
+   powershell -NoProfile -File .\documentation\cypress-handover\scripts\resume-handover.ps1 -TaskLabel checkout-auth-fix -WorkspaceRoot <repo-root> -Branch main -ProgressNote "Continue the failing checkout auth investigation." -NextAction "Run the scoped Cypress auth spec and inspect session state."
+   ```
 
-### Strengths of the changes
-Main benefits.
-
-### Weaknesses of the changes
-Known risks and limitations.
-
-### Improvements
-Concrete next improvements.
-
-### Files added/modified
-Categorize by:
-- Documentation
-- POMs
-- Test scripts
-- Configurations
-- Other
-Include short rationale per category.
-
-## 3. Execution
-
-Create and store this handover document at the end of each task unless the user asks otherwise.
-
-
-
-
-
-
-
+Read [references/template.md](references/template.md) for the legacy-compatible template pointer.
+Read [references/troubleshooting.md](references/troubleshooting.md) for legacy-compatible troubleshooting guidance.
+Read [references/conflict-resolution.md](references/conflict-resolution.md) for legacy-compatible conflict guidance.

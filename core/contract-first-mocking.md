@@ -107,3 +107,10 @@ Periodically disable mocks to see which tests fail. This identifies where the ba
 - [ ] **Data Parity**: Mock data uses realistic values (e.g., valid UUIDs, real-looking emails).
 - [ ] **Switchable Config**: The `useMocks` environment flag is documented and works in both local and CI environments.
 - [ ] **Mock Decay Audit**: Regularly disable mocks to catch drift between the contract and the implementation.
+
+## Anti-Patterns
+
+| Anti-pattern | Why it hurts | Better approach |
+|---|---|---|
+| Leaving contract mocks enabled permanently | Hides backend drift and false confidence reaches release | Treat mocks as temporary and require real E2E verification before completion |
+| Mocking app internals instead of API contracts | Couples tests to implementation details | Mock only the network contract and validate the real backend later |

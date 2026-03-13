@@ -70,6 +70,8 @@ function Build-ShortDescription([string]$description) {
   $short = Get-FirstClause (Get-FirstSentence $description)
   if ($short -match '^(?i)a skill to\s+(.+)$') { $short = $Matches[1].Trim() }
   if ($short -match '^(?i)an orchestrator skill that\s+(.+)$') { $short = $Matches[1].Trim() }
+  if ($short -match '^(?i)use(?:\s+this\s+skill)?\s+when\s+(.+)$') { $short = $Matches[1].Trim() }
+  if ($short -match '^(?i)you need\s+(.+)$') { $short = "need " + $Matches[1].Trim() }
   $short = Trim-ToWordBoundary -value $short -maxLength 64
 
   if ($short.Length -lt 25) {
@@ -93,6 +95,13 @@ function Build-DefaultPrompt([string]$skillName, [string]$description) {
       $action = "act as " + $restMatch.Groups[1].Value.Trim()
     } else {
       $action = "act as " + $rest
+    }
+  } elseif ($desc -match '^(?i)use(?:\s+this\s+skill)?\s+when\s+(.+)$') {
+    $rest = $Matches[1].Trim()
+    if ($rest -match '^(?i)you need\s+(.+)$') {
+      $action = "help when you need " + $Matches[1].Trim()
+    } else {
+      $action = "help when " + (LowerFirst $rest)
     }
   } else {
     $action = "help with " + (LowerFirst $desc)

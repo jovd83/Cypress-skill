@@ -8,13 +8,18 @@ $issues = @()
 
 $policy = @{
   "ci" = @("yaml", "bash", "powershell", "typescript", "javascript", "js", "json", "dockerfile", "groovy")
-  "core" = @("typescript", "javascript", "bash", "json", "text", "powershell")
+  "core" = @("typescript", "tsx", "javascript", "bash", "json", "text", "powershell")
   "cypress-cli" = @("bash", "powershell", "typescript", "javascript", "json", "gitignore")
   "documentation" = @("gherkin", "markdown", "text", "typescript")
   "migration" = @("typescript", "javascript", "java")
   "pom" = @("typescript", "javascript", "text")
   "README.md" = @("bash", "powershell")
   "SKILL.md" = @("powershell")
+}
+
+$documentationOverrides = @{
+  "documentation/cypress-handover/SKILL.md" = @("gherkin", "markdown", "text", "typescript", "powershell")
+  "documentation/cypress-handover/references/multi-scope-conflicts.md" = @("gherkin", "markdown", "text", "typescript", "powershell")
 }
 
 function Get-Scope([string]$RelativePath) {
@@ -25,15 +30,26 @@ function Get-Scope([string]$RelativePath) {
   return $RelativePath
 }
 
+function Get-AllowedLanguages([string]$RelativePath, [string]$Scope) {
+  if ($documentationOverrides.ContainsKey($RelativePath)) {
+    return $documentationOverrides[$RelativePath]
+  }
+
+  if ($policy.ContainsKey($Scope)) {
+    return $policy[$Scope]
+  }
+
+  return @()
+}
+
 $files = Get-ChildItem -Path $rootAbs -Recurse -File -Filter *.md
 foreach ($file in $files) {
   $rel = $file.FullName.Substring($rootAbs.Length + 1).Replace('\', '/')
   $scope = Get-Scope -RelativePath $rel
-  if (-not $policy.ContainsKey($scope)) {
+  $allowed = Get-AllowedLanguages -RelativePath $rel -Scope $scope
+  if ($allowed.Count -eq 0) {
     continue
   }
-
-  $allowed = $policy[$scope]
   $lines = Get-Content -LiteralPath $file.FullName
   $inFence = $false
 

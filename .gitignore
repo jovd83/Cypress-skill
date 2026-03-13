@@ -8,3 +8,5 @@ artifacts/
 recordings/
 cypress/screenshots/
 cypress/videos/
+*.log
+tests/results/

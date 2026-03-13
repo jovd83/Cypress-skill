@@ -161,7 +161,8 @@ description: Battle-tested Cypress v13+ patterns for E2E, API, component, and vi
 | **BDD / Gherkin** | [SKILL.md](documentation/test_cases/bdd/SKILL.md) | Given/When/Then scenarios with Examples and Tags |
 | **Plain Text** | [SKILL.md](documentation/test_cases/plain_text/SKILL.md) | Concise, human-readable test descriptions |
 | **Code Documentation** | [SKILL.md](documentation/tests/SKILL.md) | Generating JSDoc/TSDoc for Cypress automation code |
-| **Handover** | [SKILL.md](documentation/handover/SKILL.md) | Structured handover doc at the end of every task |
+| **Handover** | [SKILL.md](documentation/cypress-handover/SKILL.md) | Resume-ready handover doc with status, session state, blockers, and next steps |
+| **Session State** | [SKILL.md](documentation/session-state/SKILL.md) | Compatibility alias for session state preservation during handover |
 
 ### External Tool Integrations (Test Management)
 
@@ -218,9 +219,6 @@ For hard-zero residue scans, run:
 ```powershell
 powershell -NoProfile -File .\scripts\quality-gate.ps1 -StrictResidue
 ```
-
-
-
 
 
 

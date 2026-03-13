@@ -1,6 +1,6 @@
 ---
 name: cypress-coverage-matrix-auto-sync
-description: Keep requirements and test-traceability documentation in sync as scenarios are added or changed. Maintains anchor links and recalculates coverage stats.
+description: Keep Cypress requirements and test-traceability documentation in sync as scenarios are added or changed. Maintains anchor links and recalculates coverage stats.
 ---
 
 # Coverage Matrix Auto-Sync
@@ -11,7 +11,7 @@ Use this skill to ensure that your functional coverage plans and traceability do
 Whenever a test case is added, removed, or moved:
 - **Scan for Anchors**: Look for `[Scenario ID]` anchors in the test documentation.
 - **Update Mapping**: Ensure the `TDD` or `BDD` document matches the latest `@tag` or test title in the `.cy.ts` files.
-- **Link Integrity**: Use granular links: `[test name](file:///path/to/test.cy.ts#L123-L145)`.
+- **Link Integrity**: Use repo-relative links or stable path references, for example `[test name](https://example.com/cypress/e2e/auth/login.cy.ts#L12)`.
 
 ## 2. Coverage Stats Recalculation
 If the plan includes a summary table (e.g., `Total Scenarios`, `UI Coverage %`):

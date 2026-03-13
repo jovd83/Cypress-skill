@@ -48,7 +48,7 @@ $contracts = @(
     )
   },
   @{
-    File = "documentation/handover/SKILL.md"
+    File = "documentation/cypress-handover/SKILL.md"
     Rules = @(
       "Header::(?m)^# Handover to Human-in-the-Loop",
       "Storage and Naming::(?m)^## 1\\. Storage and Naming",

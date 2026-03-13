@@ -62,3 +62,10 @@ routesToTest.forEach((route) => {
 - [ ] **Parser Helpers**: Created utility functions to extract parameters from current URL for assertions.
 - [ ] **Fallback Validation**: Verified that invalid UUIDs or expired slugs trigger correct 404/Fallback UI rather than a crash.
 - [ ] **Dynamic State**: Verified that query parameters (e.g., `?tab=settings`) are preserved or correctly handled during navigation.
+
+## Anti-Patterns
+
+| Anti-pattern | Why it hurts | Better approach |
+|---|---|---|
+| Asserting the URL immediately after navigation without retryable checks | Flaky redirects and timing-sensitive failures | Use `cy.location().should(...)` or equivalent retryable assertions |
+| Testing only one route form when multiple canonical forms exist | Misses parity bugs between slug, UUID, and redirect flows | Cover all supported route representations and fallback paths |

@@ -59,3 +59,10 @@ const SearchBar = ({ onSearch }) => (
 - [ ] **Prefix Consistency**: Checked that all hooks use the same attribute name.
 - [ ] **Production Removal**: Decision made on whether to strip `data-testid` from production builds (usually not necessary, but optional).
 - [ ] **Contract Verification**: Tested the hook actually exists in the rendered DOM before finishing the feature.
+
+## Anti-Patterns
+
+| Anti-pattern | Why it hurts | Better approach |
+|---|---|---|
+| Reusing CSS classes as test selectors | Styling changes break automation unexpectedly | Use dedicated automation hooks such as `data-testid` |
+| Adding hooks with inconsistent naming across features | Increases selector churn and review overhead | Standardize one naming contract and enforce it in code review |

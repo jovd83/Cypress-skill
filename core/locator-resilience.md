@@ -66,3 +66,10 @@ cy.findByRole('main').within(() => {
 - [ ] **Strict Mode Audit**: Avoid using `.first()` to bypass multiple matching elements. Find out WHY there are multiple.
 - [ ] **Role Tightening**: Move from generic `cy.get('.btn')` to specific `cy.findByRole('button')`.
 - [ ] **Container Scoping**: Ensure every action happens within the intended UI surface (`cy.within()`).
+
+## Anti-Patterns
+
+| Anti-pattern | Why it hurts | Better approach |
+|---|---|---|
+| Using `.first()` or `.eq(0)` by default | Hides duplicate-element bugs and makes tests order-sensitive | Scope locators to the correct container or use a stronger automation contract |
+| Hardcoding one locale string for critical actions | Breaks in translated or region-specific UIs | Use stable test hooks or localization-tolerant matching |

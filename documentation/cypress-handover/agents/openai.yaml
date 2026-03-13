@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Handover"
+  short_description: "need a Cypress task handover that preserves status"
+  default_prompt: "Use $cypress-handover to help when you need a Cypress task handover that preserves status."
+
+policy:
+  allow_implicit_invocation: true

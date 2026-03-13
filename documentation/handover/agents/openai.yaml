@@ -1,7 +1,7 @@
 ﻿interface:
-  display_name: "Cypress Handover"
-  short_description: "perform a structured handover to a human-in-the-loop after"
-  default_prompt: "Use $cypress-handover to perform a structured handover to a human-in-the-loop after completing Cypress tasks."
+  display_name: "Cypress Handover Compat"
+  short_description: "need the legacy Cypress handover entrypoint path"
+  default_prompt: "Use $cypress-handover-compat to help when you need the legacy Cypress handover entrypoint path."
 
 policy:
   allow_implicit_invocation: true

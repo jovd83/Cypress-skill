@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Coverage Matrix Auto Sync"
+  short_description: "Keep Cypress requirements and test-traceability documentation"
+  default_prompt: "Use $cypress-coverage-matrix-auto-sync to help with keep Cypress requirements and test-traceability documentation in sync as scenarios are added or changed."
+
+policy:
+  allow_implicit_invocation: true

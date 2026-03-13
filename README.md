@@ -1,6 +1,6 @@
 # Cypress Skill Pack
 
-Cypress skills for E2E, API, component, visual, accessibility, and security testing, plus CLI automation. **70+ skills** with TypeScript and JavaScript examples.
+Cypress skills for E2E, API, component, visual, accessibility, and security testing, plus CLI automation. **85+ skills** with TypeScript and JavaScript examples.
 
 ## What are Agent Skills?
 [Agent Skills](https://github.com/agentskills/agentskills) are a simple, open format for giving AI agents capabilities and expertise. They are essentially folders of instructions, scripts, and resources that agents can discover and use to perform better at specific tasks. Write once, use everywhere!
@@ -67,7 +67,7 @@ Move the `cypress-skill` folder to the appropriate location where your AI assist
 
 | Skill Pack | Guides | What's Covered |
 |---|:---:|---|
-| **core** | 46 | Locators, assertions, fixtures, auth, API testing, network mocking, visual regression, accessibility, debugging, framework recipes |
+| **core** | 54 | Locators, assertions, fixtures, auth, API testing, network mocking, visual regression, accessibility, debugging, framework recipes |
 | **ci** | 9 | GitHub Actions, GitLab CI, CircleCI, Azure DevOps, Jenkins, Docker, sharding, reporting, coverage |
 | **pom** | 2 | Page Object Model patterns, POM vs fixtures vs helpers |
 | **migration** | 2 | Migrating from Playwright, migrating from Selenium |
@@ -77,7 +77,7 @@ Move the `cypress-skill` folder to the appropriate location where your AI assist
 
 The foundation of Cypress testing. These guides cover everything you need to write, debug, and maintain reliable end-to-end tests.
 
-- **Start here** if you're new to Cypress — begin with locators, assertions, and fixtures
+- **Start here** if you're new to Cypress - begin with locators, assertions, and fixtures
 - Covers common patterns like authentication, API testing, network mocking, and visual regression
 - Includes framework-specific recipes for React, Vue, Angular, and Next.js
 - Debugging guides to help you fix flaky tests and common pitfalls
@@ -273,7 +273,8 @@ This section provides a detailed index of all AI skills and deep-dive guides. Th
 - **[documentation/test_cases/plain_text/SKILL.md](documentation/test_cases/plain_text/SKILL.md)**: Informal test planning.
 - **[documentation/tests/SKILL.md](documentation/tests/SKILL.md)**: Automatic documentation updates using JSDoc styles for Cypress.
 - **[documentation/root_cause/SKILL.md](documentation/root_cause/SKILL.md)**: Documenting bug investigations explicitly.
-- **[documentation/handover/SKILL.md](documentation/handover/SKILL.md)**: Formal developer handovers detailing CI state.
+- **[documentation/cypress-handover/SKILL.md](documentation/cypress-handover/SKILL.md)**: Resume-ready handovers capturing completed work, current state, session state, blockers, and restart steps.
+- **[documentation/session-state/SKILL.md](documentation/session-state/SKILL.md)**: Compatibility alias for record session state in the canonical handover workflow.
 
 ### 5. Cypress CLI
 
@@ -321,6 +322,9 @@ Run the repository-level documentation checks:
 - fenced code language tags (opening code fences require an explicit language)
 - code-fence language policy by directory (enforced allowed languages per skill area/root docs)
 - `cypress-cli` command snippet validity
+- `cypress-handover` package integrity (required files, sections, and template placeholders)
+- `cypress-handover` Pester suite pass (logic, overrides, and link repair)
+- `cypress-handover` smoke test pass (end-to-end task lifecycle)
 - Bash workflow block parity with nearby PowerShell examples in `cypress-cli/*.md`
 - Cypress command queue safety patterns (no `await cy...`, no `Promise.all([cy...])`)
 - hard-wait guard in runnable code fences (blocks numeric `cy.wait(...)` except documented polling/comment cases)
@@ -347,6 +351,7 @@ Run the repository-level documentation checks:
 - skill-name prefix convention (`name:` in every `SKILL.md` must start with `cypress-`)
 - skill-description convention (`description:` in every `SKILL.md` must include `Cypress`)
 - CI workflow wiring check (`.github/workflows/quality-gate.yml`)
+- structural parity with the sibling skill tree
 - residue policy (including Playwright API signatures) and structural parity checks
 
 ```powershell

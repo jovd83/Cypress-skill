@@ -23,6 +23,13 @@ function Get-RelativeMarkdownPaths([string]$RootPath) {
     ForEach-Object { $_.FullName.Substring($RootPath.Length + 1).Replace('\', '/') }
 }
 
+$targetIgnore = @(
+  "documentation/cypress-handover/SKILL.md",
+  "documentation/cypress-handover/assets/handover-template.md",
+  "documentation/cypress-handover/references/blocked-handover-example.md",
+  "documentation/cypress-handover/references/multi-scope-conflicts.md"
+)
+
 $srcSet = Get-RelativeMarkdownPaths $srcAbs |
   ForEach-Object {
     $_ -replace '^playwright-cli/', 'cypress-cli/' `
@@ -31,7 +38,9 @@ $srcSet = Get-RelativeMarkdownPaths $srcAbs |
   } |
   Sort-Object -Unique
 
-$dstSet = Get-RelativeMarkdownPaths $dstAbs | Sort-Object -Unique
+$dstSet = Get-RelativeMarkdownPaths $dstAbs |
+  Where-Object { $_ -notin $targetIgnore } |
+  Sort-Object -Unique
 $diff = Compare-Object -ReferenceObject $srcSet -DifferenceObject $dstSet
 
 $missing = $diff | Where-Object { $_.SideIndicator -eq "<=" } | Select-Object -ExpandProperty InputObject

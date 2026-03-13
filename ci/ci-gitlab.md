@@ -111,6 +111,27 @@ e2e:
     - npx cypress run --e2e --browser chrome --headless
 ```
 
+## Pattern 4: Publish Cypress Handover Pester Results
+
+When the repo contains the Cypress handover package checks, publish the dedicated Pester results as an artifact:
+
+```yaml
+handover-docs:
+  stage: test
+  script:
+    - pwsh -NoProfile -File ./scripts/check-cypress-handover-pester.ps1 -ResultsPath ./artifacts/pester/cypress-handover.xml
+  artifacts:
+    when: always
+    paths:
+      - artifacts/pester/
+    expire_in: 14 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+```
+
+Use this alongside the main docs quality gate when you want a dedicated machine-readable result file for the handover package tests.
+
 ## Secrets and Environment
 
 Use GitLab CI variables for credentials:
@@ -141,6 +162,12 @@ Avoid committing `.env` secrets into the repository.
 - Isolate test data per pipeline.
 - Avoid shared mutable test accounts.
 - Keep retries low and investigate failing specs.
+
+### Handover Pester results are missing
+
+- Confirm the job runs `check-cypress-handover-pester.ps1` with `-ResultsPath`.
+- Confirm `artifacts/pester/` is included in GitLab artifacts.
+- If the repo image lacks PowerShell or Pester, use a job image that can run `pwsh` and install Pester first.
 
 ## Related
 

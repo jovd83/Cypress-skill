@@ -1,0 +1,7 @@
+﻿interface:
+  display_name: "Cypress Session State Compat"
+  short_description: "need the legacy Cypress session-state entrypoint path"
+  default_prompt: "Use $cypress-session-state-compat to help when you need the legacy Cypress session-state entrypoint path."
+
+policy:
+  allow_implicit_invocation: true

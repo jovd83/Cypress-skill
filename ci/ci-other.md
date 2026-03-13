@@ -37,6 +37,20 @@ workflows:
       - cypress-e2e
 ```
 
+Add a dedicated handover-docs job when you want machine-readable Pester results for the Cypress handover package:
+
+```yaml
+  cypress-handover-docs:
+    docker:
+      - image: mcr.microsoft.com/powershell:7.4-ubuntu-22.04
+    steps:
+      - checkout
+      - run: pwsh -NoProfile -Command "if (-not (Get-Module -ListAvailable Pester)) { Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser }"
+      - run: pwsh -NoProfile -File ./scripts/check-cypress-handover-pester.ps1 -ResultsPath ./artifacts/pester/cypress-handover.xml
+      - store_artifacts:
+          path: artifacts/pester
+```
+
 ## Azure DevOps
 
 ```yaml
@@ -78,6 +92,18 @@ steps:
     inputs:
       PathtoPublish: cypress/videos
       ArtifactName: cypress-videos
+
+  - task: PowerShell@2
+    displayName: Run Cypress handover Pester suite
+    inputs:
+      filePath: ./scripts/check-cypress-handover-pester.ps1
+      arguments: -ResultsPath ./artifacts/pester/cypress-handover.xml
+
+  - task: PublishBuildArtifacts@1
+    condition: always()
+    inputs:
+      PathtoPublish: artifacts/pester
+      ArtifactName: cypress-handover-pester
 ```
 
 ## Jenkins
@@ -116,9 +142,20 @@ pipeline {
       archiveArtifacts artifacts: 'cypress/screenshots/**', allowEmptyArchive: true
       archiveArtifacts artifacts: 'cypress/videos/**', allowEmptyArchive: true
       junit 'cypress/results/*.xml'
+      archiveArtifacts artifacts: 'artifacts/pester/**', allowEmptyArchive: true
     }
   }
 }
+```
+
+Add a docs stage before or after Cypress execution when you want Jenkins to publish the handover Pester XML:
+
+```groovy
+    stage('Handover Docs') {
+      steps {
+        powershell '.\\scripts\\check-cypress-handover-pester.ps1 -ResultsPath .\\artifacts\\pester\\cypress-handover.xml'
+      }
+    }
 ```
 
 ## Parallelization Guidance

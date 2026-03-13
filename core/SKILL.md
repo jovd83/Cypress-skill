@@ -60,6 +60,12 @@ description: Battle-tested Cypress patterns for E2E, API, component, visual, acc
 | CRUD flows | [crud-testing.md](crud-testing.md) | |
 | Drag and drop | [drag-and-drop.md](drag-and-drop.md) | |
 | Search & filter UI | [search-and-filter.md](search-and-filter.md) | |
+| Route behavior & navigation parity | [route-behavior.md](route-behavior.md) | |
+| Locator strictness & resilience | [locator-resilience.md](locator-resilience.md) | |
+| Testability hooks & automation contracts | [testability-hooks.md](testability-hooks.md) | |
+| API handler hardening | [api-handler-hardening.md](api-handler-hardening.md) | |
+| Contract-first mocking | [contract-first-mocking.md](contract-first-mocking.md) | |
+| Environment preflight checks | [preflight.md](preflight.md) | |
 
 ### Debugging & Fixing
 
@@ -69,6 +75,7 @@ description: Battle-tested Cypress patterns for E2E, API, component, visual, acc
 | Specific error message | [error-index.md](error-index.md) |
 | Flaky / intermittent tests | [flaky-tests.md](flaky-tests.md) |
 | Common beginner mistakes | [common-pitfalls.md](common-pitfalls.md) |
+| Stability diagnostics | [stability-diagnostics.md](stability-diagnostics.md) |
 
 ### Framework Recipes
 

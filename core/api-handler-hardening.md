@@ -74,3 +74,10 @@ it('should create a user and return 201', async () => {
 - [ ] **Auth Enforcement**: Verified that unauthorized requests return `401` or `403`.
 - [ ] **Contract Consistency**: Response JSON matches the schema used by the frontend.
 - [ ] **Error Details**: Error responses provide enough context for debugging without leaking system internals.
+
+## Anti-Patterns
+
+| Anti-pattern | Why it hurts | Better approach |
+|---|---|---|
+| Starting a full web server for every handler unit test | Slow, brittle, and duplicates E2E coverage | Invoke the handler directly with simulated request/response objects |
+| Hitting a real database in handler unit tests | Non-deterministic state and slow feedback | Mock the data layer and reserve real DB checks for integration/E2E |

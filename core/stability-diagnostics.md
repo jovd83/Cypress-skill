@@ -39,7 +39,7 @@ Cypress natively handles actionability checks (pointer-events, covered elements)
 
 ```typescript
 // Cypress automatically retries assertions and actions like click()
-// until the element is actionable. Do not use { force: true } as a workaround.
+// until the element is actionable. Do not bypass actionability checks as a workaround.
 // Wait for the overlay to disappear explicitly:
 cy.get('.overlay--loading').should('not.exist');
 cy.findByRole('button', { name: 'Save' }).should('be.visible').click();
@@ -73,3 +73,10 @@ Don't just look at Pass/Fail. Monitor these "health metrics":
 - [ ] **Timing Analysis**: Compared "Success" vs "Failure" network timelines via Cypress UI.
 - [ ] **Spinners & Overlays**: Explicitly waited for "Loading" states to resolve using `.should('not.exist')`.
 - [ ] **Optimistic Sync**: Verified that UI state reflects the backend truth via `cy.intercept` and `cy.wait`.
+
+## Anti-Patterns
+
+| Anti-pattern | Why it hurts | Better approach |
+|---|---|---|
+| Bypassing actionability checks instead of diagnosing overlays or hydration races | Hides the real flake source and weakens the test | Wait for readiness signals and remove blocking UI states explicitly |
+| Treating retry-pass runs as success | Flaky behavior remains in the suite | Classify retry-only passes as defects and investigate root cause |

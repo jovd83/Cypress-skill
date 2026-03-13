@@ -79,3 +79,10 @@ preflight();
 - **Python**: Use `pytest` hooks or a standalone `preflight.py` checking `psycopg2` connectivity.
 - **Java**: Use a dedicated Maven profile or a `Preflight` class before your E2E suite triggers.
 - **Go**: Use a `preflight_test.go` with `TestMain` to verify environment variables and DB connection strings.
+
+## Anti-Patterns
+
+| Anti-pattern | Why it hurts | Better approach |
+|---|---|---|
+| Starting a full Cypress run before checking environment readiness | Expensive failures arrive too late | Fail fast with a lightweight preflight script |
+| Treating stubbed dependencies as equivalent to real integrations | Gives false confidence about deployment readiness | Record which stubs remain and rerun against real services before completion |

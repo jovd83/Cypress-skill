@@ -129,6 +129,18 @@ Invoke-Check -Name "Documentation skill section contract" -Check {
   & "$scriptRoot\check-documentation-skill-sections.ps1" -Root $Root
 }
 
+Invoke-Check -Name "Cypress handover package contract" -Check {
+  & "$scriptRoot\check-cypress-handover-package.ps1" -Root $Root
+}
+
+Invoke-Check -Name "Cypress handover package smoke" -Check {
+  & "$scriptRoot\check-cypress-handover-smoke.ps1" -Root $Root
+}
+
+Invoke-Check -Name "Cypress handover Pester suite" -Check {
+  & "$scriptRoot\check-cypress-handover-pester.ps1" -Root $Root
+}
+
 Invoke-Check -Name "Planning/reporting skill section contract" -Check {
   & "$scriptRoot\check-planning-reporting-skill-sections.ps1" -Root $Root
 }
