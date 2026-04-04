@@ -15,6 +15,7 @@ $files = Get-ChildItem -Path $migrationDir -File -Filter *.md | Where-Object { $
 foreach ($file in $files) {
   $rel = $file.FullName.Substring($rootAbs.Length + 1).Replace('\', '/')
   $text = Get-Content -Raw -LiteralPath $file.FullName
+  $text = $text -replace "\r", ""
 
   $sectionMatches = [regex]::Matches($text, '(?ms)^## Example:.*?(?=^## |\z)')
   if ($sectionMatches.Count -eq 0) {

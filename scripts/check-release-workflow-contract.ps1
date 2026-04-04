@@ -11,6 +11,7 @@ if (-not (Test-Path -LiteralPath $workflowPath -PathType Leaf)) {
 }
 
 $text = Get-Content -Raw -LiteralPath $workflowPath
+  $text = $text -replace "\r", ""
 $issues = @()
 
 $requiredPatterns = @(

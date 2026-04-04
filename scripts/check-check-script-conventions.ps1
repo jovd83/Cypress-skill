@@ -18,6 +18,7 @@ if ($files.Count -eq 0) {
 
 foreach ($file in $files) {
   $text = Get-Content -Raw -LiteralPath $file.FullName
+  $text = $text -replace "\r", ""
 
   $paramBlockMatch = [regex]::Match($text, '(?s)^param\((?<block>.*?)\)')
   $hasParamRoot = $false

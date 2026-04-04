@@ -26,6 +26,7 @@ foreach ($relative in $targets) {
   }
 
   $text = Get-Content -Raw -LiteralPath $path
+  $text = $text -replace "\r", ""
   if ($text -notmatch [regex]::Escape($requiredUrl)) {
     $issues += [pscustomobject]@{
       File = $relative

@@ -1,3 +1,4 @@
+Describe "Cypress handover package" {
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $here "..\..")).Path
 $skillRoot = Join-Path $repoRoot "documentation/cypress-handover"
@@ -68,7 +69,6 @@ function Get-HandoverMetadataLineValue {
   return $match.Groups["value"].Value.Trim()
 }
 
-Describe "Cypress handover package" {
   BeforeEach {
     $script:tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('cypress-handover-pester-' + [guid]::NewGuid().ToString('N'))
     $script:docsRoot = Join-Path $script:tempRoot 'docs/tests'

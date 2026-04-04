@@ -19,6 +19,7 @@ if ($files.Count -eq 0) {
 foreach ($file in $files) {
   $rel = $file.FullName.Substring($rootAbs.Length + 1).Replace('\', '/')
   $text = Get-Content -Raw -LiteralPath $file.FullName
+  $text = $text -replace "\r", ""
   $missing = @()
 
   if ($text -notmatch '(?m)^# .+Installation') {

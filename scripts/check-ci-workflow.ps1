@@ -12,6 +12,7 @@ if (-not (Test-Path -LiteralPath $workflowPath)) {
 }
 
 $content = Get-Content -Raw -LiteralPath $workflowPath
+  $content = $content -replace "\r", ""
 $issues = @()
 
 if ($content -notmatch '(?m)^\s*pull_request:\s*$') {

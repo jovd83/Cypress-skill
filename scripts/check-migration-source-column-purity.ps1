@@ -24,6 +24,7 @@ foreach ($relative in $targets) {
   }
 
   $text = Get-Content -Raw -LiteralPath $path
+  $text = $text -replace "\r", ""
   $section = [regex]::Match($text, '(?ms)^## Command Mapping\s*(?<body>.*?)(?=^## |\z)')
   if (-not $section.Success) {
     $issues += [pscustomobject]@{

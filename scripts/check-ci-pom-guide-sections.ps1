@@ -16,6 +16,7 @@ function Check-DirectoryContract([string]$DirName, [string[]]$RequiredPatterns) 
   foreach ($file in $files) {
     $rel = $file.FullName.Substring($rootAbs.Length + 1).Replace('\', '/')
     $text = Get-Content -Raw -LiteralPath $file.FullName
+  $text = $text -replace "\r", ""
     $missing = @()
 
     foreach ($rule in $RequiredPatterns) {

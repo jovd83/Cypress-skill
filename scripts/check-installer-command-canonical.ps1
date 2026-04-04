@@ -22,6 +22,7 @@ foreach ($relative in $targets) {
   }
 
   $text = Get-Content -Raw -LiteralPath $path
+  $text = $text -replace "\r", ""
   if ($text -notmatch '(?i)npm init cypress@latest') {
     $issues += [pscustomobject]@{
       File = $relative

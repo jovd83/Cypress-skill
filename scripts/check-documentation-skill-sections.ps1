@@ -69,6 +69,7 @@ foreach ($contract in $contracts) {
   }
 
   $text = Get-Content -Raw -LiteralPath $path
+  $text = $text -replace "\r", ""
   $missing = @()
   foreach ($rule in $contract.Rules) {
     $label = $rule.Split("::")[0]

@@ -11,6 +11,7 @@ if (-not (Test-Path -LiteralPath $reportPath -PathType Leaf)) {
 }
 
 $text = Get-Content -Raw -LiteralPath $reportPath
+  $text = $text -replace "\r", ""
 $issues = @()
 
 $requiredPatterns = @(
