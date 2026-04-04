@@ -35,7 +35,7 @@ foreach ($contract in $contracts) {
   }
 
   $text = Get-Content -Raw -LiteralPath $path
-  $text = $text -replace "\r", ""
+  $text = $text -replace "`r", ""
   $blockPattern = '(?ms)' + $contract.LabelPattern + '\s*```(?<fence>[a-zA-Z0-9_-]+)\s*(?<code>.*?)\s*```'
   $blocks = [regex]::Matches($text, $blockPattern)
 

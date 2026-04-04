@@ -11,7 +11,7 @@ if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
 }
 
 $text = Get-Content -Raw -LiteralPath $target
-  $text = $text -replace "\r", ""
+  $text = $text -replace "`r", ""
 $match = [regex]::Match($text, '(?ms)^## Command Mapping\s*(?<section>.*?)(^\#\#\s|\z)')
 if (-not $match.Success) {
   throw "check-playwright-mapping-table failed: missing '## Command Mapping' section"

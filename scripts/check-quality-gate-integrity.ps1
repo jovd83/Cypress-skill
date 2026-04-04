@@ -12,7 +12,7 @@ if (-not (Test-Path -LiteralPath $qualityGatePath -PathType Leaf)) {
 }
 
 $text = Get-Content -Raw -LiteralPath $qualityGatePath
-  $text = $text -replace "\r", ""
+  $text = $text -replace "`r", ""
 $issues = @()
 
 # 1) Invoke-Check names must be unique and non-empty.

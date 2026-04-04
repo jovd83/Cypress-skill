@@ -44,7 +44,7 @@ Get-ChildItem -Path $rootAbs -Recurse -File -Filter SKILL.md | ForEach-Object {
   }
 
   $content = Get-Content -Raw -LiteralPath $skillPath
-  $content = $content -replace "\r", ""
+  $content = $content -replace "`r", ""
   $referenced = New-Object "System.Collections.Generic.HashSet[string]"
 
   [regex]::Matches($content, '\[[^\]]+\]\(([^)]+)\)') | ForEach-Object {

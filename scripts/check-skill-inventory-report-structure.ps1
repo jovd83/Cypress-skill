@@ -11,30 +11,31 @@ if (-not (Test-Path -LiteralPath $reportPath -PathType Leaf)) {
 }
 
 $text = Get-Content -Raw -LiteralPath $reportPath
-  $text = $text -replace "\r", ""
+$text = $text -replace "`r", ""
 $issues = @()
 
 $requiredPatterns = @(
-  "Header::(?m)^# Skill Inventory\s*$",
-  "Summary::(?m)^## Summary\s*$",
-  "Coverage By Area::(?m)^## Coverage By Area\s*$",
-  "Skill Table::(?m)^## Skill Table\s*$",
-  "Summary Total Skills::(?m)^- Total skills: `\d+`\s*$",
-  "Summary Metadata Coverage::(?m)^- Skills with `agents/openai\.yaml`: `\d+/\d+`\s*$",
-  "Coverage Table Header::(?m)^\| Area \| Skills \| Metadata Coverage \|\s*$",
-  "Skill Table Header::(?m)^\| Path \| Skill Name \| Display Name \| Area \| Metadata \|\s*$"
+  'Header::(?m)^# Skill Inventory\s*$',
+  'Summary::(?m)^## Summary\s*$',
+  'Coverage By Area::(?m)^## Coverage By Area\s*$',
+  'Skill Table::(?m)^## Skill Table\s*$',
+  'Summary Total Skills::(?m)^- Total skills: `\d+`\s*$',
+  'Summary Metadata Coverage::(?m)^- Skills with `agents/openai\.yaml`: `\d+/\d+`\s*$',
+  'Coverage Table Header::(?m)^\| Area \| Skills \| Metadata Coverage \|\s*$',
+  'Skill Table Header::(?m)^\| Path \| Skill Name \| Display Name \| Area \| Metadata \|\s*$'
 )
 
 foreach ($rule in $requiredPatterns) {
-  $label = $rule.Split("::")[0]
-  $pattern = $rule.Split("::")[1]
+  $parts = $rule -split "::"
+  $label = $parts[0]
+  $pattern = $parts[1]
   if ($text -notmatch $pattern) {
     $issues += "missing $label"
   }
 }
 
 $skillCount = (Get-ChildItem -Path $rootAbs -Recurse -File -Filter SKILL.md).Count
-$lines = Get-Content -LiteralPath $reportPath
+$lines = Get-Content -Raw -LiteralPath $reportPath | ForEach-Object { $_ -replace "`r", "" }
 $skillTableIndex = -1
 for ($i = 0; $i -lt $lines.Count; $i++) {
   if ($lines[$i] -match '^## Skill Table\s*$') {

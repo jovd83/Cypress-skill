@@ -10,50 +10,50 @@ $contracts = @(
   @{
     File = "documentation/tests/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Documenting Existing Tests",
-      "Action::(?m)^## Action"
+      'Header::(?m)^# Documenting Existing Tests',
+      'Action::(?m)^## Action'
     )
   },
   @{
     File = "documentation/root_cause/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Root Cause Analysis Documentation",
-      "Action::(?m)^## Action"
+      'Header::(?m)^# Root Cause Analysis Documentation',
+      'Action::(?m)^## Action'
     )
   },
   @{
     File = "documentation/test_cases/tdd/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Documenting Test Cases: TDD format",
-      "Storage and Organization::(?m)^## 1\\. Storage\\s*&\\s*Organization",
-      "Structure and Fields::(?m)^## 3\\. Structure\\s*&\\s*Fields",
-      "Example Template::(?m)^## 4\\. Example Template"
+      'Header::(?m)^# Documenting Test Cases: TDD format',
+      'Storage and Organization::(?m)^## 1\. Storage\s*&\s*Organization',
+      'Structure and Fields::(?m)^## 3\. Structure\s*&\s*Fields',
+      'Example Template::(?m)^## 4\. Example Template'
     )
   },
   @{
     File = "documentation/test_cases/bdd/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Documenting Test Cases: BDD \\(Gherkin\\) format",
-      "Structure::(?m)^## Structure",
-      "Best Practices::(?m)^## Best Practices",
-      "Usage::(?m)^## Usage"
+      'Header::(?m)^# Documenting Test Cases: BDD \(Gherkin\) format',
+      'Structure::(?m)^## Structure',
+      'Best Practices::(?m)^## Best Practices',
+      'Usage::(?m)^## Usage'
     )
   },
   @{
     File = "documentation/test_cases/plain_text/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Documenting Test Cases: Plain Text format",
-      "Structure::(?m)^## Structure",
-      "Usage::(?m)^## Usage"
+      'Header::(?m)^# Documenting Test Cases: Plain Text format',
+      'Structure::(?m)^## Structure',
+      'Usage::(?m)^## Usage'
     )
   },
   @{
     File = "documentation/cypress-handover/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Handover to Human-in-the-Loop",
-      "Storage and Naming::(?m)^## 1\\. Storage and Naming",
-      "Content Structure::(?m)^## 2\\. Content Structure",
-      "Execution::(?m)^## 3\\. Execution"
+      'Header::(?m)^# Handover to Human-in-the-Loop',
+      'Storage and Naming::(?m)^## 1\. Storage and Naming',
+      'Content Structure::(?m)^## 2\. Content Structure',
+      'Execution::(?m)^## 3\. Execution'
     )
   }
 )
@@ -69,11 +69,12 @@ foreach ($contract in $contracts) {
   }
 
   $text = Get-Content -Raw -LiteralPath $path
-  $text = $text -replace "\r", ""
+  $text = $text -replace "`r", ""
   $missing = @()
   foreach ($rule in $contract.Rules) {
-    $label = $rule.Split("::")[0]
-    $pattern = $rule.Split("::")[1]
+    $parts = $rule -split "::"
+    $label = $parts[0]
+    $pattern = $parts[1]
     if ($text -notmatch $pattern) {
       $missing += $label
     }

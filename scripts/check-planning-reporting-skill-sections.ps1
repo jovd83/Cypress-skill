@@ -10,46 +10,46 @@ $contracts = @(
   @{
     File = "orchestrator/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Cypress Orchestrator",
-      "Deterministic First Question::(?m)^## Deterministic First Question",
-      "Intent Routing Table::(?m)^## Intent Routing Table",
-      "Orchestration Rules::(?m)^## Orchestration Rules"
+      'Header::(?m)^# Cypress Orchestrator',
+      'Deterministic First Question::(?m)^## Deterministic First Question',
+      'Intent Routing Table::(?m)^## Intent Routing Table',
+      'Orchestration Rules::(?m)^## Orchestration Rules'
     )
   },
   @{
     File = "analysis/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Analysis\\s*&\\s*Requirements Skill",
-      "Information Gathering::(?m)^## 1\\. Information Gathering",
-      "Requirement Extraction::(?m)^## 2\\. Requirement Extraction",
-      "User Validation::(?m)^## 3\\. User Validation"
+      'Header::(?m)^# Analysis\s*&\s*Requirements Skill',
+      'Information Gathering::(?m)^## 1\. Information Gathering',
+      'Requirement Extraction::(?m)^## 2\. Requirement Extraction',
+      'User Validation::(?m)^## 3\. User Validation'
     )
   },
   @{
     File = "coverage_plan/generation/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Functional Coverage Plan Generation",
-      "Prerequisite::(?m)^## 1\\. Prerequisite",
-      "Generate Scenarios::(?m)^## 2\\. Generate the Scenarios",
-      "Formatting::(?m)^## 3\\. Formatting the Plan",
-      "Next Step::(?m)^## 4\\. Next Step"
+      'Header::(?m)^# Functional Coverage Plan Generation',
+      'Prerequisite::(?m)^## 1\. Prerequisite',
+      'Generate Scenarios::(?m)^## 2\. Generate the Scenarios',
+      'Formatting::(?m)^## 3\. Formatting the Plan',
+      'Next Step::(?m)^## 4\. Next Step'
     )
   },
   @{
     File = "coverage_plan/review/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Functional Coverage Plan Review",
-      "Present Plan::(?m)^## 1\\. Present the Plan",
-      "Prompt Feedback::(?m)^## 2\\. Prompt for Feedback",
-      "Iterate::(?m)^## 3\\. Iterate",
-      "Proceed::(?m)^## 4\\. Proceed"
+      'Header::(?m)^# Functional Coverage Plan Review',
+      'Present Plan::(?m)^## 1\. Present the Plan',
+      'Prompt Feedback::(?m)^## 2\. Prompt for Feedback',
+      'Iterate::(?m)^## 3\. Iterate',
+      'Proceed::(?m)^## 4\. Proceed'
     )
   },
   @{
     File = "reporting/stakeholder/SKILL.md"
     Rules = @(
-      "Header::(?m)^# Stakeholder Execution Report",
-      "Action::(?m)^## Action"
+      'Header::(?m)^# Stakeholder Execution Report',
+      'Action::(?m)^## Action'
     )
   }
 )
@@ -65,12 +65,13 @@ foreach ($contract in $contracts) {
   }
 
   $text = Get-Content -Raw -LiteralPath $path
-  $text = $text -replace "\r", ""
+  $text = $text -replace "`r", ""
   $missing = @()
 
   foreach ($rule in $contract.Rules) {
-    $label = $rule.Split("::")[0]
-    $pattern = $rule.Split("::")[1]
+    $parts = $rule -split "::"
+    $label = $parts[0]
+    $pattern = $parts[1]
     if ($text -notmatch $pattern) {
       $missing += $label
     }

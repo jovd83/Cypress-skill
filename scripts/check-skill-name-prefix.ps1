@@ -14,7 +14,7 @@ if ($skillFiles.Count -eq 0) {
 foreach ($file in $skillFiles) {
   $rel = $file.FullName.Substring($rootAbs.Length + 1).Replace('\', '/')
   $text = Get-Content -Raw -LiteralPath $file.FullName
-  $text = $text -replace "\r", ""
+  $text = $text -replace "`r", ""
   $frontmatter = [regex]::Match($text, '(?s)^---\s*(?<fm>.*?)\s*---')
 
   if (-not $frontmatter.Success) {

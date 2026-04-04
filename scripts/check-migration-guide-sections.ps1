@@ -22,7 +22,7 @@ $files = Get-ChildItem -Path $migrationDir -File -Filter *.md | Where-Object { $
 foreach ($file in $files) {
   $rel = $file.FullName.Substring($rootAbs.Length + 1).Replace('\', '/')
   $text = Get-Content -Raw -LiteralPath $file.FullName
-  $text = $text -replace "\r", ""
+  $text = $text -replace "`r", ""
   $missing = @()
 
   foreach ($rule in $requiredPatterns) {

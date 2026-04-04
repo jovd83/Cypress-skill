@@ -17,7 +17,7 @@ $blockPattern = '(?ms)\*\*Cypress \((?<label>TypeScript|JavaScript)\)\*\*\s*```(
 foreach ($file in $files) {
   $rel = $file.FullName.Substring($rootAbs.Length + 1).Replace('\', '/')
   $text = Get-Content -Raw -LiteralPath $file.FullName
-  $text = $text -replace "\r", ""
+  $text = $text -replace "`r", ""
   $blocks = [regex]::Matches($text, $blockPattern)
 
   $blockIndex = 0

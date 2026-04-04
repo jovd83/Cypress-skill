@@ -175,7 +175,7 @@ Before creating a release tag:
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for repository conventions, validation expectations, and guidance for editing or adding skills without bloating the package.
+See CONTRIBUTING.md (missing) for repository conventions, validation expectations, and guidance for editing or adding skills without bloating the package.
 
 ## Upstream Credit
 
