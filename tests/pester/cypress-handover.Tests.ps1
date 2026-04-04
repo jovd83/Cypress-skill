@@ -1,78 +1,78 @@
-$here = $PSScriptRoot
-if (-not $here) { $here = "." }
-$repoRoot = (Resolve-Path (Join-Path $here "..\..")).Path
-$skillRoot = Join-Path $repoRoot "documentation/cypress-handover"
-$examplePath = Join-Path $skillRoot "references/blocked-handover-example.md"
+Describe "Cypress handover package" {
+  $script:here = $PSScriptRoot
+  if (-not $script:here) { $script:here = "." }
+  $script:repoRoot = (Resolve-Path (Join-Path $script:here "..\..")).Path
+  $script:skillRoot = Join-Path $script:repoRoot "documentation/cypress-handover"
+  $script:examplePath = Join-Path $script:skillRoot "references/blocked-handover-example.md"
 
-$scriptPaths = @{
-  audit = Join-Path $skillRoot "scripts/audit-handovers.ps1"
-  archive = Join-Path $skillRoot "scripts/archive-handover-scope.ps1"
-  doctor = Join-Path $skillRoot "scripts/doctor-handover.ps1"
-  export = Join-Path $skillRoot "scripts/export-handover-index.ps1"
-  new = Join-Path $skillRoot "scripts/new-handover.ps1"
-  repair = Join-Path $skillRoot "scripts/repair-handover-links.ps1"
-  resolve = Join-Path $skillRoot "scripts/resolve-handover-location-conflict.ps1"
-  restore = Join-Path $skillRoot "scripts/restore-handover-scope.ps1"
-  validate = Join-Path $skillRoot "scripts/validate-handover.ps1"
-}
-
-function New-HandoverFixtureFile {
-  param(
-    [string]$Path,
-    [string]$Timestamp,
-    [string]$TaskLabel,
-    [string]$WorkspaceRoot,
-    [string]$Branch,
-    [string]$Status = "Blocked",
-    [string]$PreviousHandover = "No prior handover found",
-    [string]$NextAction = "Take the next scoped action and record the result."
-  )
-
-  $content = Get-Content -Raw -LiteralPath $examplePath
-  $content = $content -replace "`r", ""
-  $content = [regex]::Replace($content, '(?m)^- Timestamp:\s*.+$', ('- Timestamp: ' + $Timestamp))
-  $content = [regex]::Replace($content, '(?m)^- Task label:\s*.+$', ('- Task label: ' + $TaskLabel))
-  $content = [regex]::Replace($content, '(?m)^- Workspace root:\s*.+$', ('- Workspace root: ' + $WorkspaceRoot))
-  $content = [regex]::Replace($content, '(?m)^- Branch:\s*.+$', ('- Branch: ' + $Branch))
-  $content = [regex]::Replace($content, '(?m)^- Previous handover:\s*.+$', ('- Previous handover: ' + $PreviousHandover))
-  $content = [regex]::Replace($content, '(?m)^### Current status\n.+$', ("### Current status`n" + $Status))
-  $content = [regex]::Replace($content, '(?sm)^### Next action\n.*?(?=^### |\z)', ("### Next action`n" + $NextAction + "`n`n"))
-  Set-Content -LiteralPath $Path -Value $content -Encoding UTF8
-}
-
-function Set-HandoverSectionBody {
-  param(
-    [string]$Path,
-    [string]$Heading,
-    [string]$Body
-  )
-
-  $content = Get-Content -Raw -LiteralPath $Path
-  $content = $content -replace "`r", ""
-  $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\n.*?(?=^### |\z)'
-  $replacement = $Heading + "`n" + $Body + "`n`n"
-  $updated = [regex]::Replace($content, $pattern, $replacement, 1)
-  Set-Content -LiteralPath $Path -Value $updated -Encoding UTF8
-}
-
-function Get-HandoverMetadataLineValue {
-  param(
-    [string]$Path,
-    [string]$Label
-  )
-
-  $content = Get-Content -Raw -LiteralPath $Path
-  $content = $content -replace "`r", ""
-  $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
-  $match = [regex]::Match($content, $pattern)
-  if (-not $match.Success) {
-    return ""
+  $script:scriptPaths = @{
+    audit = Join-Path $script:skillRoot "scripts/audit-handovers.ps1"
+    archive = Join-Path $script:skillRoot "scripts/archive-handover-scope.ps1"
+    doctor = Join-Path $script:skillRoot "scripts/doctor-handover.ps1"
+    export = Join-Path $script:skillRoot "scripts/export-handover-index.ps1"
+    new = Join-Path $script:skillRoot "scripts/new-handover.ps1"
+    repair = Join-Path $script:skillRoot "scripts/repair-handover-links.ps1"
+    resolve = Join-Path $script:skillRoot "scripts/resolve-handover-location-conflict.ps1"
+    restore = Join-Path $script:skillRoot "scripts/restore-handover-scope.ps1"
+    validate = Join-Path $script:skillRoot "scripts/validate-handover.ps1"
   }
 
-  return $match.Groups["value"].Value.Trim()
-}
+  function New-HandoverFixtureFile {
+    param(
+      [string]$Path,
+      [string]$Timestamp,
+      [string]$TaskLabel,
+      [string]$WorkspaceRoot,
+      [string]$Branch,
+      [string]$Status = "Blocked",
+      [string]$PreviousHandover = "No prior handover found",
+      [string]$NextAction = "Take the next scoped action and record the result."
+    )
 
-Describe "Cypress handover package" {
+    $content = Get-Content -Raw -LiteralPath $script:examplePath
+    $content = $content -replace "`r", ""
+    $content = [regex]::Replace($content, '(?m)^- Timestamp:\s*.+$', ('- Timestamp: ' + $Timestamp))
+    $content = [regex]::Replace($content, '(?m)^- Task label:\s*.+$', ('- Task label: ' + $TaskLabel))
+    $content = [regex]::Replace($content, '(?m)^- Workspace root:\s*.+$', ('- Workspace root: ' + $WorkspaceRoot))
+    $content = [regex]::Replace($content, '(?m)^- Branch:\s*.+$', ('- Branch: ' + $Branch))
+    $content = [regex]::Replace($content, '(?m)^- Previous handover:\s*.+$', ('- Previous handover: ' + $PreviousHandover))
+    $content = [regex]::Replace($content, '(?m)^### Current status\n.+$', ("### Current status`n" + $Status))
+    $content = [regex]::Replace($content, '(?sm)^### Next action\n.*?(?=^### |\z)', ("### Next action`n" + $NextAction + "`n`n"))
+    Set-Content -LiteralPath $Path -Value $content -Encoding UTF8
+  }
+
+  function Set-HandoverSectionBody {
+    param(
+      [string]$Path,
+      [string]$Heading,
+      [string]$Body
+    )
+
+    $content = Get-Content -Raw -LiteralPath $Path
+    $content = $content -replace "`r", ""
+    $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\n.*?(?=^### |\z)'
+    $replacement = $Heading + "`n" + $Body + "`n`n"
+    $updated = [regex]::Replace($content, $pattern, $replacement, 1)
+    Set-Content -LiteralPath $Path -Value $updated -Encoding UTF8
+  }
+
+  function Get-HandoverMetadataLineValue {
+    param(
+      [string]$Path,
+      [string]$Label
+    )
+
+    $content = Get-Content -Raw -LiteralPath $Path
+    $content = $content -replace "`r", ""
+    $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+    $match = [regex]::Match($content, $pattern)
+    if (-not $match.Success) {
+      return ""
+    }
+
+    return $match.Groups["value"].Value.Trim()
+  }
+
   BeforeEach {
     $script:tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('cypress-handover-pester-' + [guid]::NewGuid().ToString('N'))
     $script:docsRoot = Join-Path $script:tempRoot 'docs/tests'
@@ -106,26 +106,26 @@ Describe "Cypress handover package" {
   }
 
   It "doctor recommends restore for archived-only scopes" {
-    $result = ((& $scriptPaths.doctor -DocsRoot $docsRoot -TaskLabel 'archived-only-scope' -Location all -WorkspaceRoot $workspace -Branch $branch -Format json) | ConvertFrom-Json)
+    $result = ((& $script:scriptPaths.doctor -DocsRoot $script:docsRoot -TaskLabel 'archived-only-scope' -Location all -WorkspaceRoot $script:workspace -Branch $script:branch -Format json) | ConvertFrom-Json)
     if ($result.RecommendedAction -ne 'restore') {
       throw "Expected restore recommendation, got '$($result.RecommendedAction)'"
     }
   }
 
   It "repair-handover-links repairs broken previous links" {
-    $older = Join-Path $activeDir '20260309_0900_CypressSkillHandover.md'
-    $latest = Join-Path $activeDir '20260310_0900_CypressSkillHandover.md'
-    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-09 09:00' -TaskLabel 'repairable-scope' -WorkspaceRoot $workspace -Branch 'repair/branch' -Status 'In progress' -PreviousHandover 'No prior handover found' -NextAction 'Keep the older checkpoint for chain repair.'
-    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-10 09:00' -TaskLabel 'repairable-scope' -WorkspaceRoot $workspace -Branch 'repair/branch' -Status 'Blocked' -PreviousHandover (Join-Path $tempRoot 'missing-prior.md') -NextAction 'Repair the broken chain link.'
-    $repairResult = ((& $scriptPaths.repair -DocsRoot $docsRoot -Location active -TaskLabel 'repairable-scope' -WorkspaceRoot $workspace -Branch 'repair/branch' -Format json) | ConvertFrom-Json)
+    $older = Join-Path $script:activeDir '20260309_0900_CypressSkillHandover.md'
+    $latest = Join-Path $script:activeDir '20260310_0900_CypressSkillHandover.md'
+    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-09 09:00' -TaskLabel 'repairable-scope' -WorkspaceRoot $script:workspace -Branch 'repair/branch' -Status 'In progress' -PreviousHandover 'No prior handover found' -NextAction 'Keep the older checkpoint for chain repair.'
+    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-10 09:00' -TaskLabel 'repairable-scope' -WorkspaceRoot $script:workspace -Branch 'repair/branch' -Status 'Blocked' -PreviousHandover (Join-Path $script:tempRoot 'missing-prior.md') -NextAction 'Repair the broken chain link.'
+    $repairResult = ((& $script:scriptPaths.repair -DocsRoot $script:docsRoot -Location active -TaskLabel 'repairable-scope' -WorkspaceRoot $script:workspace -Branch 'repair/branch' -Format json) | ConvertFrom-Json)
     if ($repairResult.RewrittenFiles -lt 1) {
       throw "Expected at least one rewritten file"
     }
-    & $scriptPaths.validate -Path $latest | Out-Null
+    & $script:scriptPaths.validate -Path $latest | Out-Null
   }
 
   It "resolve-handover-location-conflict removes duplicate archived scope when keeping active" {
-    $doctorResult = ((& $scriptPaths.doctor -DocsRoot $docsRoot -TaskLabel 'duplicate-scope' -Location all -WorkspaceRoot $workspace -Branch 'dup/branch' -Format json) | ConvertFrom-Json)
+    $doctorResult = ((& $script:scriptPaths.doctor -DocsRoot $script:docsRoot -TaskLabel 'duplicate-scope' -Location all -WorkspaceRoot $script:workspace -Branch 'dup/branch' -Format json) | ConvertFrom-Json)
     if ($doctorResult.RecommendedAction -ne 'repair') {
       throw "Expected repair recommendation for duplicate scope, got '$($doctorResult.RecommendedAction)'"
     }
@@ -133,15 +133,15 @@ Describe "Cypress handover package" {
       throw "Doctor did not point to the location-conflict resolver"
     }
 
-    $resolved = ((& $scriptPaths.resolve -DocsRoot $docsRoot -TaskLabel 'duplicate-scope' -WorkspaceRoot $workspace -Branch 'dup/branch' -KeepLocation active -Format json) | ConvertFrom-Json)
+    $resolved = ((& $script:scriptPaths.resolve -DocsRoot $script:docsRoot -TaskLabel 'duplicate-scope' -WorkspaceRoot $script:workspace -Branch 'dup/branch' -KeepLocation active -Format json) | ConvertFrom-Json)
     if ($resolved.KeptLocation -ne 'active') {
       throw "Expected active location to be kept"
     }
-    if (Test-Path -LiteralPath $duplicateArchive -PathType Leaf) {
+    if (Test-Path -LiteralPath $script:duplicateArchive -PathType Leaf) {
       throw "Expected archived duplicate to be removed"
     }
 
-    $audit = ((& $scriptPaths.audit -DocsRoot $docsRoot -Location all -Format json) | ConvertFrom-Json)
+    $audit = ((& $script:scriptPaths.audit -DocsRoot $script:docsRoot -Location all -Format json) | ConvertFrom-Json)
     $remainingCollisions = @(
       $audit.CrossLocationScopeCollisions |
         Where-Object { $_.TaskLabel -eq 'duplicate-scope' }
@@ -152,8 +152,8 @@ Describe "Cypress handover package" {
   }
 
   It "export-handover-index includes histories when requested" {
-    $outputPath = Join-Path $tempRoot 'handover-index.json'
-    $index = ((& $scriptPaths.export -DocsRoot $docsRoot -Location all -IncludeHistory -Format json -OutputPath $outputPath) | ConvertFrom-Json)
+    $outputPath = Join-Path $script:tempRoot 'handover-index.json'
+    $index = ((& $script:scriptPaths.export -DocsRoot $script:docsRoot -Location all -IncludeHistory -Format json -OutputPath $outputPath) | ConvertFrom-Json)
     if (-not (Test-Path -LiteralPath $outputPath -PathType Leaf)) {
       throw "Expected export output file to be created"
     }
@@ -167,12 +167,12 @@ Describe "Cypress handover package" {
   }
 
   It "archive and restore preserve a two-file completed chain" {
-    $older = Join-Path $activeDir '20260306_0900_CypressSkillHandover.md'
-    $latest = Join-Path $activeDir '20260307_0900_CypressSkillHandover.md'
-    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-06 09:00' -TaskLabel 'completed-history' -WorkspaceRoot $workspace -Branch 'history/branch' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older completed checkpoint.'
-    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-07 09:00' -TaskLabel 'completed-history' -WorkspaceRoot $workspace -Branch 'history/branch' -Status 'Completed' -PreviousHandover $older -NextAction 'Latest completed checkpoint.'
+    $older = Join-Path $script:activeDir '20260306_0900_CypressSkillHandover.md'
+    $latest = Join-Path $script:activeDir '20260307_0900_CypressSkillHandover.md'
+    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-06 09:00' -TaskLabel 'completed-history' -WorkspaceRoot $script:workspace -Branch 'history/branch' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older completed checkpoint.'
+    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-07 09:00' -TaskLabel 'completed-history' -WorkspaceRoot $script:workspace -Branch 'history/branch' -Status 'Completed' -PreviousHandover $older -NextAction 'Latest completed checkpoint.'
 
-    $archived = ((& $scriptPaths.archive -DocsRoot $docsRoot -TaskLabel 'completed-history' -WorkspaceRoot $workspace -Branch 'history/branch' -Format json) | ConvertFrom-Json)
+    $archived = ((& $script:scriptPaths.archive -DocsRoot $script:docsRoot -TaskLabel 'completed-history' -WorkspaceRoot $script:workspace -Branch 'history/branch' -Format json) | ConvertFrom-Json)
     if ((@($archived.ArchivedPaths)).Count -ne 2) {
       throw "Expected two archived files"
     }
@@ -180,27 +180,27 @@ Describe "Cypress handover package" {
       throw "Expected active completed chain to be moved to archive"
     }
 
-    $restored = ((& $scriptPaths.restore -DocsRoot $docsRoot -TaskLabel 'completed-history' -WorkspaceRoot $workspace -Branch 'history/branch' -Format json) | ConvertFrom-Json)
+    $restored = ((& $script:scriptPaths.restore -DocsRoot $script:docsRoot -TaskLabel 'completed-history' -WorkspaceRoot $script:workspace -Branch 'history/branch' -Format json) | ConvertFrom-Json)
     if ((@($restored.RestoredPaths)).Count -ne 2) {
       throw "Expected two restored files"
     }
     if (-not (Test-Path -LiteralPath $latest -PathType Leaf)) {
       throw "Expected latest completed checkpoint to be restored to active storage"
     }
-    & $scriptPaths.validate -Path $latest | Out-Null
+    & $script:scriptPaths.validate -Path $latest | Out-Null
   }
 
   It "archive rollback keeps active files when archive target already exists" {
-    $older = Join-Path $activeDir '20260304_0900_CypressSkillHandover.md'
-    $latest = Join-Path $activeDir '20260305_0900_CypressSkillHandover.md'
-    $conflictingArchiveTarget = Join-Path $archiveDir '20260304_0900_CypressSkillHandover.md'
-    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-04 09:00' -TaskLabel 'archive-rollback' -WorkspaceRoot $workspace -Branch 'rollback/archive' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older completed checkpoint.'
-    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-05 09:00' -TaskLabel 'archive-rollback' -WorkspaceRoot $workspace -Branch 'rollback/archive' -Status 'Completed' -PreviousHandover $older -NextAction 'Latest completed checkpoint.'
-    New-HandoverFixtureFile -Path $conflictingArchiveTarget -Timestamp '2026-03-01 09:00' -TaskLabel 'unrelated-archive' -WorkspaceRoot $workspace -Branch 'rollback/archive' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Conflicting archive target.'
+    $older = Join-Path $script:activeDir '20260304_0900_CypressSkillHandover.md'
+    $latest = Join-Path $script:activeDir '20260305_0900_CypressSkillHandover.md'
+    $conflictingArchiveTarget = Join-Path $script:archiveDir '20260304_0900_CypressSkillHandover.md'
+    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-04 09:00' -TaskLabel 'archive-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/archive' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older completed checkpoint.'
+    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-05 09:00' -TaskLabel 'archive-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/archive' -Status 'Completed' -PreviousHandover $older -NextAction 'Latest completed checkpoint.'
+    New-HandoverFixtureFile -Path $conflictingArchiveTarget -Timestamp '2026-03-01 09:00' -TaskLabel 'unrelated-archive' -WorkspaceRoot $script:workspace -Branch 'rollback/archive' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Conflicting archive target.'
 
     $failedAsExpected = $false
     try {
-      & $scriptPaths.archive -DocsRoot $docsRoot -TaskLabel 'archive-rollback' -WorkspaceRoot $workspace -Branch 'rollback/archive' -Format json | Out-Null
+      & $script:scriptPaths.archive -DocsRoot $script:docsRoot -TaskLabel 'archive-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/archive' -Format json | Out-Null
     } catch {
       $failedAsExpected = $_.Exception.Message -like '*Archive target already exists*'
     }
@@ -217,15 +217,15 @@ Describe "Cypress handover package" {
   }
 
   It "archive rollback removes written archive copies when validation fails" {
-    $older = Join-Path $activeDir '20260314_0900_CypressSkillHandover.md'
-    $latest = Join-Path $activeDir '20260315_0900_CypressSkillHandover.md'
-    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-14 09:00' -TaskLabel 'archive-validation-rollback' -WorkspaceRoot $workspace -Branch 'rollback/archive-validation' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older completed checkpoint.'
-    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-15 09:00' -TaskLabel 'archive-validation-rollback' -WorkspaceRoot $workspace -Branch 'rollback/archive-validation' -Status 'Completed' -PreviousHandover $older -NextAction 'Latest completed checkpoint.'
+    $older = Join-Path $script:activeDir '20260314_0900_CypressSkillHandover.md'
+    $latest = Join-Path $script:activeDir '20260315_0900_CypressSkillHandover.md'
+    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-14 09:00' -TaskLabel 'archive-validation-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/archive-validation' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older completed checkpoint.'
+    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-15 09:00' -TaskLabel 'archive-validation-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/archive-validation' -Status 'Completed' -PreviousHandover $older -NextAction 'Latest completed checkpoint.'
     Set-HandoverSectionBody -Path $latest -Heading '### Validation and evidence' -Body 'TBD'
 
     $failedAsExpected = $false
     try {
-      & $scriptPaths.archive -DocsRoot $docsRoot -TaskLabel 'archive-validation-rollback' -WorkspaceRoot $workspace -Branch 'rollback/archive-validation' -Format json | Out-Null
+      & $script:scriptPaths.archive -DocsRoot $script:docsRoot -TaskLabel 'archive-validation-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/archive-validation' -Format json | Out-Null
     } catch {
       $failedAsExpected = $_.Exception.Message -like '*validate-handover failed*'
     }
@@ -239,8 +239,8 @@ Describe "Cypress handover package" {
     if (-not (Test-Path -LiteralPath $latest -PathType Leaf)) {
       throw "Expected latest active file to remain after validation rollback"
     }
-    $unexpectedArchiveOlder = Join-Path $archiveDir '20260314_0900_CypressSkillHandover.md'
-    $unexpectedArchiveLatest = Join-Path $archiveDir '20260315_0900_CypressSkillHandover.md'
+    $unexpectedArchiveOlder = Join-Path $script:archiveDir '20260314_0900_CypressSkillHandover.md'
+    $unexpectedArchiveLatest = Join-Path $script:archiveDir '20260315_0900_CypressSkillHandover.md'
     if (Test-Path -LiteralPath $unexpectedArchiveOlder -PathType Leaf) {
       throw "Expected written archive copy to be removed after validation rollback"
     }
@@ -250,16 +250,16 @@ Describe "Cypress handover package" {
   }
 
   It "restore rollback keeps archived files when restore target already exists" {
-    $archivedOlder = Join-Path $archiveDir '20260302_0900_CypressSkillHandover.md'
-    $archivedLatest = Join-Path $archiveDir '20260303_0900_CypressSkillHandover.md'
-    $conflictingRestoreTarget = Join-Path $activeDir '20260302_0900_CypressSkillHandover.md'
-    New-HandoverFixtureFile -Path $archivedOlder -Timestamp '2026-03-02 09:00' -TaskLabel 'restore-rollback' -WorkspaceRoot $workspace -Branch 'rollback/restore' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older archived checkpoint.'
-    New-HandoverFixtureFile -Path $archivedLatest -Timestamp '2026-03-03 09:00' -TaskLabel 'restore-rollback' -WorkspaceRoot $workspace -Branch 'rollback/restore' -Status 'Completed' -PreviousHandover $archivedOlder -NextAction 'Latest archived checkpoint.'
-    New-HandoverFixtureFile -Path $conflictingRestoreTarget -Timestamp '2026-03-01 08:00' -TaskLabel 'unrelated-active' -WorkspaceRoot $workspace -Branch 'rollback/restore' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Conflicting active target.'
+    $archivedOlder = Join-Path $script:archiveDir '20260302_0900_CypressSkillHandover.md'
+    $archivedLatest = Join-Path $script:archiveDir '20260303_0900_CypressSkillHandover.md'
+    $conflictingRestoreTarget = Join-Path $script:activeDir '20260302_0900_CypressSkillHandover.md'
+    New-HandoverFixtureFile -Path $archivedOlder -Timestamp '2026-03-02 09:00' -TaskLabel 'restore-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/restore' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older archived checkpoint.'
+    New-HandoverFixtureFile -Path $archivedLatest -Timestamp '2026-03-03 09:00' -TaskLabel 'restore-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/restore' -Status 'Completed' -PreviousHandover $archivedOlder -NextAction 'Latest archived checkpoint.'
+    New-HandoverFixtureFile -Path $conflictingRestoreTarget -Timestamp '2026-03-01 08:00' -TaskLabel 'unrelated-active' -WorkspaceRoot $script:workspace -Branch 'rollback/restore' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Conflicting active target.'
 
     $failedAsExpected = $false
     try {
-      & $scriptPaths.restore -DocsRoot $docsRoot -TaskLabel 'restore-rollback' -WorkspaceRoot $workspace -Branch 'rollback/restore' -Format json | Out-Null
+      & $script:scriptPaths.restore -DocsRoot $script:docsRoot -TaskLabel 'restore-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/restore' -Format json | Out-Null
     } catch {
       $failedAsExpected = $_.Exception.Message -like '*Restore target already exists*'
     }
@@ -276,15 +276,15 @@ Describe "Cypress handover package" {
   }
 
   It "restore rollback removes written active copies when validation fails" {
-    $archivedOlder = Join-Path $archiveDir '20260316_0900_CypressSkillHandover.md'
-    $archivedLatest = Join-Path $archiveDir '20260317_0900_CypressSkillHandover.md'
-    New-HandoverFixtureFile -Path $archivedOlder -Timestamp '2026-03-16 09:00' -TaskLabel 'restore-validation-rollback' -WorkspaceRoot $workspace -Branch 'rollback/restore-validation' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older archived checkpoint.'
-    New-HandoverFixtureFile -Path $archivedLatest -Timestamp '2026-03-17 09:00' -TaskLabel 'restore-validation-rollback' -WorkspaceRoot $workspace -Branch 'rollback/restore-validation' -Status 'Completed' -PreviousHandover $archivedOlder -NextAction 'Latest archived checkpoint.'
+    $archivedOlder = Join-Path $script:archiveDir '20260316_0900_CypressSkillHandover.md'
+    $archivedLatest = Join-Path $script:archiveDir '20260317_0900_CypressSkillHandover.md'
+    New-HandoverFixtureFile -Path $archivedOlder -Timestamp '2026-03-16 09:00' -TaskLabel 'restore-validation-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/restore-validation' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older archived checkpoint.'
+    New-HandoverFixtureFile -Path $archivedLatest -Timestamp '2026-03-17 09:00' -TaskLabel 'restore-validation-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/restore-validation' -Status 'Completed' -PreviousHandover $archivedOlder -NextAction 'Latest archived checkpoint.'
     Set-HandoverSectionBody -Path $archivedLatest -Heading '### Validation and evidence' -Body 'TBD'
 
     $failedAsExpected = $false
     try {
-      & $scriptPaths.restore -DocsRoot $docsRoot -TaskLabel 'restore-validation-rollback' -WorkspaceRoot $workspace -Branch 'rollback/restore-validation' -Format json | Out-Null
+      & $script:scriptPaths.restore -DocsRoot $script:docsRoot -TaskLabel 'restore-validation-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/restore-validation' -Format json | Out-Null
     } catch {
       $failedAsExpected = $_.Exception.Message -like '*validate-handover failed*'
     }
@@ -298,8 +298,8 @@ Describe "Cypress handover package" {
     if (-not (Test-Path -LiteralPath $archivedLatest -PathType Leaf)) {
       throw "Expected latest archived file to remain after validation rollback"
     }
-    $unexpectedActiveOlder = Join-Path $activeDir '20260316_0900_CypressSkillHandover.md'
-    $unexpectedActiveLatest = Join-Path $activeDir '20260317_0900_CypressSkillHandover.md'
+    $unexpectedActiveOlder = Join-Path $script:activeDir '20260316_0900_CypressSkillHandover.md'
+    $unexpectedActiveLatest = Join-Path $script:activeDir '20260317_0900_CypressSkillHandover.md'
     if (Test-Path -LiteralPath $unexpectedActiveOlder -PathType Leaf) {
       throw "Expected written active copy to be removed after validation rollback"
     }
@@ -309,16 +309,16 @@ Describe "Cypress handover package" {
   }
 
   It "repair rollback restores rewritten files when scope validation fails" {
-    $older = Join-Path $activeDir '20260318_0900_CypressSkillHandover.md'
-    $latest = Join-Path $activeDir '20260319_0900_CypressSkillHandover.md'
-    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-18 09:00' -TaskLabel 'repair-rollback' -WorkspaceRoot $workspace -Branch 'rollback/repair' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older checkpoint.'
-    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-19 09:00' -TaskLabel 'repair-rollback' -WorkspaceRoot $workspace -Branch 'rollback/repair' -Status 'Blocked' -PreviousHandover (Join-Path $tempRoot 'missing-prior.md') -NextAction 'Repair the broken link.'
+    $older = Join-Path $script:activeDir '20260318_0900_CypressSkillHandover.md'
+    $latest = Join-Path $script:activeDir '20260319_0900_CypressSkillHandover.md'
+    New-HandoverFixtureFile -Path $older -Timestamp '2026-03-18 09:00' -TaskLabel 'repair-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/repair' -Status 'Completed' -PreviousHandover 'No prior handover found' -NextAction 'Older checkpoint.'
+    New-HandoverFixtureFile -Path $latest -Timestamp '2026-03-19 09:00' -TaskLabel 'repair-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/repair' -Status 'Blocked' -PreviousHandover (Join-Path $script:tempRoot 'missing-prior.md') -NextAction 'Repair the broken link.'
     Set-HandoverSectionBody -Path $older -Heading '### Validation and evidence' -Body 'TBD'
     $originalPrevious = Get-HandoverMetadataLineValue -Path $latest -Label 'Previous handover'
 
     $failedAsExpected = $false
     try {
-      & $scriptPaths.repair -DocsRoot $docsRoot -Location active -TaskLabel 'repair-rollback' -WorkspaceRoot $workspace -Branch 'rollback/repair' -Format json | Out-Null
+      & $script:scriptPaths.repair -DocsRoot $script:docsRoot -Location active -TaskLabel 'repair-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/repair' -Format json | Out-Null
     } catch {
       $failedAsExpected = $_.Exception.Message -like '*validate-handover failed*'
     }
@@ -333,11 +333,11 @@ Describe "Cypress handover package" {
   }
 
   It "resolve conflict does not delete either location when kept files fail validation" {
-    Set-HandoverSectionBody -Path $duplicateActive -Heading '### Validation and evidence' -Body 'TBD'
+    Set-HandoverSectionBody -Path $script:duplicateActive -Heading '### Validation and evidence' -Body 'TBD'
 
     $failedAsExpected = $false
     try {
-      & $scriptPaths.resolve -DocsRoot $docsRoot -TaskLabel 'duplicate-scope' -WorkspaceRoot $workspace -Branch 'dup/branch' -KeepLocation active -Format json | Out-Null
+      & $script:scriptPaths.resolve -DocsRoot $script:docsRoot -TaskLabel 'duplicate-scope' -WorkspaceRoot $script:workspace -Branch 'dup/branch' -KeepLocation active -Format json | Out-Null
     } catch {
       $failedAsExpected = $_.Exception.Message -like '*validate-handover failed*'
     }
@@ -345,20 +345,20 @@ Describe "Cypress handover package" {
     if (-not $failedAsExpected) {
       throw "Expected conflict resolution to fail when the kept active file does not validate"
     }
-    if (-not (Test-Path -LiteralPath $duplicateActive -PathType Leaf)) {
+    if (-not (Test-Path -LiteralPath $script:duplicateActive -PathType Leaf)) {
       throw "Expected kept active duplicate to remain after validation failure"
     }
-    if (-not (Test-Path -LiteralPath $duplicateArchive -PathType Leaf)) {
+    if (-not (Test-Path -LiteralPath $script:duplicateArchive -PathType Leaf)) {
       throw "Expected removable archived duplicate to remain after validation failure"
     }
   }
 
   It "new-handover rejects cross-scope manual previous overrides" {
-    Push-Location $tempRoot
+    Push-Location $script:tempRoot
     try {
       $rejected = $false
       try {
-        & $scriptPaths.new -TaskLabel 'checkout auth fix' -DocsRoot 'docs/tests' -PreviousHandover $activeOther -Force | Out-Null
+        & $script:scriptPaths.new -TaskLabel 'checkout auth fix' -DocsRoot 'docs/tests' -PreviousHandover $script:activeOther -Force | Out-Null
       } catch {
         $message = $_.Exception.Message
         $rejected = ($message -like '*same Workspace root*') -or ($message -like '*same Branch*') -or ($message -like '*same Task label*')

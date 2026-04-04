@@ -10,6 +10,7 @@ if (-not (Test-Path -LiteralPath $reportPath -PathType Leaf)) {
   throw "check-skill-inventory-report-structure failed: missing reports/skill-inventory.md"
 }
 
+# Use -Raw for regex-based overview, then non-Raw for line-based table scan
 $text = Get-Content -Raw -LiteralPath $reportPath
 $text = $text -replace "`r", ""
 $issues = @()
@@ -35,7 +36,8 @@ foreach ($rule in $requiredPatterns) {
 }
 
 $skillCount = (Get-ChildItem -Path $rootAbs -Recurse -File -Filter SKILL.md).Count
-$lines = Get-Content -Raw -LiteralPath $reportPath | ForEach-Object { $_ -replace "`r", "" }
+# DO NOT USE -Raw HERE because we want an array of lines for the Loop
+$lines = Get-Content -Path $reportPath | ForEach-Object { $_ -replace "`r", "" }
 $skillTableIndex = -1
 for ($i = 0; $i -lt $lines.Count; $i++) {
   if ($lines[$i] -match '^## Skill Table\s*$') {
@@ -51,7 +53,7 @@ if ($skillTableIndex -ge 0) {
     if ([string]::IsNullOrWhiteSpace($line)) { continue }
     if ($line -notmatch '^\|') { break }
     if ($line -match '^\|---') { continue }
-    if ($line -eq '| Path | Skill Name | Display Name | Area | Metadata |') { continue }
+    if ($line -match '^\| Path \| Skill Name \| Display Name \| Area \| Metadata \|') { continue }
     $tableLines += $line
   }
 }
