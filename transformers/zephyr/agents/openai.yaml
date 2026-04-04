@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Transformer Zephyr"
-  short_description: "Test-management transformation skill for Zephyr Scale"
-  default_prompt: "Use $cypress-transformer-zephyr to help with test-management transformation skill for Zephyr Scale."
+  short_description: "Legacy Cypress-specific alias for Zephyr case export"
+  default_prompt: "Use $cypress-transformer-zephyr to help with legacy Cypress-specific alias for Zephyr case export."
 
 policy:
   allow_implicit_invocation: true

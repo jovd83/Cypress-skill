@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Transformer Xray"
-  short_description: "Test-management transformation skill for Xray"
-  default_prompt: "Use $cypress-transformer-xray to help with test-management transformation skill for Xray."
+  short_description: "Legacy Cypress-specific alias for Xray case export"
+  default_prompt: "Use $cypress-transformer-xray to help with legacy Cypress-specific alias for Xray case export."
 
 policy:
   allow_implicit_invocation: true

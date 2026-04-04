@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Documentation Plaintext"
-  short_description: "Narrative test-case documentation skill for Cypress work in"
-  default_prompt: "Use $cypress-documentation-plaintext to help with narrative test-case documentation skill for Cypress work in lightweight plain-text form."
+  short_description: "Legacy Cypress-specific alias for plain-text case formatting"
+  default_prompt: "Use $cypress-documentation-plaintext to help with legacy Cypress-specific alias for plain-text case formatting."
 
 policy:
   allow_implicit_invocation: true

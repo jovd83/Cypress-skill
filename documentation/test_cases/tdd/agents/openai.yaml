@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Documentation Tdd"
-  short_description: "Narrative test-case documentation skill for Cypress work in"
-  default_prompt: "Use $cypress-documentation-tdd to help with narrative test-case documentation skill for Cypress work in structured TDD format."
+  short_description: "Legacy Cypress-specific alias for TDD-style case documentation"
+  default_prompt: "Use $cypress-documentation-tdd to help with legacy Cypress-specific alias for TDD-style case documentation."
 
 policy:
   allow_implicit_invocation: true

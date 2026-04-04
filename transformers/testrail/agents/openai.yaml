@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Transformer Testrail"
-  short_description: "Test-management transformation skill for TestRail"
-  default_prompt: "Use $cypress-transformer-testrail to help with test-management transformation skill for TestRail."
+  short_description: "Legacy Cypress-specific alias for TestRail case export"
+  default_prompt: "Use $cypress-transformer-testrail to help with legacy Cypress-specific alias for TestRail case export."
 
 policy:
   allow_implicit_invocation: true

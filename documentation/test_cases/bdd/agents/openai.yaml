@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Documentation Bdd"
-  short_description: "Narrative test-case documentation skill for Cypress work in"
-  default_prompt: "Use $cypress-documentation-bdd to help with narrative test-case documentation skill for Cypress work in BDD and Gherkin form."
+  short_description: "Legacy Cypress-specific alias for BDD case formatting"
+  default_prompt: "Use $cypress-documentation-bdd to help with legacy Cypress-specific alias for BDD case formatting."
 
 policy:
   allow_implicit_invocation: true

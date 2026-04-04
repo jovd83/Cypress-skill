@@ -1,16 +1,10 @@
 ---
-metadata:
-  author: jovd83
-  version: "1.0.0"
----
-
----
 name: cypress-handover-compat
 description: Use when you need the legacy Cypress handover entrypoint path; follow the canonical Cypress handover workflow in documentation/cypress-handover.
 metadata:
   author: jovd83
-  version: "1.1"
---- 
+  version: "1.1.0"
+---
 
 # Handover
 

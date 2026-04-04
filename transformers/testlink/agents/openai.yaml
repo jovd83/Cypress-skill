@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Transformer Testlink"
-  short_description: "Test-management transformation skill for TestLink"
-  default_prompt: "Use $cypress-transformer-testlink to help with test-management transformation skill for TestLink."
+  short_description: "Legacy Cypress-specific alias for TestLink case export"
+  default_prompt: "Use $cypress-transformer-testlink to help with legacy Cypress-specific alias for TestLink case export."
 
 policy:
   allow_implicit_invocation: true
