@@ -1,13 +1,21 @@
-﻿---
+---
 name: cypress-migration
-description: Step-by-step migration guides for moving to Cypress from Playwright or Selenium/WebDriver, including command mappings, architecture differences, and incremental adoption strategies.
+description: Migration skill for moving existing UI automation to Cypress. Use when Codex needs to translate Playwright or Selenium/WebDriver patterns, plan incremental migration, preserve coverage during framework change, or explain architectural differences that affect the suite design.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Cypress Migration Guides
 
-> Move to Cypress with confidence using side-by-side command mappings and architecture translations.
+Use this skill when the user is moving from another browser automation stack to Cypress.
 
-**2 guides** covering complete migration paths from common automation stacks.
+## Migration Workflow
+
+1. Inventory the existing suite structure, runner assumptions, and shared helpers.
+2. Map framework concepts to Cypress equivalents.
+3. Choose an incremental migration path that preserves confidence.
+4. Revisit architecture decisions such as waiting, selectors, network control, fixtures, and CI once the syntax translation is done.
 
 ## Official References
 
@@ -20,9 +28,6 @@ description: Step-by-step migration guides for moving to Cypress from Playwright
 | Playwright | [from-playwright.md](from-playwright.md) |
 | Selenium / WebDriver | [from-selenium.md](from-selenium.md) |
 
+## Output Bias
 
-
-
-
-
-
+Prefer migration plans, translated examples, and architecture notes over abstract comparisons.

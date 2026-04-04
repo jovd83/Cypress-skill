@@ -1,25 +1,33 @@
-﻿---
+---
 name: cypress-reporter-xray
-description: A skill to use Xray APIs to report Cypress test execution results.
+description: Test-management reporting skill for Xray. Use when Codex needs to publish Cypress execution results into Xray using the project's mappings, environment configuration, and chosen reporting flow.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Xray API Reporter
 
-This skill handles importing execution results to Jira Xray.
+Use this skill when the goal is to push execution outcomes into Xray.
 
 ## Action
-When requested:
-1. Ask the user for Jira Credentials (API token).
-2. Install the `@xray-app/cypress-junit-reporter` or `cypress-xray-helper` npm library.
-3. Configure the `cypress.config.ts` to output enriched JUnit or JSON.
-4. Submit the results to the Xray `/import/execution` REST endpoint using the custom reporter built-in uploading logic or curl.
-5. Verify the Jira issue was updated securely, and report back the Execution Issue ID.
 
+Inputs:
 
+- Xray connection details and credentials,
+- the local result source,
+- the mapping from automated tests to Xray issue or case IDs,
+- any target run, build, or environment context required by the project.
 
+Workflow:
 
+1. Confirm the mapping and target run context.
+2. Configure the reporting path or client the project uses.
+3. Publish results securely.
+4. Return a concise report of what was sent and what could not be reported.
 
+Guardrails:
 
-
-
-
+- Never echo secrets back in plain text.
+- Do not report results for tests that cannot be mapped confidently.
+- Call out partial publication explicitly.

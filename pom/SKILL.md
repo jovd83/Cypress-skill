@@ -1,26 +1,33 @@
-﻿---
+---
 name: cypress-pom
-description: Page Object Model patterns for Cypress - when to use POM, how to structure page objects, and when fixtures or helpers are a better fit.
+description: Test-architecture skill for Cypress page objects, fixtures, helpers, and custom commands. Use when Codex needs to decide whether to introduce a Page Object Model, how to structure page objects, and how to separate browser state, UI behavior, and stateless utilities cleanly.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Cypress Page Object Model
 
-> Structure your test code for maintainability - know when POM helps and when simpler patterns win.
+Use this skill when the main decision is architectural rather than tactical.
 
-**2 guides** covering Page Object Model implementation and the decision framework for choosing between POM, fixtures, and helpers.
+## Decision Model
+
+- Use fixtures and setup hooks for setup, teardown, seeded state, and reusable inputs.
+- Use page objects to encapsulate repeated or complex UI behavior.
+- Use helpers for stateless utilities such as data generation, formatting, or pure transformations.
+- Use custom commands or `cy.task()` only when they provide a real integration benefit rather than becoming a dumping ground for page behavior.
+
+## Practical Rules
+
+1. Reach for a page object when the same UI behavior appears in multiple tests or when the flow is complex enough to deserve a named abstraction.
+2. Keep assertions close to the test unless a reusable page-level assertion adds clarity.
+3. Avoid helpers that silently own browser state.
+4. Keep support code organized with the tests it serves.
 
 ## Guide Index
 
-| Topic | Guide |
+| Need | Guide |
 |---|---|
-| Page Object Model patterns | [page-object-model.md](page-object-model.md) |
-| POM vs fixtures vs helpers | [pom-vs-fixtures-vs-helpers.md](pom-vs-fixtures-vs-helpers.md) |
-
-
-
-
-
-
-
-
-
+| Page object design | [page-object-model.md](page-object-model.md) |
+| POM vs fixture vs helper tradeoffs | [pom-vs-fixtures-vs-helpers.md](pom-vs-fixtures-vs-helpers.md) |
+| Broader architecture decisions | [../core/test-architecture.md](../core/test-architecture.md) |

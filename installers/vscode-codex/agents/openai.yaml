@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Installer Vscode Codex"
-  short_description: "guide the installation and configuration of Cypress testing"
-  default_prompt: "Use $cypress-installer-vscode-codex to guide the installation and configuration of Cypress testing within VSCode alongside OpenAI Codex."
+  short_description: "Editor-setup skill for Cypress plus OpenAI Codex in Visual"
+  default_prompt: "Use $cypress-installer-vscode-codex to help with editor-setup skill for Cypress plus OpenAI Codex in Visual Studio Code."
 
 policy:
   allow_implicit_invocation: true

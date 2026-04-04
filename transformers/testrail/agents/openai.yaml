@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Transformer Testrail"
-  short_description: "transform Cypress natural language test cases into TestRail"
-  default_prompt: "Use $cypress-transformer-testrail to transform Cypress natural language test cases into TestRail compatible import formats (XML/CSV)."
+  short_description: "Test-management transformation skill for TestRail"
+  default_prompt: "Use $cypress-transformer-testrail to help with test-management transformation skill for TestRail."
 
 policy:
   allow_implicit_invocation: true

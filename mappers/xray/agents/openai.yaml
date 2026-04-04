@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Mapper Xray"
-  short_description: "map Xray unique IDs back to local Cypress test documentation"
-  default_prompt: "Use $cypress-mapper-xray to map Xray unique IDs back to local Cypress test documentation."
+  short_description: "Test-management mapping skill for Xray"
+  default_prompt: "Use $cypress-mapper-xray to help with test-management mapping skill for Xray."
 
 policy:
   allow_implicit_invocation: true

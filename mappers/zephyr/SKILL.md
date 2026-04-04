@@ -1,23 +1,31 @@
-﻿---
+---
 name: cypress-mapper-zephyr
-description: A skill to map Zephyr unique IDs back to local Cypress test documentation.
+description: Test-management mapping skill for Zephyr Scale. Use when Codex needs to apply authoritative Zephyr case IDs back into local Cypress docs, titles, or annotations so the repository can trace automation to imported Zephyr records.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Zephyr Mapper
 
-After uploading to Zephyr Scale, test cases receive unique Jira keys (e.g., `PROJ-T123`).
+Use this skill after Zephyr has assigned IDs and the local repository needs to reflect them.
 
 ## Action
-When requested:
-1. Request the exported mapping of Names to Zephyr Test Keys from the user.
-2. Apply the Zephyr Key (`PROJ-T123`) to the local test documentation.
-3. Tag the Cypress code by adding the Zephyr Key at the beginning of the title: `it('PROJ-T123: user login...', () => {})`
 
+Inputs:
 
+- an authoritative mapping from local scenario names or paths to Zephyr IDs,
+- the target markdown or automation files,
+- the team convention for where IDs belong in docs or test titles.
 
+Output contract:
 
+- updated local docs or code references,
+- a summary of which IDs were applied where,
+- any ambiguous matches that still need human confirmation.
 
+Guardrails:
 
-
-
-
+- Do not invent IDs.
+- Do not overwrite an existing different ID without calling out the conflict.
+- Prefer annotations or title conventions already used by the repository.

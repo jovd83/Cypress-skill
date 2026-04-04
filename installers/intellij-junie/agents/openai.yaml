@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Installer Intellij Junie"
-  short_description: "guide the installation and configuration of Cypress testing"
-  default_prompt: "Use $cypress-installer-intellij-junie to guide the installation and configuration of Cypress testing within IntelliJ IDEA alongside the Junie AI assistant."
+  short_description: "Editor-setup skill for Cypress plus Junie in IntelliJ IDEA"
+  default_prompt: "Use $cypress-installer-intellij-junie to help with editor-setup skill for Cypress plus Junie in IntelliJ IDEA."
 
 policy:
   allow_implicit_invocation: true

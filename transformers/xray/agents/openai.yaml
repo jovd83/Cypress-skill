@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Transformer Xray"
-  short_description: "transform Cypress natural language test cases into Xray"
-  default_prompt: "Use $cypress-transformer-xray to transform Cypress natural language test cases into Xray compatible import formats (JSON/CSV)."
+  short_description: "Test-management transformation skill for Xray"
+  default_prompt: "Use $cypress-transformer-xray to help with test-management transformation skill for Xray."
 
 policy:
   allow_implicit_invocation: true

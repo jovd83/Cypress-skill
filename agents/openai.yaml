@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Skill"
-  short_description: "Battle-tested Cypress v13+ patterns for E2E"
-  default_prompt: "Use $cypress-skill to help with battle-tested Cypress v13+ patterns for E2E."
+  short_description: "Flagship Cypress skill pack for planning"
+  default_prompt: "Use $cypress-skill to help with flagship Cypress skill pack for planning."
 
 policy:
   allow_implicit_invocation: true

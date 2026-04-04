@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Mapper Testrail"
-  short_description: "map TestRail unique IDs back to local Cypress test"
-  default_prompt: "Use $cypress-mapper-testrail to map TestRail unique IDs back to local Cypress test documentation."
+  short_description: "Test-management mapping skill for TestRail"
+  default_prompt: "Use $cypress-mapper-testrail to help with test-management mapping skill for TestRail."
 
 policy:
   allow_implicit_invocation: true

@@ -248,6 +248,26 @@ cy.fixture('users.json').then((users) => {
 - Returning impossible API shapes that do not match production contracts.
 - Mocking every endpoint in tests meant for integration confidence.
 
+## Troubleshooting
+
+### Intercept alias never resolves
+
+- Register the intercept before `cy.visit()` or before the action that triggers the request.
+- Confirm the HTTP method and URL pattern both match the real request.
+- Use a narrower pattern if a wildcard route is catching the wrong call.
+
+### Mocked UI behaves differently from production
+
+- Compare the mocked payload with a real backend response.
+- Keep status codes, headers, and body shape realistic.
+- Move long-lived mock payloads into fixtures so they can be reviewed and versioned.
+
+### Too many mocks are hiding regressions
+
+- Keep third-party isolation and error-path tests mocked.
+- Reduce internal API mocking in tests that are supposed to provide end-to-end confidence.
+- Split deterministic UI tests and backend-integrated tests into different suites if needed.
+
 ## Related
 
 - [core/assertions-and-waiting.md](assertions-and-waiting.md)

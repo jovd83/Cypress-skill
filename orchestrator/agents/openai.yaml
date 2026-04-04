@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Orchestrator"
-  short_description: "acts as the primary contact point for Cypress testing"
-  default_prompt: "Use $cypress-orchestrator to act as the primary contact point for Cypress testing."
+  short_description: "Central entrypoint for broad or ambiguous Cypress requests"
+  default_prompt: "Use $cypress-orchestrator to help with central entrypoint for broad or ambiguous Cypress requests."
 
 policy:
   allow_implicit_invocation: true

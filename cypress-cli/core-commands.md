@@ -190,3 +190,30 @@ cypress-cli click e5
 3. Keep selectors test-friendly (`data-cy`, roles, labels).
 4. Avoid forcing interactions when elements are hidden/disabled.
 5. Use `run-code` only when command primitives are insufficient.
+
+## Troubleshooting
+
+### Refs point at the wrong element
+
+- Run `cypress-cli snapshot` again after any navigation, rerender, modal change, or tab switch.
+- Do not reuse refs captured before a major DOM change.
+- Prefer smaller interaction batches with a fresh snapshot between them.
+
+### Click or fill fails even though the element looks visible
+
+- Re-snapshot and confirm the current ref still maps to the intended element.
+- Check whether an overlay, disabled state, or scroll position is blocking actionability.
+- Use `run-code` only if the workflow genuinely needs Cypress-level assertions or setup.
+
+### Browser processes stay open after scripts
+
+- Close the current session with `cypress-cli close`.
+- Use `cypress-cli close-all` for multi-session cleanup.
+- Use `cypress-cli kill-all` only when normal shutdown fails.
+
+## Related
+
+- [request-mocking.md](request-mocking.md)
+- [session-management.md](session-management.md)
+- [running-custom-code.md](running-custom-code.md)
+- [debugging-and-artifacts.md](debugging-and-artifacts.md)

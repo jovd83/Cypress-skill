@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Reporter Zephyr"
-  short_description: "use Zephyr Scale APIs to report Cypress test execution results"
-  default_prompt: "Use $cypress-reporter-zephyr to use Zephyr Scale APIs to report Cypress test execution results."
+  short_description: "Test-management reporting skill for Zephyr Scale"
+  default_prompt: "Use $cypress-reporter-zephyr to help with test-management reporting skill for Zephyr Scale."
 
 policy:
   allow_implicit_invocation: true

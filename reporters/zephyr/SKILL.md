@@ -1,25 +1,33 @@
-﻿---
+---
 name: cypress-reporter-zephyr
-description: A skill to use Zephyr Scale APIs to report Cypress test execution results.
+description: Test-management reporting skill for Zephyr Scale. Use when Codex needs to publish Cypress execution results into Zephyr using the project's mappings, environment configuration, and chosen reporting flow.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Zephyr Scale API Reporter
 
-This skill interacts with the Zephyr Scale REST API to publish test results.
+Use this skill when the goal is to push execution outcomes into Zephyr.
 
 ## Action
-When requested to report results to Zephyr:
-1. Ask the user for the Zephyr Bearer Token.
-2. Install the `@gurglosa/cypress-zephyr-jira-reporter` or `cypress-zephyr` npm library.
-3. Configure the reporter in `cypress.config.ts`.
-4. Parse the local Cypress results. Match the `CYP-T123:` keys to determine the target Test Cases.
-5. Formulate the JSON payload for the `/testruns` endpoint or let the reporter plugin handle the Jira test cycle sync automatically.
 
+Inputs:
 
+- Zephyr connection details and credentials,
+- the local result source,
+- the mapping from automated tests to Zephyr case IDs,
+- any target run, build, or environment context required by the project.
 
+Workflow:
 
+1. Confirm the mapping and target run context.
+2. Configure the reporting path or client the project uses.
+3. Publish results securely.
+4. Return a concise report of what was sent and what could not be reported.
 
+Guardrails:
 
-
-
-
+- Never echo secrets back in plain text.
+- Do not report results for tests that cannot be mapped confidently.
+- Call out partial publication explicitly.

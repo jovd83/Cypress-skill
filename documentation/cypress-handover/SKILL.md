@@ -1,6 +1,9 @@
 ---
 name: cypress-handover
 description: Use when you need a Cypress task handover that preserves status, session state, blockers, and exact resume steps for a human or later agent.
+metadata:
+  author: jovd83
+  version: "1.0"
 ---
 
 # Handover to Human-in-the-Loop

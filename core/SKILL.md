@@ -1,6 +1,9 @@
-﻿---
+---
 name: cypress-core
 description: Battle-tested Cypress patterns for E2E, API, component, visual, accessibility, and security testing. Covers selectors, assertions, hooks, intercepts, auth flows, debugging, and framework recipes for React, Next.js, Vue, and Angular.
+metadata:
+  author: jovd83
+  version: "1.0"
 ---
 
 # Cypress Core Testing

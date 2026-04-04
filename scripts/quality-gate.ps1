@@ -85,8 +85,20 @@ Invoke-Check -Name "Agents metadata sync drift check" -Check {
   & "$scriptRoot\sync-agents-metadata.ps1" -Root $Root -CheckOnly
 }
 
+Invoke-Check -Name "Skill inventory freshness" -Check {
+  & "$scriptRoot\check-skill-inventory-freshness.ps1" -Root $Root
+}
+
+Invoke-Check -Name "Skill inventory report structure" -Check {
+  & "$scriptRoot\check-skill-inventory-report-structure.ps1" -Root $Root
+}
+
 Invoke-Check -Name "Skill index coverage (local guides linked)" -Check {
   & "$scriptRoot\check-skill-index-coverage.ps1" -Root $Root
+}
+
+Invoke-Check -Name "Long-form guide contract" -Check {
+  & "$scriptRoot\check-long-form-guide-contract.ps1" -Root $Root
 }
 
 Invoke-Check -Name "Core guide section contract" -Check {
@@ -175,6 +187,10 @@ Invoke-Check -Name "Skill description Cypress convention" -Check {
 
 Invoke-Check -Name "CI workflow quality gate wiring" -Check {
   & "$scriptRoot\check-ci-workflow.ps1" -Root $Root
+}
+
+Invoke-Check -Name "Release workflow contract" -Check {
+  & "$scriptRoot\check-release-workflow-contract.ps1" -Root $Root
 }
 
 Invoke-Check -Name "Playwright residue policy" -Check {

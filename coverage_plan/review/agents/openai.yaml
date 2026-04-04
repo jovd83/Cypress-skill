@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Coverage Plan Review"
-  short_description: "present generated Cypress functional coverage plans to the"
-  default_prompt: "Use $cypress-coverage-plan-review to present generated Cypress functional coverage plans to the user and request explicit approval."
+  short_description: "Coverage-plan review skill for Cypress work"
+  default_prompt: "Use $cypress-coverage-plan-review to help with coverage-plan review skill for Cypress work."
 
 policy:
   allow_implicit_invocation: true

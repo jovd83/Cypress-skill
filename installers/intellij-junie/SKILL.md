@@ -1,32 +1,34 @@
-﻿---
+---
 name: cypress-installer-intellij-junie
-description: A skill to guide the installation and configuration of Cypress testing within IntelliJ IDEA alongside the Junie AI assistant.
+description: Editor-setup skill for Cypress plus Junie in IntelliJ IDEA. Use when Codex needs to help configure a practical JetBrains environment for Cypress authoring, execution, debugging, and local skill usage.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # IntelliJ IDEA with Junie Installation
 
-This skill provides the steps to set up AI-assisted Cypress testing inside JetBrains IntelliJ IDEA using the Junie plugin.
+Use this skill when the user wants a working Cypress workflow in IntelliJ IDEA with Junie-style assistance.
 
 ## Prerequisites
-- Node.js installed.
-- IntelliJ IDEA (Ultimate or Community) installed.
-- Junie plugin installed from the JetBrains marketplace.
+
+- Node.js installed
+- npm or another supported package manager available
+- IntelliJ IDEA or a compatible JetBrains IDE installed
+- access to the Junie or agent workflow the user actually plans to use
 
 ## Installation Steps
-1. **Initialize Cypress**
-   Open the terminal inside IntelliJ and run `npm init cypress@latest`.
-   Select TypeScript for maximum compatibility.
-2. **Configure Junie**
-   - Open IntelliJ Settings > Plugins > Installed, confirm Junie is active.
-   - Authorize Junie according to the plugin's onboarding instructions.
-3. **Index Documentation**
-   Provide the `cypress-skill` repository files, including these markdown skills, to the Junie context. Junie will read these patterns to enforce best practices when writing new tests or diagnosing failures.
 
+1. Initialize or inspect the Cypress project with `npm init cypress@latest` when Cypress is not already set up.
+2. Confirm the project can install dependencies and run Cypress locally.
+3. Configure the JetBrains plugins, terminal workflow, and agent setup the user actually has available.
+4. Verify local execution and debugging work in the IDE.
+5. Point the user to the relevant skills in this repository for test authoring, CI, planning, or documentation.
 
+Output contract:
 
-
-
-
-
-
-
+- prerequisites
+- setup steps
+- verification commands
+- IDE-specific caveats
+- the next recommended skill or guide after setup

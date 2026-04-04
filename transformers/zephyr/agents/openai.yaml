@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Transformer Zephyr"
-  short_description: "transform Cypress natural language test cases into Zephyr"
-  default_prompt: "Use $cypress-transformer-zephyr to transform Cypress natural language test cases into Zephyr Scale compatible import formats (JSON/CSV)."
+  short_description: "Test-management transformation skill for Zephyr Scale"
+  default_prompt: "Use $cypress-transformer-zephyr to help with test-management transformation skill for Zephyr Scale."
 
 policy:
   allow_implicit_invocation: true

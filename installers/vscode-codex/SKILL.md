@@ -1,34 +1,34 @@
-﻿---
+---
 name: cypress-installer-vscode-codex
-description: A skill to guide the installation and configuration of Cypress testing within VSCode alongside OpenAI Codex.
+description: Editor-setup skill for Cypress plus OpenAI Codex in Visual Studio Code. Use when Codex needs to help configure a practical VS Code environment for Cypress authoring, execution, debugging, and local skill usage.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # VSCode with OpenAI Codex Installation
 
-This skill provides the steps to set up the ideal environment for AI-assisted Cypress testing inside Visual Studio Code.
+Use this skill when the user wants a working Cypress workflow in Visual Studio Code with Codex-style assistance.
 
 ## Prerequisites
-- Node.js installed.
-- VSCode installed.
-- Access to an OpenAI API key for Codex/GitHub Copilot.
+
+- Node.js installed
+- npm or another supported package manager available
+- Visual Studio Code installed
+- access to the Codex or agent workflow the user actually plans to use
 
 ## Installation Steps
-1. **Initialize Cypress**
-   Run `npm init cypress@latest` in the terminal.
-   Choose TypeScript (recommended), and accept the default folders.
-2. **Install AI Extensions**
-   - Install the **GitHub Copilot** extension for VSCode.
-   - Alternatively, install any OpenAI Codex-compatible VSCode extension.
-3. **Configure Codex**
-   Insert your OpenAI API key into the chosen extension's settings.
-4. **Load Skills**
-   Use these markdown documentation skills to guide Codex via the chat interface by referencing the `SKILL.md` guides for Cypress structure.
 
+1. Initialize or inspect the Cypress project with `npm init cypress@latest` when Cypress is not already set up.
+2. Confirm the project can install dependencies and run Cypress locally.
+3. Configure the editor extensions, terminal workflow, and agent setup the user actually has available.
+4. Verify local execution and debugging work in VS Code.
+5. Point the user to the relevant skills in this repository for test authoring, CI, planning, or documentation.
 
+Output contract:
 
-
-
-
-
-
-
+- prerequisites
+- setup steps
+- verification commands
+- editor-specific caveats
+- the next recommended skill or guide after setup

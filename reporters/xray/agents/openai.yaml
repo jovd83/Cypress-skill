@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Reporter Xray"
-  short_description: "use Xray APIs to report Cypress test execution results"
-  default_prompt: "Use $cypress-reporter-xray to use Xray APIs to report Cypress test execution results."
+  short_description: "Test-management reporting skill for Xray"
+  default_prompt: "Use $cypress-reporter-xray to help with test-management reporting skill for Xray."
 
 policy:
   allow_implicit_invocation: true

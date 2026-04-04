@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Documentation Root Cause"
-  short_description: "perform root cause analysis on failed Cypress test runs and"
-  default_prompt: "Use $cypress-documentation-root-cause to perform root cause analysis on failed Cypress test runs and generate developer-friendly diagnostics."
+  short_description: "Failure-analysis skill for Cypress runs"
+  default_prompt: "Use $cypress-documentation-root-cause to help with failure-analysis skill for Cypress runs."
 
 policy:
   allow_implicit_invocation: true

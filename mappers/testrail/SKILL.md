@@ -1,23 +1,31 @@
-﻿---
+---
 name: cypress-mapper-testrail
-description: A skill to map TestRail unique IDs back to local Cypress test documentation.
+description: Test-management mapping skill for TestRail. Use when Codex needs to apply authoritative TestRail case IDs back into local Cypress docs, titles, or annotations so the repository can trace automation to imported TestRail records.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # TestRail Mapper
 
-After adding test cases to a TestRail suite, they get assigned an ID (e.g., `C12345`).
+Use this skill after TestRail has assigned IDs and the local repository needs to reflect them.
 
 ## Action
-When requested:
-1. Ask the user for the TestRail Case ID mappings.
-2. Insert the TestRail ID into the markdown test documentation.
-3. Integrate the Case ID into Cypress test titles (which is required by the TestRail reporter plugin): `it('C12345 Verify user login...', () => {})` or using tags `@C12345`.
 
+Inputs:
 
+- an authoritative mapping from local scenario names or paths to TestRail IDs,
+- the target markdown or automation files,
+- the team convention for where IDs belong in docs or test titles.
 
+Output contract:
 
+- updated local docs or code references,
+- a summary of which IDs were applied where,
+- any ambiguous matches that still need human confirmation.
 
+Guardrails:
 
-
-
-
+- Do not invent IDs.
+- Do not overwrite an existing different ID without calling out the conflict.
+- Prefer annotations or title conventions already used by the repository.

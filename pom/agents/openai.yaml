@@ -1,7 +1,7 @@
 ﻿interface:
   display_name: "Cypress Pom"
-  short_description: "Page Object Model patterns for Cypress - when to use POM"
-  default_prompt: "Use $cypress-pom to help with page Object Model patterns for Cypress - when to use POM."
+  short_description: "Test-architecture skill for Cypress page objects"
+  default_prompt: "Use $cypress-pom to help with test-architecture skill for Cypress page objects."
 
 policy:
   allow_implicit_invocation: true

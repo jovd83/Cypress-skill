@@ -1,6 +1,9 @@
 ---
 name: cypress-session-state-compat
 description: Use when you need the legacy Cypress session-state entrypoint path; record session state in the canonical Cypress handover workflow.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Session State
@@ -8,6 +11,8 @@ description: Use when you need the legacy Cypress session-state entrypoint path;
 This compatibility entrypoint exists for structural parity with the sibling skill tree.
 
 Use the canonical session-state guidance embedded in [../cypress-handover/SKILL.md](../cypress-handover/SKILL.md#session-state).
+
+Do not introduce a second persistent-memory workflow here. This path is a thin routing alias only.
 
 ## Why This Path Exists
 

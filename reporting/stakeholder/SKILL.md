@@ -1,26 +1,27 @@
-﻿---
+---
 name: cypress-reporting-stakeholder
-description: A skill to draft human-readable, high-level Cypress test execution reports for non-technical stakeholders.
+description: Stakeholder-reporting skill for Cypress execution results. Use when Codex needs to turn raw Cypress runs into a concise, non-technical summary of tested scope, release health, business impact, and recommended next actions.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Stakeholder Execution Report
 
-This skill is designed to take raw test execution data and turn it into a digestible summary for product managers and business stakeholders.
+Use this skill when the audience is a product manager, QA lead, delivery lead, or another stakeholder who does not want raw runner noise.
 
 ## Action
-When requested to generate a stakeholder report:
-1. Read the Cypress HTML or JSON report.
-2. Draft a Markdown or PDF document outlining:
-   - **Executive Summary:** Overall health of the release (pass % vs fail %).
-   - **Features Tested:** A bulleted list of functional areas covered by the test suite.
-   - **Known Issues:** A layman's description of the tests that failed, and the actual business impact (e.g., "Users currently cannot reset their password").
-3. Present the drafted report to the user.
 
+Produce a report with:
 
+- `Executive summary`
+- `Scope covered`
+- `Overall outcome`
+- `Known issues and business impact`
+- `Recommended next actions`
 
+Writing rules:
 
-
-
-
-
-
+- Translate technical failures into business language.
+- Call out confidence limits if the run was partial, flaky, blocked, or environment-constrained.
+- Keep stack traces and low-level logs out of the main report unless the user explicitly wants them.

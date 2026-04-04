@@ -1,33 +1,40 @@
-﻿---
+---
 name: cypress-coverage-plan-review
-description: A skill to present generated Cypress functional coverage plans to the user and request explicit approval.
+description: Coverage-plan review skill for Cypress work. Use when Codex needs to present a proposed coverage plan, surface assumptions and tradeoffs, collect user feedback, and secure explicit approval before large implementation or documentation work.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Functional Coverage Plan Review
 
-This skill ensures human-in-the-loop approval of the test planning before any code or documentation is written.
+Use this skill to turn a proposed plan into an approved plan.
 
 ## 1. Present the Plan
-Format the generated test scenarios clearly. Use summary blocks or tables to make it easy for the user to review.
+
+Present the plan in a compact, scannable format. Highlight what is included, what is deferred, and where the highest-risk coverage sits.
 
 ## 2. Prompt for Feedback
-Explicitly ask the user:
-> "Here is the proposed functional coverage plan based on your requirements. 
-> 1. Does this seem okay to you?
-> 2. Are there any missing scenarios you would like me to add?
-> 3. Are there any scenarios you would like to remove or de-prioritize?"
+
+Ask for additions, removals, reprioritization, or approval only where that decision matters. A compact prompt is preferred over a long questionnaire.
+
+Use a prompt such as:
+
+> "Here is the proposed Cypress coverage plan. Please confirm what should be approved, deferred, removed, or expanded before implementation starts."
 
 ## 3. Iterate
-If the user requests changes, go back, modify the plan according to their feedback, and present it again.
+
+If feedback changes the plan materially, refresh the presented version before proceeding.
+
+When useful, maintain a review table:
+
+| Requirement ID | Scenario | Priority | Status | Notes |
+|---|---|---|---|---|
+
+Use `Status` values such as `proposed`, `approved`, `deferred`, or `removed`.
 
 ## 4. Proceed
-Only when the user provides explicit approval ("Yes", "Looks good", "LGTM", etc.), proceed to the documentation or implementation skills (e.g., `documentation/test_cases/*` or writing the Cypress code).
 
+If the user already approved the scope in the same thread, do not force a second approval loop.
 
-
-
-
-
-
-
-
+If the plan is large, costly, or assumption-heavy, get explicit approval before implementation or documentation.

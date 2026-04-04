@@ -406,6 +406,32 @@ cypress-cli -s=long-task state-save checkpoint.json
 cypress-cli -s=long-task state-load checkpoint.json
 ```
 
+## Troubleshooting
+
+### Session state leaks between workflows
+
+- Use distinct semantic session names per role, user, or purpose.
+- Avoid sharing one persistent profile across parallel runs.
+- Delete stale persistent data before reusing a session for a different flow.
+
+### Persistent session no longer works after reopening
+
+- Confirm the same session name and profile path are being reused.
+- Recreate the state if the app invalidated cookies or tokens.
+- Treat saved state as temporary, especially for auth-heavy flows.
+
+### Too many browser processes are left behind
+
+- Close finished sessions explicitly.
+- Use `close-all` at the end of automation scripts.
+- Use `kill-all` only to recover from stuck or zombie processes.
+
+## Related
+
+- [core-commands.md](core-commands.md)
+- [storage-and-auth.md](storage-and-auth.md)
+- [debugging-and-artifacts.md](debugging-and-artifacts.md)
+
 
 
 

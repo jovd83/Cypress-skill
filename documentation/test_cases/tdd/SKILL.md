@@ -1,21 +1,25 @@
-﻿---
+---
 name: cypress-documentation-tdd
-description: A skill to document Cypress test cases in a standard TDD (Test-Driven Development) format.
+description: Legacy Cypress-specific alias for TDD-style case documentation. Prefer the standalone `test-artifact-export-skill` skill for formatting approved test cases or building export-ready artifacts, and use this only when Cypress-local conventions must be preserved explicitly.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Documenting Test Cases: TDD format
 
-This skill ensures that test cases are uniformly documented using a standardized structure that supports high-fidelity traceability and organization.
+Use this skill when the team wants formal, traceable test-case documents rather than lightweight notes.
 
 ## 1. Storage & Organization
 
-To maintain a scalable documentation suite, tests **must** be stored in a hierarchical structure based on features or epics:
+Store TDD-style test cases in a stable, feature-oriented structure:
 
-- **Root Directory**: `docs/tests/`
-- **Sub-folders**: One folder per Epic or Feature (matching the `tests/` automation structure).
-- **Files**: One `.md` file per major scenario group or user story.
+- Root directory: `docs/tests/`
+- Subfolders: one folder per feature, epic, or domain area
+- Files: one markdown file per scenario group, story, or coherent test slice
 
-**Example Structure:**
+Example structure:
+
 ```text
 docs/tests/
 |-- auth/
@@ -27,27 +31,29 @@ docs/tests/
 
 ## 2. Granular Traceability
 
-The `Test script` field must provide a direct link to the automated execution point. Simply linking to the file is insufficient if the file contains multiple tests.
+Link the document to the automation at the test level whenever possible, not just the file level.
 
-- **Requirement**: Use the format ``file_name @ file_path#test_name``.
-- **Example**: `Test script: auth-settings.spec.ts @ tests/e2e/regression/auth-settings.spec.ts#AUTH-US02: User Login`
+- Required format: ``file_name @ file_path#test_name``
+- Example: `auth-settings.cy.ts @ cypress/e2e/regression/auth-settings.cy.ts#AUTH-US02: User Login`
+
+If the test does not exist yet, keep the intended script field explicit and mark the document as design-stage output.
 
 ## 3. Structure & Fields
 
-When asked to document a test case in TDD format, you must generate a markdown document with the following fields:
+Produce a markdown document with these fields:
 
-- **title**: Informative, unique, and self-explanatory. Include requirement reference, test suite ID, and classification (**required**: MSS, EXT, or ERR). Every feature must have at least one MSS scenario.
-- **description**: A concise overview of the test script's purpose.
-- **test_suite**: The organizational group (Feature/Epic name).
-- **Covered requirement**: The requirement, User Story, or AC reference being validated.
-- **preconditions**: System state required before execution. **Format as a lettered list: A), B), C), etc.**
-- **steps**: A markdown table with columns: `Step`, `Action`, and `Expected result`.
-- **execution_type**: Usually `Automated`.
-- **design_status**: `Draft`, `Ready`, or `Obsolete`.
-- **test_engineer**: Identifier of the engineer/agent.
-- **test_level**: Priority/Level (1-5).
-- **jira**: Relevant Jira ticket ID.
-- **Test script**: The granular link to the code (File + Test Name).
+- `title`: informative, unique, and requirement-aware
+- `description`: concise purpose of the scenario
+- `test_suite`: feature, epic, or suite grouping
+- `Covered requirement`: the requirement, story, or acceptance-criteria reference
+- `preconditions`: system state required before execution, formatted as a lettered list
+- `steps`: markdown table with `Step`, `Action`, and `Expected result`
+- `execution_type`: usually `Automated`, but can be explicit when mixed or manual
+- `design_status`: `Draft`, `Ready`, or `Obsolete`
+- `test_engineer`: engineer or agent identifier
+- `test_level`: priority or level using the team convention
+- `jira`: relevant Jira or tracker reference when available
+- `Test script`: granular implementation link or planned destination
 
 ## 4. Example Template
 
@@ -66,17 +72,8 @@ steps:
 | 2 | Enter credentials | Login successful |
 execution_type: Automated
 design_status: Ready
-test_engineer: Antigravity
+test_engineer: Codex
 test_level: 1
-jira: N/A
-Test script: auth-settings.spec.ts @ tests/e2e/regression/auth-settings.spec.ts#AUTH-US02: User Login
+jira: AUTH-102
+Test script: auth-settings.cy.ts @ cypress/e2e/regression/auth-settings.cy.ts#AUTH-US02: User Login
 ```
-
-
-
-
-
-
-
-
-

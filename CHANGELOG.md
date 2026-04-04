@@ -2,6 +2,19 @@
 
 All notable changes to the `cypress-skill` will be documented in this file.
 
+## [1.1.0] - 2026-03-19
+
+### Added
+- **Contributor Guide**: Added `CONTRIBUTING.md` with repo conventions, validation expectations, and rules for extending the pack without bloating it.
+- **Skill Inventory**: Added `reports/skill-inventory.md` plus `scripts/generate-skill-inventory.ps1` to document the published skill surface and metadata coverage.
+- **Inventory Freshness Check**: Added `scripts/check-skill-inventory-freshness.ps1` and wired it into the quality gate.
+- **Release Workflow**: Added `.github/workflows/release.yml` to validate, package, and publish release artifacts from version tags.
+
+### Changed
+- **Repository Packaging** (`README.md`, `SKILL.md`): Reframed the root package as a flagship, multi-skill Cypress pack with clearer boundaries, installation guidance, optional enterprise workflows, and an explicit memory model.
+- **Routing and Planning Contracts** (`orchestrator/SKILL.md`, `analysis/SKILL.md`, `coverage_plan/generation/SKILL.md`, `coverage_plan/review/SKILL.md`, `reporting/stakeholder/SKILL.md`): Rewrote the highest-leverage entry skills to make their scope, outputs, escalation rules, and handoffs more deterministic and enterprise-ready.
+- **Subskill Contract Normalization**: Rewrote CI, migration, POM, documentation, installer, mapper, transformer, and reporter entry skills to align more closely with the repo's newer contract style.
+
 ## [1.0.0] - 2026-03-13
 
 ### Added

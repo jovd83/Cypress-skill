@@ -190,3 +190,30 @@ cypress-cli run-code "() => {
 - Use `run-code` for targeted advanced behavior, not for every simple click/fill.
 - Prefer stable selectors (`data-cy`, accessible roles/labels).
 - Keep setup logic reusable with custom commands and `cy.session()`.
+
+## Troubleshooting
+
+### Custom code behaves like another framework instead of Cypress
+
+- Remove direct page-handle patterns and keep everything inside Cypress commands.
+- Replace uncontrolled async logic with Cypress chaining and `.then(...)`.
+- Prefer `cy.intercept()` and retryable assertions over manual timing loops.
+
+### `run-code` became too large to understand
+
+- Extract the repeated behavior into a support command or a reusable snippet.
+- Keep one `run-code` block focused on one task boundary.
+- Move broader testing guidance into the appropriate `core/` guide if the logic is no longer CLI-specific.
+
+### Browser-side inspection works locally but is flaky in CI
+
+- Add deterministic waits on aliases, URL changes, or visible state.
+- Prefer fixture-driven or app-observable conditions over timing assumptions.
+- Capture screenshots or console output around the custom block for evidence.
+
+## Related
+
+- [core-commands.md](core-commands.md)
+- [request-mocking.md](request-mocking.md)
+- [debugging-and-artifacts.md](debugging-and-artifacts.md)
+- [storage-and-auth.md](storage-and-auth.md)

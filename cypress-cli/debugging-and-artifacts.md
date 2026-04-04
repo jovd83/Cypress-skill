@@ -153,3 +153,30 @@ cypress-cli run-code "() => {
 3. Alias key requests (`.as('name')`) and assert status/body.
 4. Avoid blanket retries that hide real defects.
 5. Prefer app-observable signals over arbitrary waits.
+
+## Troubleshooting
+
+### Artifacts are not useful enough to explain the failure
+
+- Add screenshots before and after the risky interaction instead of only at the end.
+- Pair visual artifacts with aliased network assertions and console output.
+- Save snapshots around UI transitions so selector drift is visible.
+
+### Debug run is too noisy
+
+- Block or stub non-essential third-party traffic.
+- Focus console capture on error or warning levels first.
+- Reduce the scenario to the smallest reproducible flow before collecting more artifacts.
+
+### Video exists but still does not show the cause
+
+- Add command-log evidence and request assertions to the same flow.
+- Capture intermediate screenshots at major checkpoints.
+- Use `run-code` to log browser performance or application state where that signal matters.
+
+## Related
+
+- [core-commands.md](core-commands.md)
+- [request-mocking.md](request-mocking.md)
+- [running-custom-code.md](running-custom-code.md)
+- [screenshots-and-media.md](screenshots-and-media.md)

@@ -1,76 +1,39 @@
-﻿---
+---
 name: cypress-documentation-bdd
-description: A skill to document Cypress test cases using the BDD (Behavior-Driven Development) Gherkin syntax.
+description: Legacy Cypress-specific alias for BDD case formatting. Prefer the standalone `test-artifact-export-skill` skill for Gherkin, BDD, and export-ready case rendering, and use this only when Cypress-local conventions must be preserved explicitly.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Documenting Test Cases: BDD (Gherkin) format
 
-This skill ensures that test scenarios are documented using the standardized Given-When-Then BDD syntax.
+Use this skill when the team wants behavior-first documentation in Gherkin or feature-file style.
 
 ## Structure
 
-When asked to document a test case in BDD format, you must generate a markdown or `.feature` file following the standard Gherkin keywords:
+Produce a markdown or `.feature` file using standard Gherkin building blocks:
 
-### Feature
-A high-level description of a software feature.
-*Example: Feature: User Authentication*
+- `Feature` for the high-level capability
+- `Scenario` or `Scenario Outline` for individual examples
+- `Given`, `When`, `Then`, `And`, and `But` for behavior flow
+- `Background` for repeated setup
+- `Examples` for data-driven scenario outlines
+- `Tags` for scope, requirement IDs, or execution grouping
+- `Data Tables` when structured step input is clearer than prose
 
-### Scenario / Scenario Outline
-A concrete example illustrating how the software should behave.
-*Example: Scenario: Failed login with invalid credentials*
-
-### Given
-The initial context or state of the system.
-*Example: Given the user is on the login page*
-
-### When
-An event or an action taken by the user.
-*Example: When the user enters "invalid@test.com" and "wrongpass"*
-*And clicks the login button*
-
-### Then
-An expected outcome.
-*Example: Then an error message "Invalid credentials" is displayed*
-
-### And / But
-Keywords used to extend Given, When, or Then steps without repeating them.
-
-### Background
-Steps that are common to all scenarios within the feature file, executed before each scenario.
-
-### Scenario Outline & Examples
-Used for data-driven testing, executing the same scenario multiple times with different sets of data. Placeholders `<param>` are filled from an `Examples:` table.
-*Example:*
-```gherkin
-Scenario Outline: Login attempts
-  When the user enters "<username>" and "<password>"
-  Then the result is "<status>"
-
-  Examples:
-    | username | password | status  |
-    | admin    | pwd123   | success |
-    | user     | badpwd   | failure |
-```
-
-### Tags
-Used to categorize scenarios (e.g., `@smoke`, `@regression`, `@US-101`) enabling selective execution.
-
-### Data Tables
-Allows passing structured arrays directly within a single step (represented with `|`).
+Prefer business-facing language over implementation detail. Write behaviors, not selector choreography.
 
 ## Best Practices
-- Keep statements simple and declarative.
-- Avoid UI-specific jargon (e.g., "Given I click the blue div with id user-form") and focus on behavior (e.g., "Given the user submits the form").
-- Add specific requirement tags (e.g., `@US-101`) above the Scenario.
+
+- Keep scenarios small, readable, and outcome-focused.
+- Prefer one business intent per scenario.
+- Use tags for requirement references, suites, or execution targeting when the team already has a convention.
+- Avoid UI jargon unless the UI detail is itself the requirement.
+- Keep step wording stable enough that future automation can reuse it cleanly.
 
 ## Usage
-Produce this documentation inside a `docs/features/` or `tests/features/` folder as instructed by the user. Do not write the Cypress step definitions until this scenario is approved.
 
+Write the document inside `docs/features/`, `tests/features/`, or the location requested by the user.
 
-
-
-
-
-
-
-
+Do not generate Cypress step definitions or glue code unless the user explicitly asked for implementation as well.

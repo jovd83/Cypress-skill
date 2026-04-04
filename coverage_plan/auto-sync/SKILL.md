@@ -1,35 +1,47 @@
 ---
 name: cypress-coverage-matrix-auto-sync
-description: Keep Cypress requirements and test-traceability documentation in sync as scenarios are added or changed. Maintains anchor links and recalculates coverage stats.
+description: Coverage-maintenance skill for Cypress planning and documentation. Use when Codex needs to synchronize coverage plans, scenario IDs, traceability links, and summary counts after tests, requirements, or narrative test documents change.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Coverage Matrix Auto-Sync
 
-Use this skill to ensure that your functional coverage plans and traceability documents stay updated as you modify tests or requirements.
+Use this skill to keep planning artifacts aligned with reality after the suite changes.
 
 ## 1. Traceability Maintenance
-Whenever a test case is added, removed, or moved:
-- **Scan for Anchors**: Look for `[Scenario ID]` anchors in the test documentation.
-- **Update Mapping**: Ensure the `TDD` or `BDD` document matches the latest `@tag` or test title in the `.cy.ts` files.
-- **Link Integrity**: Use repo-relative links or stable path references, for example `[test name](https://example.com/cypress/e2e/auth/login.cy.ts#L12)`.
+
+Identify added, removed, renamed, or moved scenarios and reconcile them across:
+
+- the coverage plan or matrix,
+- narrative TDD or BDD documents,
+- implementation references such as `.cy.ts` files, titles, tags, or scenario IDs.
+
+Do not invent implementation links that you cannot verify.
 
 ## 2. Coverage Stats Recalculation
-If the plan includes a summary table (e.g., `Total Scenarios`, `UI Coverage %`):
-- **Recount**: Manually (or via script) count the scenarios listed in the matrix vs the actual implemented tests.
-- **Discrepancy Check**: Flag any requirements that have "Planned" scenarios but no "Implemented" links.
+
+Recalculate summary counts only after the underlying scenario rows are correct.
+
+Flag drift explicitly when the plan claims coverage that the implementation cannot prove.
 
 ## 3. Anchor & ID Standards
-- Use stable, searchable IDs for scenarios (e.g., `SCN-001`, `AUTH-MSS-01`).
-- Ensure every requirement AC has at least one corresponding scenario ID in the matrix.
+
+- Prefer stable scenario IDs over human-readable titles for traceability joins.
+- Keep anchors and IDs consistent across plan, docs, and code.
+- Ensure each requirement or acceptance-criteria item can be traced to at least one scenario when the matrix is intended to be complete.
 
 ## 4. Documentation Sync Workflow
-1. **Source of Truth**: The `coverage_plan/*.md` is the source of truth for *what* is tested.
-2. **Implementation Proof**: the `docs/tests/**/*.md` (TDD/BDD) provides the *proof* with links to code.
-3. **Synchronization**: Run a global search for each Scenario ID to ensure it exists in both the plan and the formal documentation.
+
+1. Treat `coverage_plan/*.md` as the source of truth for planned scope.
+2. Treat `docs/tests/**/*.md` as the narrative traceability layer when those files exist.
+3. Treat Cypress implementation as the proof layer for executed behavior.
+4. Report unmapped requirements, stale IDs, broken links, or evidence gaps explicitly.
 
 ## Checklist
 
-- [ ] **Stats Updated**: Summary counts in the coverage plan match the list.
-- [ ] **Links Verified**: All file/line links in the TDD docs are valid.
-- [ ] **Requirements Covered**: No AC is left without a mapped scenario.
-- [ ] **Consistency Check**: Scenario names are consistent across the plan, docs, and code.
+- [ ] Stats updated after row-level reconciliation
+- [ ] IDs and links verified
+- [ ] Unmapped requirements or scenarios called out explicitly
+- [ ] Scenario names and references consistent across plan, docs, and code

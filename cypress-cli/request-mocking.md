@@ -179,3 +179,29 @@ Cypress does not natively stub WebSocket frames the same way it stubs HTTP. Pref
 3. Mock external dependencies aggressively; mock your own backend selectively.
 4. Keep fixtures realistic and versioned.
 5. Remove temporary mocks that hide regressions.
+
+## Troubleshooting
+
+### Route helper does not appear to match the request
+
+- Narrow or broaden the glob pattern until it matches the real request URL.
+- Include the HTTP method when the same path is used for multiple operations.
+- Use `cypress-cli network` or `run-code` with logging to inspect the actual request shape.
+
+### `cy.intercept()` logic becomes hard to read
+
+- Move repeated mock setup into reusable `run-code` snippets or fixtures.
+- Split very large conditional mocks by endpoint or operation name.
+- Prefer static fixtures when branching logic is not part of the test intent.
+
+### Mocked flow passes but real integration still fails
+
+- Keep a separate suite or run path with reduced mocking.
+- Use pass-through assertions for contract validation when realism matters.
+- Confirm the mocked payload still reflects the real API shape.
+
+## Related
+
+- [core-commands.md](core-commands.md)
+- [running-custom-code.md](running-custom-code.md)
+- [debugging-and-artifacts.md](debugging-and-artifacts.md)

@@ -1,23 +1,32 @@
-﻿---
+---
 name: cypress-transformer-testrail
-description: A skill to transform Cypress natural language test cases into TestRail compatible import formats (XML/CSV).
+description: Legacy Cypress-specific alias for TestRail case export. Prefer the standalone `test-artifact-export-skill` skill for transforming approved test cases into TestRail-ready artifacts, and use this only when Cypress-local conventions must be preserved explicitly.
+metadata:
+  author: jovd83
+  version: "1.1"
 ---
 
 # Transforming Test Cases to TestRail
 
-This skill structures test scenarios into the XML or CSV formats compatible with TestRail's import tool.
+Use this skill to convert narrative test cases into TestRail import artifacts.
 
 ## Action
-When asked to generate TestRail imports:
-1. Extract metadata: Sections, Title, Preconditions.
-2. Structure the test steps and expected results via TestRail's custom steps template if using CSV (mapping to `Title`, `Preconditions`, `Steps`, `Expected Result`).
-3. Save the layout inside `testrail_import.xml` or `testrail_import.csv`.
 
+Inputs:
 
+- source scenarios in TDD, BDD, or plain-text form,
+- the target TestRail structure if the project already uses one,
+- any required suite, section, or metadata conventions.
 
+Output contract:
 
+- a TestRail-compatible XML or CSV payload,
+- a structured mapping table when import planning should happen before generation,
+- or a normalized scenario table ready for import tooling.
 
+Mapping rules:
 
-
-
-
+- map titles, preconditions, steps, and expected results consistently,
+- keep requirement identifiers where TestRail fields allow them,
+- preserve ordering and execution intent,
+- call out any source fields that have no clean TestRail destination.

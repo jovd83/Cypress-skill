@@ -1,6 +1,15 @@
 ---
+metadata:
+  author: jovd83
+  version: "1.0.0"
+---
+
+---
 name: cypress-handover-compat
 description: Use when you need the legacy Cypress handover entrypoint path; follow the canonical Cypress handover workflow in documentation/cypress-handover.
+metadata:
+  author: jovd83
+  version: "1.1"
 --- 
 
 # Handover
@@ -8,6 +17,8 @@ description: Use when you need the legacy Cypress handover entrypoint path; foll
 This compatibility entrypoint exists for structural parity with the sibling skill tree.
 
 Use the canonical handover workflow in [../cypress-handover/SKILL.md](../cypress-handover/SKILL.md).
+
+Do not create a separate handover model here. This path is a thin routing alias only.
 
 ## Why This Path Exists
 
