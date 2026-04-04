@@ -1,5 +1,10 @@
 # Cypress Agent Skills
 
+[![Validate Skills](https://github.com/jovd83/Cypress-skill/actions/workflows/validate.yml/badge.svg)](https://github.com/jovd83/Cypress-skill/actions/workflows/validate.yml)
+[![version](https://img.shields.io/badge/version-1.1-blue)](CHANGELOG.md)
+[![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/jovd83)
+
 Enterprise-grade Cypress skills for AI coding assistants. This repository packages focused `SKILL.md` entrypoints, reusable reference guides, and deterministic workflow tooling so Cypress help feels consistent, installable, and maintainable instead of prompt-fragile.
 
 ## What This Repository Is
