@@ -62,6 +62,13 @@ Do not load every guide by default. Read only the subskill and reference files t
 - Mock external dependencies selectively; do not hide the behavior of the system under test behind unnecessary mocks.
 - Keep requirements, plans, documentation, and executable tests traceable to one another when the workflow includes planning or documentation.
 
+## Gotchas
+
+- **Asynchronous Execution:** Cypress commands are added to a queue and run asynchronously. Do not use standard `async/await` with Cypress commands; use `.then()` for yielding values.
+- **Conditional Testing Avoidance:** Avoid writing tests that conditionally behave differently depending on the DOM state (e.g., "if this button exists, click it"). Cypress expects deterministic state.
+- **Cross-Origin Limits:** Navigating to a different superdomain within a single test requires `cy.origin()`.
+- **Anti-Pattern Hard Waits:** Avoid using `cy.wait(Number)`. Always prefer waiting for aliases on network intercepts or relying on Cypress's built-in retry-ability on assertions.
+
 ## Official References
 
 - Cypress best practices: https://docs.cypress.io/guides/references/best-practices
