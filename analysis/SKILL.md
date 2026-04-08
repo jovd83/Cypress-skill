@@ -4,6 +4,14 @@ description: Requirements-analysis skill for Cypress planning and implementation
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: requirements-analysis, cypress-requirements-analysis
+  dispatcher-accepted-intents: analyze_cypress_requirements, derive_cypress_testable_behaviors
+  dispatcher-input-artifacts: requirements, ticket, spec, markdown_docs, repo_context
+  dispatcher-output-artifacts: analysis_baseline, requirement_summary, open_questions, routing_request
+  dispatcher-stack-tags: cypress, analysis, ui-testing
+  dispatcher-risk: low
+  dispatcher-writes-files: false
 ---
 
 # Analysis & Requirements Skill
@@ -48,3 +56,9 @@ Use a direct validation prompt such as:
 If the user asked only for the baseline, stop after this step.
 
 If the requirements are clear enough and the same request also asks for downstream planning, continue while keeping assumptions explicit and auditable.
+
+## 4. Handoff
+
+Use dispatcher intent `plan_cypress_coverage` when the next step is coverage planning.
+
+If dispatcher routing is unavailable, hand off to `cypress-coverage-plan-generation`.

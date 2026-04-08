@@ -4,6 +4,14 @@ description: Coverage-plan review skill for Cypress work. Use when Codex needs t
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: coverage-plan-review, cypress-coverage-review
+  dispatcher-accepted-intents: review_cypress_coverage_plan, approve_cypress_test_scope
+  dispatcher-input-artifacts: coverage_plan, scenario_matrix, approval_request
+  dispatcher-output-artifacts: approved_coverage_plan, deferred_scope, review_decision
+  dispatcher-stack-tags: cypress, coverage-planning, review
+  dispatcher-risk: low
+  dispatcher-writes-files: false
 ---
 
 # Functional Coverage Plan Review

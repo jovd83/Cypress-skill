@@ -4,6 +4,14 @@ description: Coverage-planning skill for Cypress work. Use when Codex needs to t
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: coverage-planning, cypress-coverage-planning
+  dispatcher-accepted-intents: plan_cypress_coverage, generate_cypress_test_coverage_plan
+  dispatcher-input-artifacts: analysis_baseline, confirmed_requirements, repo_context, scope_constraints
+  dispatcher-output-artifacts: coverage_plan, scenario_matrix, approval_request
+  dispatcher-stack-tags: cypress, coverage-planning, ui-testing
+  dispatcher-risk: medium
+  dispatcher-writes-files: false
 ---
 
 # Functional Coverage Plan Generation
@@ -42,4 +50,6 @@ Use `Coverage Type` values such as `happy-path`, `variation`, `negative`, `edge`
 
 ## 4. Next Step
 
-Use `cypress-coverage-plan-review` when explicit review or sign-off is needed before implementation or documentation.
+Use dispatcher intent `review_cypress_coverage_plan` when explicit review or sign-off is needed before implementation or documentation.
+
+If dispatcher routing is unavailable, use `cypress-coverage-plan-review`.
