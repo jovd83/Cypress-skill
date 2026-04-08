@@ -4,6 +4,14 @@ description: Flagship Cypress skill pack for planning, authoring, debugging, doc
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: ui-automation, cypress, coverage-planning, automation-routing
+  dispatcher-accepted-intents: implement_ui_confirmation_test, plan_cypress_coverage, diagnose_cypress_failure, document_cypress_tests
+  dispatcher-input-artifacts: repo_context, requirements, test_case_set, existing_cypress_suite, failing_ui_scenario
+  dispatcher-output-artifacts: cypress_test, coverage_plan, root_cause_report, automation_docs, routing_request
+  dispatcher-stack-tags: cypress, ui-testing, browser-automation
+  dispatcher-risk: high
+  dispatcher-writes-files: true
 ---
 
 # Cypress Skill Pack
@@ -24,6 +32,15 @@ Do not load every guide by default. Read only the subskill and reference files t
 - Do not treat this repository as shared-memory infrastructure. If durable cross-agent knowledge is needed beyond one repo or skill, integrate an external shared-memory skill instead of storing it here implicitly.
 - Do not silently promote runtime notes into persistent artifacts. Persistent outputs should be deliberate, named, and stored in a documented workflow such as `coverage_plan/` or `documentation/`.
 
+## Dispatcher Integration
+
+Use `skill-dispatcher` as the primary integration layer whenever this package needs help from another skill or when a broader orchestrator is deciding whether Cypress is the right execution layer.
+
+- Prefer dispatcher-led routing by intent, especially for tasks such as `implement_ui_confirmation_test`, `render_test_artifact`, and `review_automation_quality`.
+- Prefer the repository's native browser automation stack over Cypress when repo evidence points elsewhere.
+- Treat direct paths to sibling skills as a compatibility fallback, not as the primary routing contract.
+- Keep shared-memory usage limited to stable cross-project policy supplied externally, never task-local routing state.
+
 ## Routing Map
 
 | Need | Use |
@@ -37,10 +54,10 @@ Do not load every guide by default. Read only the subskill and reference files t
 | Requirements extraction | [analysis/SKILL.md](analysis/SKILL.md) |
 | Coverage planning | [coverage_plan/generation/SKILL.md](coverage_plan/generation/SKILL.md) and [coverage_plan/review/SKILL.md](coverage_plan/review/SKILL.md) |
 | Coverage-plan maintenance | [coverage_plan/auto-sync/SKILL.md](coverage_plan/auto-sync/SKILL.md) |
-| Narrative test documentation or format conversion | `C:\projects\skills\test-artifact-export-skill\SKILL.md` |
+| Narrative test documentation or format conversion | Dispatch `render_test_artifact` through `skill-dispatcher`; fall back to `C:\projects\skills\test-artifact-export-skill\SKILL.md` when needed |
 | Automation-code documentation or failure diagnosis | [documentation/tests/SKILL.md](documentation/tests/SKILL.md) or [documentation/root_cause/SKILL.md](documentation/root_cause/SKILL.md) |
 | Human or agent handoff workflows | [documentation/cypress-handover/SKILL.md](documentation/cypress-handover/SKILL.md) and [documentation/session-state/SKILL.md](documentation/session-state/SKILL.md) |
-| Test-case export to Xray, Zephyr, TestLink, or TestRail | `C:\projects\skills\test-artifact-export-skill\SKILL.md` |
+| Test-case export to Xray, Zephyr, TestLink, or TestRail | Dispatch `render_test_artifact` through `skill-dispatcher`; fall back to `C:\projects\skills\test-artifact-export-skill\SKILL.md` when needed |
 | Test-management integrations after export exists | [mappers/](mappers/), and [reporters/](reporters/) subskills |
 | IDE-specific setup help | [installers/](installers/) subskills |
 | Non-technical summary reporting | [reporting/stakeholder/SKILL.md](reporting/stakeholder/SKILL.md) |
@@ -85,7 +102,7 @@ Do not load every guide by default. Read only the subskill and reference files t
 - `analysis/`, `coverage_plan/`, and `documentation/` add planning and traceability workflows.
 - `documentation/cypress-handover/` and `documentation/session-state/` are optional operational workflows for multi-session or multi-operator work.
 - `mappers/`, `reporters/`, `reporting/`, and `installers/` are optional extensions, not prerequisites for ordinary Cypress authoring.
-- The standalone `test-artifact-export-skill` skill is the canonical formatter/exporter for narrative test cases and tool-ready artifacts.
+- The standalone `test-artifact-export-skill` skill is the canonical formatter/exporter for narrative test cases and tool-ready artifacts, but reach it through `skill-dispatcher` first when cross-skill routing is available.
 
 ## Use the Root Skill Well
 

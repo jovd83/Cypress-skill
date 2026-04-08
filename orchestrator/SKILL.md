@@ -4,6 +4,14 @@ description: Central entrypoint for broad or ambiguous Cypress requests. Use whe
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: cypress-orchestration, cypress-routing
+  dispatcher-accepted-intents: route_cypress_work, orchestrate_cypress_task
+  dispatcher-input-artifacts: user_request, repo_context, requirements, failure_output
+  dispatcher-output-artifacts: routing_decision, routing_request, execution_plan
+  dispatcher-stack-tags: cypress, orchestration, ui-testing
+  dispatcher-risk: medium
+  dispatcher-writes-files: false
 ---
 
 # Cypress Orchestrator
@@ -30,9 +38,9 @@ Do not ask a menu question after the user already requested a concrete deliverab
 | Set up or debug CI execution | `ci` | Ask which CI provider only when examples differ materially |
 | Derive requirements from tickets or specs | `analysis` | Ask for the strongest available source if none was provided |
 | Produce or refine a coverage plan | `coverage_plan/generation` and `coverage_plan/review` | Clarify approval needs only for large or costly plans |
-| Write test documentation or convert case formats | `C:\projects\skills\test-artifact-export-skill\SKILL.md` or `documentation/tests` | Ask for the desired format only if it is not inferable |
+| Write test documentation or convert case formats | Dispatch `render_test_artifact` through `skill-dispatcher` or use `documentation/tests` | Ask for the desired format only if it is not inferable |
 | Create handoff or session-state artifacts | `documentation/cypress-handover` or `documentation/session-state` | Confirm task scope only when multiple scopes exist |
-| Export test cases to TestLink, TestRail, Xray, or Zephyr | `C:\projects\skills\test-artifact-export-skill\SKILL.md` | Ask for the target system if not stated |
+| Export test cases to TestLink, TestRail, Xray, or Zephyr | Dispatch `render_test_artifact` through `skill-dispatcher` | Ask for the target system if not stated |
 | Report execution to TestLink, TestRail, Xray, or Zephyr | relevant `mappers/*` or `reporters/*` | Ask for the target system if not stated |
 | Summarize Cypress results for stakeholders | `reporting/stakeholder` | Ask for release context if the report would otherwise be misleading |
 | Migrate from another framework or Selenium/WebDriver | `migration` | Ask for source stack if missing |
@@ -46,3 +54,4 @@ Do not ask a menu question after the user already requested a concrete deliverab
 3. State high-impact assumptions when you make them.
 4. Keep planning, documentation, and implementation handoffs explicit when multiple subskills are used in sequence.
 5. Escalate only when the missing decision materially changes scope, cost, risk, or long-lived structure.
+6. Treat direct sibling-skill paths as a compatibility fallback when dispatcher routing is unavailable.
