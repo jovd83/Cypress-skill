@@ -4,6 +4,14 @@ description: Use when you need the legacy Cypress handover entrypoint path; foll
 metadata:
   author: jovd83
   version: "1.1.0"
+  dispatcher-category: testing
+  dispatcher-capabilities: handover-compatibility, cypress-handover-compat
+  dispatcher-accepted-intents: create_cypress_handover
+  dispatcher-input-artifacts: work_summary, validation_status, blockers
+  dispatcher-output-artifacts: handover_document, resume_steps
+  dispatcher-stack-tags: cypress, handover, compatibility
+  dispatcher-risk: low
+  dispatcher-writes-files: true
 ---
 
 # Handover

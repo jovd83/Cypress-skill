@@ -4,6 +4,14 @@ description: Use when you need the legacy Cypress session-state entrypoint path;
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: session-state, cypress-session-state
+  dispatcher-accepted-intents: record_cypress_session_state
+  dispatcher-input-artifacts: work_state, touched_files, blockers
+  dispatcher-output-artifacts: session_state_record, resume_pointer
+  dispatcher-stack-tags: cypress, session-state, operations
+  dispatcher-risk: low
+  dispatcher-writes-files: true
 ---
 
 # Session State

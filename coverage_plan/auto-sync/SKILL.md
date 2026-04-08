@@ -4,6 +4,14 @@ description: Coverage-maintenance skill for Cypress planning and documentation. 
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: coverage-maintenance, cypress-coverage-sync
+  dispatcher-accepted-intents: sync_cypress_coverage_artifacts
+  dispatcher-input-artifacts: coverage_plan, test_suite, traceability_artifacts
+  dispatcher-output-artifacts: updated_coverage_artifacts, sync_report
+  dispatcher-stack-tags: cypress, coverage, sync
+  dispatcher-risk: low
+  dispatcher-writes-files: true
 ---
 
 # Coverage Matrix Auto-Sync

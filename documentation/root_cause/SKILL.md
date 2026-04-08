@@ -4,6 +4,14 @@ description: Failure-analysis skill for Cypress runs. Use when Codex needs to in
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: failure-analysis, cypress-root-cause
+  dispatcher-accepted-intents: analyze_cypress_test_failure
+  dispatcher-input-artifacts: failure_output, repo_context, test_artifacts
+  dispatcher-output-artifacts: root_cause_report, failure_summary
+  dispatcher-stack-tags: cypress, diagnostics, failure-analysis
+  dispatcher-risk: low
+  dispatcher-writes-files: false
 ---
 
 # Root Cause Analysis Documentation

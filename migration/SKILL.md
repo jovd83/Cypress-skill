@@ -4,6 +4,14 @@ description: Migration skill for moving existing UI automation to Cypress. Use w
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: framework-migration, cypress-migration
+  dispatcher-accepted-intents: migrate_to_cypress
+  dispatcher-input-artifacts: source_test_suite, repo_context, migration_scope
+  dispatcher-output-artifacts: migration_plan, migrated_tests, compatibility_notes
+  dispatcher-stack-tags: cypress, migration, framework
+  dispatcher-risk: high
+  dispatcher-writes-files: true
 ---
 
 # Cypress Migration Guides

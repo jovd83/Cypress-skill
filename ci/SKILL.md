@@ -4,6 +4,14 @@ description: CI and delivery skill for Cypress automation. Use when Codex needs 
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: ci-configuration, cypress-ci
+  dispatcher-accepted-intents: configure_cypress_ci, optimize_cypress_execution
+  dispatcher-input-artifacts: repo_context, ci_pipeline, cypress_config
+  dispatcher-output-artifacts: ci_guidance, execution_plan, pipeline_update
+  dispatcher-stack-tags: cypress, ci, automation
+  dispatcher-risk: medium
+  dispatcher-writes-files: true
 ---
 
 # Cypress CI/CD

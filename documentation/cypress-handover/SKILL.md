@@ -4,6 +4,14 @@ description: Use when you need a Cypress task handover that preserves status, se
 metadata:
   author: jovd83
   version: "1.0"
+  dispatcher-category: testing
+  dispatcher-capabilities: handover, cypress-handover
+  dispatcher-accepted-intents: create_cypress_handover
+  dispatcher-input-artifacts: work_summary, validation_status, blockers
+  dispatcher-output-artifacts: handover_document, resume_steps
+  dispatcher-stack-tags: cypress, handover, operations
+  dispatcher-risk: low
+  dispatcher-writes-files: true
 ---
 
 # Handover to Human-in-the-Loop

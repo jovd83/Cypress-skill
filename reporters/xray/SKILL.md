@@ -4,6 +4,14 @@ description: Test-management reporting skill for Xray. Use when Codex needs to p
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: test-management-reporting, cypress-test-management-reporting
+  dispatcher-accepted-intents: report_cypress_test_results
+  dispatcher-input-artifacts: execution_results, test_management_config, mappings
+  dispatcher-output-artifacts: published_results, reporting_summary
+  dispatcher-stack-tags: cypress, reporting, test-management
+  dispatcher-risk: medium
+  dispatcher-writes-files: true
 ---
 
 # Xray API Reporter

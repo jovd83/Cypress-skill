@@ -4,6 +4,14 @@ description: Editor-setup skill for Cypress plus Junie in IntelliJ IDEA. Use whe
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: editor-setup, cypress-editor-setup
+  dispatcher-accepted-intents: setup_cypress_editor
+  dispatcher-input-artifacts: editor_choice, repo_context, local_environment
+  dispatcher-output-artifacts: editor_setup_steps, configuration_guidance
+  dispatcher-stack-tags: cypress, setup, editor
+  dispatcher-risk: low
+  dispatcher-writes-files: false
 ---
 
 # IntelliJ IDEA with Junie Installation

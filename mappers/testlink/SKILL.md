@@ -4,6 +4,14 @@ description: Test-management mapping skill for TestLink. Use when Codex needs to
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: test-management-mapping, cypress-test-management-mapping
+  dispatcher-accepted-intents: map_cypress_test_management_ids
+  dispatcher-input-artifacts: test_management_ids, local_artifacts, repo_context
+  dispatcher-output-artifacts: mapped_traceability_artifacts, mapping_report
+  dispatcher-stack-tags: cypress, mapping, test-management
+  dispatcher-risk: low
+  dispatcher-writes-files: true
 ---
 
 # TestLink Mapper

@@ -4,6 +4,14 @@ description: Legacy Cypress-specific alias for Xray case export. Prefer the stan
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: test-artifact-formatting, cypress-legacy-export-transform
+  dispatcher-accepted-intents: render_test_artifact, export_test_cases
+  dispatcher-input-artifacts: approved_test_cases, normalized_test_case_model, destination_constraints
+  dispatcher-output-artifacts: transformed_test_artifact, export_bundle
+  dispatcher-stack-tags: cypress, transform, legacy-alias
+  dispatcher-risk: low
+  dispatcher-writes-files: true
 ---
 
 # Transforming Test Cases to Xray

@@ -4,6 +4,14 @@ description: Battle-tested Cypress patterns for E2E, API, component, visual, acc
 metadata:
   author: jovd83
   version: "1.0"
+  dispatcher-category: testing
+  dispatcher-capabilities: ui-automation, cypress-core, cypress-implementation
+  dispatcher-accepted-intents: implement_ui_confirmation_test, debug_cypress_test, review_cypress_test
+  dispatcher-input-artifacts: repo_context, requirements, failing_ui_scenario, existing_cypress_suite
+  dispatcher-output-artifacts: cypress_test, implementation_guidance, fix_plan
+  dispatcher-stack-tags: cypress, ui-testing, implementation
+  dispatcher-risk: high
+  dispatcher-writes-files: true
 ---
 
 # Cypress Core Testing
@@ -115,10 +123,3 @@ metadata:
 | Which locator strategy? | [locator-strategy.md](locator-strategy.md) |
 | E2E vs component vs API? | [test-architecture.md](test-architecture.md) |
 | Mock vs real services? | [when-to-mock.md](when-to-mock.md) |
-
-
-
-
-
-
-

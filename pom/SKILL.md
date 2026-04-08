@@ -4,6 +4,14 @@ description: Test-architecture skill for Cypress page objects, fixtures, helpers
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: test-architecture, cypress-pom-design
+  dispatcher-accepted-intents: design_cypress_test_architecture
+  dispatcher-input-artifacts: repo_context, suite_structure, reuse_patterns
+  dispatcher-output-artifacts: architecture_guidance, pom_design, fixture_strategy
+  dispatcher-stack-tags: cypress, architecture, pom
+  dispatcher-risk: medium
+  dispatcher-writes-files: false
 ---
 
 # Cypress Page Object Model

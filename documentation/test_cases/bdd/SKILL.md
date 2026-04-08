@@ -4,6 +4,14 @@ description: Legacy Cypress-specific alias for BDD case formatting. Prefer the s
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: test-artifact-formatting, cypress-legacy-test-case-formatting
+  dispatcher-accepted-intents: render_test_artifact, export_test_cases
+  dispatcher-input-artifacts: approved_test_cases, normalized_test_case_model, scenario_list
+  dispatcher-output-artifacts: formatted_test_artifact, export_ready_case_set
+  dispatcher-stack-tags: cypress, documentation, legacy-alias
+  dispatcher-risk: low
+  dispatcher-writes-files: true
 ---
 
 # Documenting Test Cases: BDD (Gherkin) format

@@ -4,6 +4,14 @@ description: Automation-code documentation skill for Cypress suites. Use when Co
 metadata:
   author: jovd83
   version: "1.1"
+  dispatcher-category: testing
+  dispatcher-capabilities: automation-documentation, cypress-test-documentation
+  dispatcher-accepted-intents: document_cypress_tests
+  dispatcher-input-artifacts: test_suite, repo_context, traceability_artifacts
+  dispatcher-output-artifacts: automation_docs, documentation_update
+  dispatcher-stack-tags: cypress, documentation, automation
+  dispatcher-risk: low
+  dispatcher-writes-files: true
 ---
 
 # Documenting Existing Tests

@@ -5,6 +5,14 @@ allowed-tools: Bash(cypress-cli:*)
 metadata:
   author: jovd83
   version: "1.0"
+  dispatcher-category: testing
+  dispatcher-capabilities: browser-automation-cli, cypress-cli-automation
+  dispatcher-accepted-intents: drive_cypress_browser_cli
+  dispatcher-input-artifacts: browser_task, target_url, automation_constraints
+  dispatcher-output-artifacts: browser_run_artifact, cli_workflow, generated_steps
+  dispatcher-stack-tags: cypress, cli, browser-automation
+  dispatcher-risk: medium
+  dispatcher-writes-files: true
 ---
 
 # Browser Automation with cypress-cli
