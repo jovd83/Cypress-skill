@@ -22,10 +22,14 @@ function Get-ResolvedPath([string]$Path) {
   try {
     $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
     if ($null -ne $resolved) {
-      return $resolved.Path -replace '\\', '/'
+      $resolvedPath = $resolved.Path -replace '\\', '/'
+      Write-Host "DEBUG: Get-ResolvedPath resolved '$normalized' -> '$resolvedPath'"
+      return $resolvedPath
     }
   } catch {}
-  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  $fallback = ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  Write-Host "DEBUG: Get-ResolvedPath fallback '$normalized' -> '$fallback'"
+  return $fallback
 }
 
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
@@ -112,11 +116,13 @@ function Assert-PreviousHandoverChain(
   $nextPath = $PreviousHandover
   while ($nextPath -ne $noPriorValue) {
     $nextPathNormalized = $nextPath -replace '\\', '/'
+    Write-Host "DEBUG: validation traversal: checking '$nextPathNormalized'"
     if (-not (Test-Path -LiteralPath $nextPathNormalized -PathType Leaf)) {
       throw "validate-handover failed: Previous handover path does not exist"
     }
 
     $resolvedPath = Get-ResolvedPath ((Resolve-Path -LiteralPath $nextPathNormalized).Path)
+    Write-Host "DEBUG: validation traversal: resolved to '$resolvedPath'"
     if ($visited.Contains($resolvedPath)) {
       throw "validate-handover failed: Previous handover chain contains a cycle"
     }

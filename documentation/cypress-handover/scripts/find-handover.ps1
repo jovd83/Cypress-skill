@@ -29,10 +29,14 @@ function Get-ResolvedPath([string]$Path) {
   try {
     $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
     if ($null -ne $resolved) {
-      return $resolved.Path -replace '\\', '/'
+      $resolvedPath = $resolved.Path -replace '\\', '/'
+      Write-Host "DEBUG: Get-ResolvedPath resolved '$normalized' -> '$resolvedPath'"
+      return $resolvedPath
     }
   } catch {}
-  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  $fallback = ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  Write-Host "DEBUG: Get-ResolvedPath fallback '$normalized' -> '$fallback'"
+  return $fallback
 }
 
 function Normalize-TaskLabel([string]$Value) {
@@ -154,9 +158,11 @@ $candidates = $inputs | ForEach-Object {
   $candidateBranch = Get-HandoverMetadataValue -Path $file.FullName -Label "Branch"
   $candidateTimestamp = Get-HandoverMetadataValue -Path $file.FullName -Label "Timestamp"
   $scopeKey = ("{0}|{1}|{2}" -f (Normalize-TaskLabel -Value $candidateTaskLabel), (Normalize-WorkspaceRoot -Value $candidateWorkspaceRoot), (Normalize-Branch -Value $candidateBranch))
+  $candidatePath = Get-ResolvedPath $file.FullName
+  Write-Host "DEBUG: find candidate: '$candidatePath'"
   [pscustomobject]@{
     Location = $_.Location
-    Path = Get-ResolvedPath $file.FullName
+    Path = $candidatePath
     Timestamp = $candidateTimestamp
     ParsedTimestamp = Parse-HandoverTimestamp -Value $candidateTimestamp
     TaskLabel = $candidateTaskLabel

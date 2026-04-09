@@ -29,10 +29,14 @@ function Get-ResolvedPath([string]$Path) {
   try {
     $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
     if ($null -ne $resolved) {
-      return $resolved.Path -replace '\\', '/'
+      $resolvedPath = $resolved.Path -replace '\\', '/'
+      Write-Host "DEBUG: Get-ResolvedPath resolved '$normalized' -> '$resolvedPath'"
+      return $resolvedPath
     }
   } catch {}
-  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  $fallback = ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  Write-Host "DEBUG: Get-ResolvedPath fallback '$normalized' -> '$fallback'"
+  return $fallback
 }
 
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
@@ -164,6 +168,7 @@ $noPriorValue = "No prior handover found"
 
 while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
   $currentPathNormalized = $currentPath -replace '\\', '/'
+  Write-Host "DEBUG: archive traversal: checking '$currentPathNormalized'"
   if (-not (Test-Path -LiteralPath $currentPathNormalized -PathType Leaf)) {
     throw "Previous handover path does not exist while archiving: $currentPath"
   }
@@ -176,6 +181,7 @@ while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
   [void]$visited.Add($resolvedCurrentPathCanonical)
 
   $previousValue = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
+  Write-Host "DEBUG: archive traversal: read PreviousValue='$previousValue' inside '$resolvedCurrentPathCanonical'"
   $chain.Add([pscustomobject]@{
     Path = Get-ResolvedPath $resolvedCurrentPath
     PreviousHandover = ($previousValue -replace '\\', '/')
@@ -196,6 +202,7 @@ foreach ($entry in $orderedChain) {
     throw "Archive target already exists: $targetPath"
   }
   $entryPathCanonical = Get-ResolvedPath $entry.Path
+  Write-Host "DEBUG: archive mapping: mapping key='$entryPathCanonical' -> target='$targetPath'"
   $targetPathBySource[$entryPathCanonical] = $targetPath
 }
 
