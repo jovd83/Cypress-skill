@@ -87,8 +87,8 @@ if (-not (Test-Path -LiteralPath $validatorScript -PathType Leaf)) {
 
 $handoverDir = Join-Path $DocsRoot "handovers"
 $handoverDirNormalized = $handoverDir -replace '\\', '/'
-if (-not (Test-Path -Path $handoverDirNormalized -PathType Container)) {
-  throw "Handover directory not found: $handoverDir"
+if (-not (Test-Path -LiteralPath $handoverDirNormalized -PathType Container)) {
+  throw "Handover directory does not exist: $handoverDirNormalized"
 }
 
 $archiveDir = Join-Path $handoverDir "archive"

@@ -149,7 +149,7 @@ $noPriorValue = "No prior handover found"
 
 while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
   $currentPathNormalized = $currentPath -replace '\\', '/'
-  if (-not (Test-Path -Path $currentPathNormalized -PathType Leaf)) {
+  if (-not (Test-Path -LiteralPath $currentPathNormalized -PathType Leaf)) {
     throw "Previous handover path does not exist while restoring: $currentPath"
   }
 

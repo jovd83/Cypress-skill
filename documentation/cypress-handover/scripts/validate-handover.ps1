@@ -112,7 +112,7 @@ function Assert-PreviousHandoverChain(
   $nextPath = $PreviousHandover
   while ($nextPath -ne $noPriorValue) {
     $nextPathNormalized = $nextPath -replace '\\', '/'
-    if (-not (Test-Path -Path $nextPathNormalized -PathType Leaf)) {
+    if (-not (Test-Path -LiteralPath $nextPathNormalized -PathType Leaf)) {
       throw "validate-handover failed: Previous handover path does not exist"
     }
 
