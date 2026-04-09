@@ -32,6 +32,19 @@ function Get-ResolvedPath([string]$Path) {
   return $fallback
 }
 
+function Resolve-HandoverLink([string]$ContainingFilePath, [string]$LinkValue) {
+  if ([string]::IsNullOrWhiteSpace($LinkValue) -or ($LinkValue -eq "No prior handover found")) {
+    return $LinkValue
+  }
+  $normalized = $LinkValue -replace '\\', '/'
+  if ([System.IO.Path]::IsPathRooted($normalized)) {
+    return Get-ResolvedPath $normalized
+  }
+  $dir = [System.IO.Path]::GetDirectoryName($ContainingFilePath)
+  $abs = Join-Path $dir $normalized
+  return Get-ResolvedPath $abs
+}
+
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
   $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
   $match = [regex]::Match($Markdown, $pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
@@ -121,7 +134,7 @@ function Assert-PreviousHandoverChain(
       throw "validate-handover failed: Previous handover path does not exist"
     }
 
-    $resolvedPath = Get-ResolvedPath ((Resolve-Path -LiteralPath $nextPathNormalized).Path)
+    $resolvedPath = Resolve-HandoverLink -ContainingFilePath $currentResolvedPathCanonical -LinkValue $nextPath
     Write-Host "DEBUG: validation traversal: resolved to '$resolvedPath'"
     if ($visited.Contains($resolvedPath)) {
       throw "validate-handover failed: Previous handover chain contains a cycle"
@@ -150,13 +163,13 @@ function Assert-PreviousHandoverChain(
       throw "validate-handover failed: Previous handover chain must move backward in time"
     }
 
-    $ancestorLink = Get-HandoverMetadataValue -Markdown $previousText -Label "Previous handover"
-    if ([string]::IsNullOrWhiteSpace($ancestorLink)) {
+    $currentResolvedPathCanonical = $resolvedPath
+    $nextPath = Get-HandoverMetadataValue -Markdown $previousText -Label "Previous handover"
+    if ([string]::IsNullOrWhiteSpace($nextPath)) {
       throw "validate-handover failed: Previous handover chain contains a missing ancestor link"
     }
 
     $newerTimestamp = $previousTimestamp
-    $nextPath = $ancestorLink
   }
 }
 

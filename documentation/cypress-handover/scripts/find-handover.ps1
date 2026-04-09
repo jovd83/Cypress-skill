@@ -39,6 +39,19 @@ function Get-ResolvedPath([string]$Path) {
   return $fallback
 }
 
+function Resolve-HandoverLink([string]$ContainingFilePath, [string]$LinkValue) {
+  if ([string]::IsNullOrWhiteSpace($LinkValue) -or ($LinkValue -eq "No prior handover found")) {
+    return $LinkValue
+  }
+  $normalized = $LinkValue -replace '\\', '/'
+  if ([System.IO.Path]::IsPathRooted($normalized)) {
+    return Get-ResolvedPath $normalized
+  }
+  $dir = [System.IO.Path]::GetDirectoryName($ContainingFilePath)
+  $abs = Join-Path $dir $normalized
+  return Get-ResolvedPath $abs
+}
+
 function Normalize-TaskLabel([string]$Value) {
   if ($null -eq $Value) { return "" }
   $normalized = $Value.Trim().ToLowerInvariant()
@@ -83,15 +96,18 @@ function Get-ChainDepth([string]$Path) {
 
   $depth = 0
   $nextPath = Get-HandoverMetadataValue -Path $resolvedCurrent -Label "Previous handover"
-  while (($nextPath -ne $noPriorValue) -and (-not [string]::IsNullOrWhiteSpace($nextPath)) -and (Test-Path -LiteralPath $nextPath -PathType Leaf)) {
-    $resolvedNext = Get-ResolvedPath ((Resolve-Path -LiteralPath $nextPath).Path)
+  while (($nextPath -ne $noPriorValue) -and (-not [string]::IsNullOrWhiteSpace($nextPath))) {
+    $resolvedNext = Resolve-HandoverLink -ContainingFilePath $resolvedCurrent -LinkValue $nextPath
+    if (-not (Test-Path -LiteralPath $resolvedNext -PathType Leaf)) {
+      break
+    }
     if ($visited.Contains($resolvedNext)) {
       break
     }
-
     [void]$visited.Add($resolvedNext)
     $depth++
-    $nextPath = Get-HandoverMetadataValue -Path $resolvedNext -Label "Previous handover"
+    $resolvedCurrent = $resolvedNext
+    $nextPath = Get-HandoverMetadataValue -Path $resolvedCurrent -Label "Previous handover"
   }
 
   return $depth

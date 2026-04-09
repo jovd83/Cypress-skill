@@ -39,6 +39,19 @@ function Get-ResolvedPath([string]$Path) {
   return $fallback
 }
 
+function Resolve-HandoverLink([string]$ContainingFilePath, [string]$LinkValue) {
+  if ([string]::IsNullOrWhiteSpace($LinkValue) -or ($LinkValue -eq "No prior handover found")) {
+    return $LinkValue
+  }
+  $normalized = $LinkValue -replace '\\', '/'
+  if ([System.IO.Path]::IsPathRooted($normalized)) {
+    return Get-ResolvedPath $normalized
+  }
+  $dir = [System.IO.Path]::GetDirectoryName($ContainingFilePath)
+  $abs = Join-Path $dir $normalized
+  return Get-ResolvedPath $abs
+}
+
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
   $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
   $match = [regex]::Match($Markdown, $pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
@@ -166,7 +179,7 @@ $visited = New-Object 'System.Collections.Generic.HashSet[string]'
 $currentPath = $latest.Path
 $noPriorValue = "No prior handover found"
 
-while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
+while ((-not [string]::IsNullOrWhiteSpace($currentPath)) -and ($currentPath -ne $noPriorValue)) {
   $currentPathNormalized = $currentPath -replace '\\', '/'
   Write-Host "DEBUG: archive traversal: checking '$currentPathNormalized'"
   if (-not (Test-Path -LiteralPath $currentPathNormalized -PathType Leaf)) {
@@ -182,16 +195,14 @@ while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
 
   $previousValue = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
   Write-Host "DEBUG: archive traversal: read PreviousValue='$previousValue' inside '$resolvedCurrentPathCanonical'"
+  $resolvedPreviousValue = Resolve-HandoverLink -ContainingFilePath $resolvedCurrentPath -LinkValue $previousValue
+  
   $chain.Add([pscustomobject]@{
-    Path = Get-ResolvedPath $resolvedCurrentPath
+    Path = $resolvedCurrentPathCanonical
     PreviousHandover = ($previousValue -replace '\\', '/')
   }) | Out-Null
 
-  if ($previousValue -eq $noPriorValue) {
-    break
-  }
-
-  $currentPath = $previousValue
+  $currentPath = $resolvedPreviousValue
 }
 
 $orderedChain = @($chain | Sort-Object Path)

@@ -29,10 +29,27 @@ function Get-ResolvedPath([string]$Path) {
   try {
     $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
     if ($null -ne $resolved) {
-      return $resolved.Path -replace '\\', '/'
+      $resolvedPath = $resolved.Path -replace '\\', '/'
+      Write-Host "DEBUG: Get-ResolvedPath resolved '$normalized' -> '$resolvedPath'"
+      return $resolvedPath
     }
   } catch {}
-  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  $fallback = ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  Write-Host "DEBUG: Get-ResolvedPath fallback '$normalized' -> '$fallback'"
+  return $fallback
+}
+
+function Resolve-HandoverLink([string]$ContainingFilePath, [string]$LinkValue) {
+  if ([string]::IsNullOrWhiteSpace($LinkValue) -or ($LinkValue -eq "No prior handover found")) {
+    return $LinkValue
+  }
+  $normalized = $LinkValue -replace '\\', '/'
+  if ([System.IO.Path]::IsPathRooted($normalized)) {
+    return Get-ResolvedPath $normalized
+  }
+  $dir = [System.IO.Path]::GetDirectoryName($ContainingFilePath)
+  $abs = Join-Path $dir $normalized
+  return Get-ResolvedPath $abs
 }
 
 function Normalize-TaskLabel([string]$Value) {
@@ -196,7 +213,7 @@ try {
       $entry = $orderedEntries[$index]
       $expectedPreviousRaw = if ($index -lt ($orderedEntries.Count - 1)) { $orderedEntries[$index + 1].Path } else { $noPriorValue }
       
-      $currentPreviousCanonical = Get-ResolvedPath $entry.PreviousHandover
+      $currentPreviousCanonical = Resolve-HandoverLink -ContainingFilePath $entry.Path -LinkValue $entry.PreviousHandover
       $expectedPreviousCanonical = Get-ResolvedPath $expectedPreviousRaw
 
       if ($currentPreviousCanonical -eq $expectedPreviousCanonical) {

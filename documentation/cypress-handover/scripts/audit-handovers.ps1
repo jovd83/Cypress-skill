@@ -27,10 +27,14 @@ function Get-ResolvedPath([string]$Path) {
   try {
     $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
     if ($null -ne $resolved) {
-      return $resolved.Path -replace '\\', '/'
+      $resolvedPath = $resolved.Path -replace '\\', '/'
+      Write-Host "DEBUG: Get-ResolvedPath resolved '$normalized' -> '$resolvedPath'"
+      return $resolvedPath
     }
   } catch {}
-  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  $fallback = ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+  Write-Host "DEBUG: Get-ResolvedPath fallback '$normalized' -> '$fallback'"
+  return $fallback
 }
 
 function Normalize-TaskLabel([string]$Value) {
