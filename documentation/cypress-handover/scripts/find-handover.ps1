@@ -21,6 +21,17 @@ function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   return $match.Groups["value"].Value.Trim()
 }
 
+function Get-CanonicalPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  try {
+    return [System.IO.Path]::GetFullPath($Path) -replace '\\', '/'
+  } catch {
+    return $Path -replace '\\', '/'
+  }
+}
+
 function Normalize-TaskLabel([string]$Value) {
   if ($null -eq $Value) { return "" }
   $normalized = $Value.Trim().ToLowerInvariant()
@@ -60,13 +71,13 @@ function Parse-HandoverTimestamp([string]$Value) {
 function Get-ChainDepth([string]$Path) {
   $noPriorValue = "No prior handover found"
   $visited = New-Object 'System.Collections.Generic.HashSet[string]'
-  $resolvedCurrent = [System.IO.Path]::GetFullPath((Resolve-Path -LiteralPath $Path).Path)
+  $resolvedCurrent = Get-CanonicalPath ((Resolve-Path -LiteralPath $Path).Path)
   [void]$visited.Add($resolvedCurrent)
 
   $depth = 0
   $nextPath = Get-HandoverMetadataValue -Path $resolvedCurrent -Label "Previous handover"
   while (($nextPath -ne $noPriorValue) -and (-not [string]::IsNullOrWhiteSpace($nextPath)) -and (Test-Path -LiteralPath $nextPath -PathType Leaf)) {
-    $resolvedNext = [System.IO.Path]::GetFullPath((Resolve-Path -LiteralPath $nextPath).Path)
+    $resolvedNext = Get-CanonicalPath ((Resolve-Path -LiteralPath $nextPath).Path)
     if ($visited.Contains($resolvedNext)) {
       break
     }
@@ -142,7 +153,7 @@ $candidates = $inputs | ForEach-Object {
   $scopeKey = ("{0}|{1}|{2}" -f (Normalize-TaskLabel -Value $candidateTaskLabel), (Normalize-WorkspaceRoot -Value $candidateWorkspaceRoot), (Normalize-Branch -Value $candidateBranch))
   [pscustomobject]@{
     Location = $_.Location
-    Path = [System.IO.Path]::GetFullPath($file.FullName)
+    Path = Get-CanonicalPath ($file.FullName)
     Timestamp = $candidateTimestamp
     ParsedTimestamp = Parse-HandoverTimestamp -Value $candidateTimestamp
     TaskLabel = $candidateTaskLabel

@@ -21,6 +21,17 @@ function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   return $match.Groups["value"].Value.Trim()
 }
 
+function Get-CanonicalPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  try {
+    return [System.IO.Path]::GetFullPath($Path) -replace '\\', '/'
+  } catch {
+    return $Path -replace '\\', '/'
+  }
+}
+
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
   $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
   $match = [regex]::Match($Markdown, $pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
@@ -162,7 +173,7 @@ while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
 
   $previousValue = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
   $chain.Add([pscustomobject]@{
-    Path = [System.IO.Path]::GetFullPath($resolvedCurrentPath)
+    Path = Get-CanonicalPath ($resolvedCurrentPath)
     PreviousHandover = ($previousValue -replace '\\', '/')
   }) | Out-Null
 
@@ -180,7 +191,8 @@ foreach ($entry in $orderedChain) {
   if ((Test-Path -LiteralPath $targetPath) -and (-not $Force)) {
     throw "Archive target already exists: $targetPath"
   }
-  $targetPathBySource[$entry.Path] = $targetPath
+  $entryPathCanonical = Get-CanonicalPath ($entry.Path)
+  $targetPathBySource[$entryPathCanonical] = $targetPath
 }
 
 $writtenTargets = New-Object 'System.Collections.Generic.List[string]'
@@ -189,15 +201,15 @@ try {
     $text = Get-Content -Raw -LiteralPath $entry.Path
     $updatedPreviousRaw = $entry.PreviousHandover
     if ($updatedPreviousRaw -ne $noPriorValue) {
-      # Use GetFullPath for consistent lookup key regardless of original separators
-      $lookupKey = [System.IO.Path]::GetFullPath($updatedPreviousRaw)
+      $lookupKey = Get-CanonicalPath ($updatedPreviousRaw)
       if ($targetPathBySource.ContainsKey($lookupKey)) {
         $updatedPrevious = $targetPathBySource[$lookupKey] -replace '\\', '/'
         $text = Replace-MetadataLine -Markdown $text -Label "Previous handover" -Value $updatedPrevious
       }
     }
 
-    $targetPath = $targetPathBySource[$entry.Path]
+    $entryPathCanonical = Get-CanonicalPath ($entry.Path)
+    $targetPath = $targetPathBySource[$entryPathCanonical]
     Set-Content -LiteralPath $targetPath -Value $text -Encoding UTF8
     [void]$writtenTargets.Add($targetPath)
   }

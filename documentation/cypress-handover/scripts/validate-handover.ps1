@@ -14,6 +14,17 @@ function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   return $match.Groups["value"].Value.Trim()
 }
 
+function Get-CanonicalPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  try {
+    return [System.IO.Path]::GetFullPath($Path) -replace '\\', '/'
+  } catch {
+    return $Path -replace '\\', '/'
+  }
+}
+
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
   $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
   $match = [regex]::Match($Markdown, $pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
@@ -89,7 +100,7 @@ function Assert-PreviousHandoverChain(
   }
 
   $visited = New-Object 'System.Collections.Generic.HashSet[string]'
-  $currentResolvedPath = [System.IO.Path]::GetFullPath((Resolve-Path -LiteralPath $CurrentPath).Path)
+  $currentResolvedPath = Get-CanonicalPath ((Resolve-Path -LiteralPath $CurrentPath).Path)
   [void]$visited.Add($currentResolvedPath)
   $expectedWorkspaceRoot = Normalize-WorkspaceRoot -Value $WorkspaceRoot
   $expectedBranch = (($Branch -replace '\s+', ' ').Trim()).ToLowerInvariant()
@@ -102,7 +113,7 @@ function Assert-PreviousHandoverChain(
       throw "validate-handover failed: Previous handover path does not exist"
     }
 
-    $resolvedPath = [System.IO.Path]::GetFullPath((Resolve-Path -Path $nextPathNormalized).Path)
+    $resolvedPath = Get-CanonicalPath ((Resolve-Path -Path $nextPathNormalized).Path)
     if ($visited.Contains($resolvedPath)) {
       throw "validate-handover failed: Previous handover chain contains a cycle"
     }

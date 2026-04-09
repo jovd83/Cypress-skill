@@ -21,6 +21,17 @@ function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   return $match.Groups["value"].Value.Trim()
 }
 
+function Get-CanonicalPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  try {
+    return [System.IO.Path]::GetFullPath($Path) -replace '\\', '/'
+  } catch {
+    return $Path -replace '\\', '/'
+  }
+}
+
 function Normalize-TaskLabel([string]$Value) {
   if ($null -eq $Value) { return "" }
   $normalized = $Value.Trim().ToLowerInvariant()
@@ -129,7 +140,7 @@ $entries = @(
     $normalizedEntryBranch = Normalize-Branch -Value $branchValue
     [pscustomobject]@{
       Location = $_.Location
-      Path = [System.IO.Path]::GetFullPath($file.FullName)
+      Path = Get-CanonicalPath ($file.FullName)
       Timestamp = $timestamp
       ParsedTimestamp = Parse-HandoverTimestamp -Value $timestamp
       TaskLabel = $taskLabel
@@ -182,11 +193,10 @@ try {
       $entry = $orderedEntries[$index]
       $expectedPreviousRaw = if ($index -lt ($orderedEntries.Count - 1)) { $orderedEntries[$index + 1].Path } else { $noPriorValue }
       
-      # Use GetFullPath for consistent comparison
-      $currentPreviousNormalized = if ($entry.PreviousHandover -eq $noPriorValue) { $noPriorValue } else { [System.IO.Path]::GetFullPath($entry.PreviousHandover) }
-      $expectedPreviousNormalized = if ($expectedPreviousRaw -eq $noPriorValue) { $noPriorValue } else { [System.IO.Path]::GetFullPath($expectedPreviousRaw) }
+      $currentPreviousCanonical = Get-CanonicalPath ($entry.PreviousHandover)
+      $expectedPreviousCanonical = Get-CanonicalPath ($expectedPreviousRaw)
 
-      if ($currentPreviousNormalized -eq $expectedPreviousNormalized) {
+      if ($currentPreviousCanonical -eq $expectedPreviousCanonical) {
         continue
       }
 
