@@ -175,8 +175,8 @@ if (($scopeCount -gt 1) -and [string]::IsNullOrWhiteSpace($normalizedWorkspaceRo
 $latest = $candidates | Select-Object -First 1
 $latestText = Get-Content -Raw -LiteralPath $latest.Path
 $latestStatus = Get-SectionBody -Markdown $latestText -Heading "### Current status"
-if ($latestStatus -ne "Completed") {
-  throw "Only completed handover scopes can be archived"
+if (($latestStatus -ne "Completed") -and (-not $Force)) {
+  throw "Only completed handover scopes can be archived. Use -Force to archive an in-progress or blocked handover."
 }
 
 $chain = New-Object 'System.Collections.Generic.List[object]'
