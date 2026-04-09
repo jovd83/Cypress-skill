@@ -162,7 +162,7 @@ while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
 
   $previousValue = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
   $chain.Add([pscustomobject]@{
-    Path = $resolvedCurrentPath
+    Path = [System.IO.Path]::GetFullPath($resolvedCurrentPath)
     PreviousHandover = ($previousValue -replace '\\', '/')
   }) | Out-Null
 
@@ -188,9 +188,9 @@ try {
   foreach ($entry in $orderedChain) {
     $text = Get-Content -Raw -LiteralPath $entry.Path
     $updatedPreviousRaw = $entry.PreviousHandover
-    if (($updatedPreviousRaw -ne $noPriorValue)) {
-      # Normalize search key to native separators to match targetPathBySource keys
-      $lookupKey = $updatedPreviousRaw -replace '/', [System.IO.Path]::DirectorySeparatorChar
+    if ($updatedPreviousRaw -ne $noPriorValue) {
+      # Use GetFullPath for consistent lookup key regardless of original separators
+      $lookupKey = [System.IO.Path]::GetFullPath($updatedPreviousRaw)
       if ($targetPathBySource.ContainsKey($lookupKey)) {
         $updatedPrevious = $targetPathBySource[$lookupKey] -replace '\\', '/'
         $text = Replace-MetadataLine -Markdown $text -Label "Previous handover" -Value $updatedPrevious

@@ -60,13 +60,13 @@ function Parse-HandoverTimestamp([string]$Value) {
 function Get-ChainDepth([string]$Path) {
   $noPriorValue = "No prior handover found"
   $visited = New-Object 'System.Collections.Generic.HashSet[string]'
-  $resolvedCurrent = (Resolve-Path -LiteralPath $Path).Path
+  $resolvedCurrent = [System.IO.Path]::GetFullPath((Resolve-Path -LiteralPath $Path).Path)
   [void]$visited.Add($resolvedCurrent)
 
   $depth = 0
   $nextPath = Get-HandoverMetadataValue -Path $resolvedCurrent -Label "Previous handover"
   while (($nextPath -ne $noPriorValue) -and (-not [string]::IsNullOrWhiteSpace($nextPath)) -and (Test-Path -LiteralPath $nextPath -PathType Leaf)) {
-    $resolvedNext = (Resolve-Path -LiteralPath $nextPath).Path
+    $resolvedNext = [System.IO.Path]::GetFullPath((Resolve-Path -LiteralPath $nextPath).Path)
     if ($visited.Contains($resolvedNext)) {
       break
     }
@@ -142,7 +142,7 @@ $candidates = $inputs | ForEach-Object {
   $scopeKey = ("{0}|{1}|{2}" -f (Normalize-TaskLabel -Value $candidateTaskLabel), (Normalize-WorkspaceRoot -Value $candidateWorkspaceRoot), (Normalize-Branch -Value $candidateBranch))
   [pscustomobject]@{
     Location = $_.Location
-    Path = $file.FullName
+    Path = [System.IO.Path]::GetFullPath($file.FullName)
     Timestamp = $candidateTimestamp
     ParsedTimestamp = Parse-HandoverTimestamp -Value $candidateTimestamp
     TaskLabel = $candidateTaskLabel
@@ -176,7 +176,7 @@ if (-not [string]::IsNullOrWhiteSpace($normalizedBranch)) {
   }
 }
 
-$scopeCount = @($candidates | Group-Object LocationScopeKey).Count
+$scopeCount = @($candidates | Group-Object ScopeKey).Count
 if (($scopeCount -gt 1) -and (-not [string]::IsNullOrWhiteSpace($normalizedTaskLabel))) {
   if ($Location -eq "all") {
     throw "Multiple handovers found for task label '$TaskLabel'. Rerun with -Location and/or -WorkspaceRoot and/or -Branch to disambiguate scope."

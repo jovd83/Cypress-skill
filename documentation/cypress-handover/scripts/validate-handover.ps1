@@ -89,7 +89,7 @@ function Assert-PreviousHandoverChain(
   }
 
   $visited = New-Object 'System.Collections.Generic.HashSet[string]'
-  $currentResolvedPath = (Resolve-Path -LiteralPath $CurrentPath).Path
+  $currentResolvedPath = [System.IO.Path]::GetFullPath((Resolve-Path -LiteralPath $CurrentPath).Path)
   [void]$visited.Add($currentResolvedPath)
   $expectedWorkspaceRoot = Normalize-WorkspaceRoot -Value $WorkspaceRoot
   $expectedBranch = (($Branch -replace '\s+', ' ').Trim()).ToLowerInvariant()
@@ -102,7 +102,7 @@ function Assert-PreviousHandoverChain(
       throw "validate-handover failed: Previous handover path does not exist"
     }
 
-    $resolvedPath = (Resolve-Path -Path $nextPathNormalized).Path
+    $resolvedPath = [System.IO.Path]::GetFullPath((Resolve-Path -Path $nextPathNormalized).Path)
     if ($visited.Contains($resolvedPath)) {
       throw "validate-handover failed: Previous handover chain contains a cycle"
     }

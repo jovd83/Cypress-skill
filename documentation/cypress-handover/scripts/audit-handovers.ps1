@@ -137,7 +137,16 @@ $results = foreach ($input in $inputs) {
     Location = $input.Location
     ScopeKey = ("{0}|{1}|{2}" -f $normalizedTaskLabel, $normalizedWorkspaceRoot, $normalizedBranch)
     # Normalize path to native separators for robust reporting and lookup
-    Path = $file.FullName
+    Path = [System.IO.Path]::GetFullPath($file.FullName)
+    FileName = $file.Name
+    Timestamp = $timestamp
+    ParsedTimestamp = $parsedTimestamp
+    TaskLabel = $taskLabel
+    NormalizedTaskLabel = $normalizedTaskLabel
+    WorkspaceRoot = $workspaceRoot
+    NormalizedWorkspaceRoot = $normalizedWorkspaceRoot
+    Branch = $branch
+    NormalizedBranch = $normalizedBranch
     IsValid = $isValid
     ValidationError = $validationError
   }

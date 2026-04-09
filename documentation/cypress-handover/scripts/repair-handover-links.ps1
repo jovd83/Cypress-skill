@@ -129,7 +129,7 @@ $entries = @(
     $normalizedEntryBranch = Normalize-Branch -Value $branchValue
     [pscustomobject]@{
       Location = $_.Location
-      Path = $candidatePathNormalized
+      Path = [System.IO.Path]::GetFullPath($file.FullName)
       Timestamp = $timestamp
       ParsedTimestamp = Parse-HandoverTimestamp -Value $timestamp
       TaskLabel = $taskLabel
@@ -140,7 +140,7 @@ $entries = @(
       NormalizedBranch = $normalizedEntryBranch
       ScopeKey = ("{0}|{1}|{2}" -f $normalizedEntryTaskLabel, $normalizedEntryWorkspace, $normalizedEntryBranch)
       LocationScopeKey = ("{0}|{1}" -f $_.Location, ("{0}|{1}|{2}" -f $normalizedEntryTaskLabel, $normalizedEntryWorkspace, $normalizedEntryBranch))
-      PreviousHandover = (Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Previous handover" -replace '\\', '/')
+      PreviousHandover = (Get-HandoverMetadataValue -Path $file.FullName -Label "Previous handover" -replace '\\', '/')
     }
   }
 )
@@ -180,16 +180,23 @@ try {
     $updatedPaths = New-Object 'System.Collections.Generic.List[string]'
     for ($index = 0; $index -lt $orderedEntries.Count; $index++) {
       $entry = $orderedEntries[$index]
-      $expectedPrevious = if ($index -lt ($orderedEntries.Count - 1)) { $orderedEntries[$index + 1].Path } else { $noPriorValue }
-      if ($entry.PreviousHandover -eq $expectedPrevious) {
+      $expectedPreviousRaw = if ($index -lt ($orderedEntries.Count - 1)) { $orderedEntries[$index + 1].Path } else { $noPriorValue }
+      
+      # Use GetFullPath for consistent comparison
+      $currentPreviousNormalized = if ($entry.PreviousHandover -eq $noPriorValue) { $noPriorValue } else { [System.IO.Path]::GetFullPath($entry.PreviousHandover) }
+      $expectedPreviousNormalized = if ($expectedPreviousRaw -eq $noPriorValue) { $noPriorValue } else { [System.IO.Path]::GetFullPath($expectedPreviousRaw) }
+
+      if ($currentPreviousNormalized -eq $expectedPreviousNormalized) {
         continue
       }
+
+      $expectedPreviousStored = if ($expectedPreviousRaw -eq $noPriorValue) { $noPriorValue } else { $expectedPreviousRaw -replace '\\', '/' }
 
       if (-not $originalContentByPath.ContainsKey($entry.Path)) {
         $originalContentByPath[$entry.Path] = Get-Content -Raw -LiteralPath $entry.Path
       }
 
-      $updatedText = Replace-MetadataLine -Markdown $originalContentByPath[$entry.Path] -Label "Previous handover" -Value $expectedPrevious
+      $updatedText = Replace-MetadataLine -Markdown $originalContentByPath[$entry.Path] -Label "Previous handover" -Value $expectedPreviousStored
       Set-Content -LiteralPath $entry.Path -Value $updatedText -Encoding UTF8
       [void]$changedPaths.Add($entry.Path)
       [void]$updatedPaths.Add($entry.Path)
