@@ -179,11 +179,12 @@ $index = 0
 $noPriorValue = "No prior handover found"
 
 while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
-  if (-not (Test-Path -LiteralPath $currentPath -PathType Leaf)) {
+  $currentPathNormalized = $currentPath -replace '\\', '/'
+  if (-not (Test-Path -Path $currentPathNormalized -PathType Leaf)) {
     throw "Previous handover path does not exist while tracing chain: $currentPath"
   }
 
-  $resolvedCurrentPath = (Resolve-Path -LiteralPath $currentPath).Path
+  $resolvedCurrentPath = (Resolve-Path -Path $currentPathNormalized).Path
   if ($visited.Contains($resolvedCurrentPath)) {
     throw "Previous handover chain contains a cycle while tracing: $resolvedCurrentPath"
   }

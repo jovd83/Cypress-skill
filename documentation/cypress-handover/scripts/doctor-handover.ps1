@@ -76,7 +76,7 @@ if (-not (Test-Path -LiteralPath $resolveConflictScript -PathType Leaf)) {
   throw "Location-conflict resolver not found: $resolveConflictScript"
 }
 
-$resolvedDocsRoot = (Resolve-Path -LiteralPath $DocsRoot).Path
+$resolvedDocsRoot = (Resolve-Path -Path ($DocsRoot -replace '\\', '/')).Path
 $normalizedTaskLabel = Normalize-TaskLabel -Value $TaskLabel
 $normalizedWorkspaceRoot = Normalize-WorkspaceRoot -Value $WorkspaceRoot
 $normalizedBranch = Normalize-Branch -Value $Branch

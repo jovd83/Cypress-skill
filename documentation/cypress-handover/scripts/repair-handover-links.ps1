@@ -73,7 +73,8 @@ if (-not (Test-Path -LiteralPath $validatorScript -PathType Leaf)) {
 }
 
 $handoverDir = Join-Path $DocsRoot "handovers"
-if (-not (Test-Path -LiteralPath $handoverDir -PathType Container)) {
+$handoverDirNormalized = $handoverDir -replace '\\', '/'
+if (-not (Test-Path -Path $handoverDirNormalized -PathType Container)) {
   throw "Handover directory not found: $handoverDir"
 }
 
@@ -118,16 +119,17 @@ $normalizedBranch = Normalize-Branch -Value $Branch
 $entries = @(
   $inputs | ForEach-Object {
     $file = $_.File
-    $taskLabel = Get-HandoverMetadataValue -Path $file.FullName -Label "Task label"
-    $workspace = Get-HandoverMetadataValue -Path $file.FullName -Label "Workspace root"
-    $branchValue = Get-HandoverMetadataValue -Path $file.FullName -Label "Branch"
-    $timestamp = Get-HandoverMetadataValue -Path $file.FullName -Label "Timestamp"
+    $candidatePathNormalized = $file.FullName -replace '\\', '/'
+    $taskLabel = Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Task label"
+    $workspace = Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Workspace root"
+    $branchValue = Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Branch"
+    $timestamp = Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Timestamp"
     $normalizedEntryTaskLabel = Normalize-TaskLabel -Value $taskLabel
     $normalizedEntryWorkspace = Normalize-WorkspaceRoot -Value $workspace
     $normalizedEntryBranch = Normalize-Branch -Value $branchValue
     [pscustomobject]@{
       Location = $_.Location
-      Path = $file.FullName
+      Path = $candidatePathNormalized
       Timestamp = $timestamp
       ParsedTimestamp = Parse-HandoverTimestamp -Value $timestamp
       TaskLabel = $taskLabel
@@ -138,7 +140,7 @@ $entries = @(
       NormalizedBranch = $normalizedEntryBranch
       ScopeKey = ("{0}|{1}|{2}" -f $normalizedEntryTaskLabel, $normalizedEntryWorkspace, $normalizedEntryBranch)
       LocationScopeKey = ("{0}|{1}" -f $_.Location, ("{0}|{1}|{2}" -f $normalizedEntryTaskLabel, $normalizedEntryWorkspace, $normalizedEntryBranch))
-      PreviousHandover = Get-HandoverMetadataValue -Path $file.FullName -Label "Previous handover"
+      PreviousHandover = (Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Previous handover" -replace '\\', '/')
     }
   }
 )
@@ -218,7 +220,7 @@ try {
   throw
 }
 
-$resolvedDocsRoot = (Resolve-Path -LiteralPath $DocsRoot).Path
+$resolvedDocsRoot = (Resolve-Path -Path ($DocsRoot -replace '\\', '/')).Path
 $scopeResultArray = @($scopeResults | ForEach-Object { $_ })
 $result = [pscustomobject]@{
   DocsRoot = $resolvedDocsRoot

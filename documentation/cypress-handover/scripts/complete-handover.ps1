@@ -194,7 +194,7 @@ if ([string]::IsNullOrWhiteSpace($validationBody)) {
 
 $updatedText = $sourceText
 $updatedText = Replace-MetadataLine -Markdown $updatedText -Label "Timestamp" -Value $newTimestamp
-$updatedText = Replace-MetadataLine -Markdown $updatedText -Label "Previous handover" -Value $selected.Path
+$updatedText = Replace-MetadataLine -Markdown $updatedText -Label "Previous handover" -Value ($selected.Path -replace '\\', '/')
 $updatedText = Replace-SectionBody -Markdown $updatedText -Heading "### Current status" -Body "Completed"
 $updatedText = Replace-SectionBody -Markdown $updatedText -Heading "### What was done" -Body $whatWasDone
 $updatedText = Replace-SectionBody -Markdown $updatedText -Heading "### In progress" -Body "None."

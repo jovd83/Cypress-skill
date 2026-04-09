@@ -163,7 +163,7 @@ try {
     ) | Select-Object -First 1
     Assert-True (Test-Path -LiteralPath $newPath -PathType Leaf) "check-cypress-handover-smoke failed: new-handover did not create a file"
     $newText = Get-Content -Raw -LiteralPath $newPath
-    Assert-True ($newText -match [regex]::Escape('- Previous handover: ' + $activeScoped)) "check-cypress-handover-smoke failed: new-handover did not link the same active scope"
+    Assert-True ($newText -match [regex]::Escape('- Previous handover: ' + ($activeScoped -replace '\\', '/'))) "check-cypress-handover-smoke failed: new-handover did not link the same active scope"
 
     $manualScopeRejected = $false
     try {

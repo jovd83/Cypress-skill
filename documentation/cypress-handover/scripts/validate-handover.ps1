@@ -97,11 +97,12 @@ function Assert-PreviousHandoverChain(
 
   $nextPath = $PreviousHandover
   while ($nextPath -ne $noPriorValue) {
-    if (-not (Test-Path -LiteralPath $nextPath -PathType Leaf)) {
+    $nextPathNormalized = $nextPath -replace '\\', '/'
+    if (-not (Test-Path -Path $nextPathNormalized -PathType Leaf)) {
       throw "validate-handover failed: Previous handover path does not exist"
     }
 
-    $resolvedPath = (Resolve-Path -LiteralPath $nextPath).Path
+    $resolvedPath = (Resolve-Path -Path $nextPathNormalized).Path
     if ($visited.Contains($resolvedPath)) {
       throw "validate-handover failed: Previous handover chain contains a cycle"
     }
@@ -329,4 +330,4 @@ foreach ($category in $fileCategoryRules) {
   }
 }
 
-Write-Host "validate-handover: OK"
+Write-Verbose "validate-handover: OK"

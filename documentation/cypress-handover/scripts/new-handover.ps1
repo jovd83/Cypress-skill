@@ -203,6 +203,8 @@ if ([string]::IsNullOrWhiteSpace($PreviousHandover)) {
   }
 }
 
+$PreviousHandover = $PreviousHandover -replace '\\', '/'
+
 $template = Get-Content -Raw -LiteralPath $templatePath
 $content = $template `
   -replace '\{\{TIMESTAMP\}\}', (Get-Date -Format "yyyy-MM-dd HH:mm") `

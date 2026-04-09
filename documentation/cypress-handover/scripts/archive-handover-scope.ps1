@@ -78,7 +78,8 @@ if (-not (Test-Path -LiteralPath $validatorScript -PathType Leaf)) {
 }
 
 $handoverDir = Join-Path $DocsRoot "handovers"
-if (-not (Test-Path -LiteralPath $handoverDir -PathType Container)) {
+$handoverDirNormalized = $handoverDir -replace '\\', '/'
+if (-not (Test-Path -Path $handoverDirNormalized -PathType Container)) {
   throw "Handover directory not found: $handoverDir"
 }
 
@@ -94,9 +95,10 @@ $normalizedWorkspaceRoot = Normalize-WorkspaceRoot -Value $WorkspaceRoot
 $normalizedBranch = Normalize-Branch -Value $Branch
 
 $candidates = @(
-  Get-ChildItem -LiteralPath $handoverDir -File -Filter "*_CypressSkillHandover.md" | ForEach-Object {
-    $candidateTaskLabel = Get-HandoverMetadataValue -Path $_.FullName -Label "Task label"
-    $candidateWorkspaceRoot = Get-HandoverMetadataValue -Path $_.FullName -Label "Workspace root"
+  Get-ChildItem -Path $handoverDirNormalized -File -Filter "*_CypressSkillHandover.md" | ForEach-Object {
+    $candidatePathNormalized = $_.FullName -replace '\\', '/'
+    $candidateTaskLabel = Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Task label"
+    $candidateWorkspaceRoot = Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Workspace root"
     $candidateBranch = Get-HandoverMetadataValue -Path $_.FullName -Label "Branch"
     $candidateTimestamp = Get-HandoverMetadataValue -Path $_.FullName -Label "Timestamp"
     [pscustomobject]@{
@@ -147,27 +149,28 @@ $currentPath = $latest.Path
 $noPriorValue = "No prior handover found"
 
 while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
-  if (-not (Test-Path -LiteralPath $currentPath -PathType Leaf)) {
+  $currentPathNormalized = $currentPath -replace '\\', '/'
+  if (-not (Test-Path -Path $currentPathNormalized -PathType Leaf)) {
     throw "Previous handover path does not exist while archiving: $currentPath"
   }
 
-  $resolvedCurrentPath = (Resolve-Path -LiteralPath $currentPath).Path
+  $resolvedCurrentPath = (Resolve-Path -Path $currentPathNormalized).Path
   if ($visited.Contains($resolvedCurrentPath)) {
     throw "Previous handover chain contains a cycle while archiving: $resolvedCurrentPath"
   }
   [void]$visited.Add($resolvedCurrentPath)
 
-  $previousHandover = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
+  $previousValue = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
   $chain.Add([pscustomobject]@{
     Path = $resolvedCurrentPath
-    PreviousHandover = $previousHandover
+    PreviousHandover = ($previousValue -replace '\\', '/')
   }) | Out-Null
 
-  if ($previousHandover -eq $noPriorValue) {
+  if ($previousValue -eq $noPriorValue) {
     break
   }
 
-  $currentPath = $previousHandover
+  $currentPath = $previousValue
 }
 
 $orderedChain = @($chain | Sort-Object Path)
@@ -184,10 +187,14 @@ $writtenTargets = New-Object 'System.Collections.Generic.List[string]'
 try {
   foreach ($entry in $orderedChain) {
     $text = Get-Content -Raw -LiteralPath $entry.Path
-    $updatedPrevious = $entry.PreviousHandover
-    if (($updatedPrevious -ne $noPriorValue) -and $targetPathBySource.ContainsKey($updatedPrevious)) {
-      $updatedPrevious = $targetPathBySource[$updatedPrevious]
-      $text = Replace-MetadataLine -Markdown $text -Label "Previous handover" -Value $updatedPrevious
+    $updatedPreviousRaw = $entry.PreviousHandover
+    if (($updatedPreviousRaw -ne $noPriorValue)) {
+      # Normalize search key to native separators to match targetPathBySource keys
+      $lookupKey = $updatedPreviousRaw -replace '/', [System.IO.Path]::DirectorySeparatorChar
+      if ($targetPathBySource.ContainsKey($lookupKey)) {
+        $updatedPrevious = $targetPathBySource[$lookupKey] -replace '\\', '/'
+        $text = Replace-MetadataLine -Markdown $text -Label "Previous handover" -Value $updatedPrevious
+      }
     }
 
     $targetPath = $targetPathBySource[$entry.Path]
@@ -214,7 +221,7 @@ $result = [pscustomobject]@{
   WorkspaceRoot = $latest.WorkspaceRoot
   Branch = $latest.Branch
   ArchivedCount = $orderedChain.Count
-  ArchiveDirectory = (Resolve-Path -LiteralPath $archiveDir).Path
+  ArchiveDirectory = (Resolve-Path -Path ($archiveDir -replace '\\', '/')).Path
   ArchivedPaths = @(
     $orderedChain |
       Sort-Object @{ Expression = "Path"; Descending = $false } |

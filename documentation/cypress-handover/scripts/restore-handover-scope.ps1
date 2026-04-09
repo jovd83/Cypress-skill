@@ -134,27 +134,28 @@ $currentPath = $latest.Path
 $noPriorValue = "No prior handover found"
 
 while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
-  if (-not (Test-Path -LiteralPath $currentPath -PathType Leaf)) {
+  $currentPathNormalized = $currentPath -replace '\\', '/'
+  if (-not (Test-Path -Path $currentPathNormalized -PathType Leaf)) {
     throw "Previous handover path does not exist while restoring: $currentPath"
   }
 
-  $resolvedCurrentPath = (Resolve-Path -LiteralPath $currentPath).Path
+  $resolvedCurrentPath = (Resolve-Path -Path $currentPathNormalized).Path
   if ($visited.Contains($resolvedCurrentPath)) {
     throw "Previous handover chain contains a cycle while restoring: $resolvedCurrentPath"
   }
   [void]$visited.Add($resolvedCurrentPath)
 
-  $previousHandover = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
+  $previousValue = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
   $chain.Add([pscustomobject]@{
     Path = $resolvedCurrentPath
-    PreviousHandover = $previousHandover
+    PreviousHandover = ($previousValue -replace '\\', '/')
   }) | Out-Null
 
-  if ($previousHandover -eq $noPriorValue) {
+  if ($previousValue -eq $noPriorValue) {
     break
   }
 
-  $currentPath = $previousHandover
+  $currentPath = $previousValue
 }
 
 $orderedChain = @($chain | Sort-Object Path)
@@ -171,10 +172,14 @@ $writtenTargets = New-Object 'System.Collections.Generic.List[string]'
 try {
   foreach ($entry in $orderedChain) {
     $text = Get-Content -Raw -LiteralPath $entry.Path
-    $updatedPrevious = $entry.PreviousHandover
-    if (($updatedPrevious -ne $noPriorValue) -and $targetPathBySource.ContainsKey($updatedPrevious)) {
-      $updatedPrevious = $targetPathBySource[$updatedPrevious]
-      $text = Replace-MetadataLine -Markdown $text -Label "Previous handover" -Value $updatedPrevious
+    $updatedPreviousRaw = $entry.PreviousHandover
+    if (($updatedPreviousRaw -ne $noPriorValue)) {
+      # Normalize search key to native separators to match targetPathBySource keys
+      $lookupKey = $updatedPreviousRaw -replace '/', [System.IO.Path]::DirectorySeparatorChar
+      if ($targetPathBySource.ContainsKey($lookupKey)) {
+        $updatedPrevious = $targetPathBySource[$lookupKey] -replace '\\', '/'
+        $text = Replace-MetadataLine -Markdown $text -Label "Previous handover" -Value $updatedPrevious
+      }
     }
 
     $targetPath = $targetPathBySource[$entry.Path]

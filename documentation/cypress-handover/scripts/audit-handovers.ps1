@@ -72,15 +72,17 @@ if (-not (Test-Path -LiteralPath $validatorScript -PathType Leaf)) {
 }
 
 $handoverDir = Join-Path $DocsRoot "handovers"
-if (-not (Test-Path -LiteralPath $handoverDir -PathType Container)) {
+$handoverDirNormalized = $handoverDir -replace '\\', '/'
+if (-not (Test-Path -Path $handoverDirNormalized -PathType Container)) {
   throw "Handover directory not found: $handoverDir"
 }
 
 $archiveDir = Join-Path $handoverDir "archive"
+$archiveDirNormalized = $archiveDir -replace '\\', '/'
 $inputs = New-Object 'System.Collections.Generic.List[object]'
 
 if (($Location -eq "active") -or ($Location -eq "all")) {
-  foreach ($file in (Get-ChildItem -LiteralPath $handoverDir -File -Filter "*_CypressSkillHandover.md" | Sort-Object FullName)) {
+  foreach ($file in (Get-ChildItem -Path $handoverDirNormalized -File -Filter "*_CypressSkillHandover.md" | Sort-Object FullName)) {
     $inputs.Add([pscustomobject]@{
       Location = "active"
       File = $file
@@ -89,12 +91,12 @@ if (($Location -eq "active") -or ($Location -eq "all")) {
 }
 
 if (($Location -eq "archive") -or ($Location -eq "all")) {
-  if (-not (Test-Path -LiteralPath $archiveDir -PathType Container)) {
+  if (-not (Test-Path -Path $archiveDirNormalized -PathType Container)) {
     if ($Location -eq "archive") {
       throw "Archive directory not found: $archiveDir"
     }
   } else {
-    foreach ($file in (Get-ChildItem -LiteralPath $archiveDir -File -Filter "*_CypressSkillHandover.md" | Sort-Object FullName)) {
+    foreach ($file in (Get-ChildItem -Path $archiveDirNormalized -File -Filter "*_CypressSkillHandover.md" | Sort-Object FullName)) {
       $inputs.Add([pscustomobject]@{
         Location = "archive"
         File = $file
@@ -133,17 +135,9 @@ $results = foreach ($input in $inputs) {
 
   [pscustomobject]@{
     Location = $input.Location
-    Path = $file.FullName
-    FileName = $file.Name
-    Timestamp = $timestamp
-    ParsedTimestamp = $parsedTimestamp
-    TaskLabel = $taskLabel
-    NormalizedTaskLabel = $normalizedTaskLabel
-    WorkspaceRoot = $workspaceRoot
-    NormalizedWorkspaceRoot = $normalizedWorkspaceRoot
-    Branch = $branch
-    NormalizedBranch = $normalizedBranch
     ScopeKey = ("{0}|{1}|{2}" -f $normalizedTaskLabel, $normalizedWorkspaceRoot, $normalizedBranch)
+    # Normalize path to native separators for robust reporting and lookup
+    Path = $file.FullName
     IsValid = $isValid
     ValidationError = $validationError
   }
@@ -228,7 +222,7 @@ $activeCount = (@($results | Where-Object { $_.Location -eq "active" })).Count
 $archiveCount = (@($results | Where-Object { $_.Location -eq "archive" })).Count
 
 $summary = [pscustomobject]@{
-  HandoverDirectory = (Resolve-Path -LiteralPath $handoverDir).Path
+  HandoverDirectory = (Resolve-Path -Path $handoverDirNormalized).Path
   AuditLocation = $Location
   TotalFiles = $results.Count
   ActiveFiles = $activeCount
