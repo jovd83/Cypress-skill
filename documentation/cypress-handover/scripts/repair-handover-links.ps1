@@ -21,15 +21,18 @@ function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   return $match.Groups["value"].Value.Trim()
 }
 
-function Get-CanonicalPath([string]$Path) {
+function Get-ResolvedPath([string]$Path) {
   if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
     return $Path
   }
+  $normalized = $Path -replace '\\', '/'
   try {
-    return [System.IO.Path]::GetFullPath($Path) -replace '\\', '/'
-  } catch {
-    return $Path -replace '\\', '/'
-  }
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path -replace '\\', '/'
+    }
+  } catch {}
+  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
 }
 
 function Normalize-TaskLabel([string]$Value) {
@@ -140,7 +143,7 @@ $entries = @(
     $normalizedEntryBranch = Normalize-Branch -Value $branchValue
     [pscustomobject]@{
       Location = $_.Location
-      Path = Get-CanonicalPath ($file.FullName)
+      Path = Get-ResolvedPath $file.FullName
       Timestamp = $timestamp
       ParsedTimestamp = Parse-HandoverTimestamp -Value $timestamp
       TaskLabel = $taskLabel
@@ -193,8 +196,8 @@ try {
       $entry = $orderedEntries[$index]
       $expectedPreviousRaw = if ($index -lt ($orderedEntries.Count - 1)) { $orderedEntries[$index + 1].Path } else { $noPriorValue }
       
-      $currentPreviousCanonical = Get-CanonicalPath ($entry.PreviousHandover)
-      $expectedPreviousCanonical = Get-CanonicalPath ($expectedPreviousRaw)
+      $currentPreviousCanonical = Get-ResolvedPath $entry.PreviousHandover
+      $expectedPreviousCanonical = Get-ResolvedPath $expectedPreviousRaw
 
       if ($currentPreviousCanonical -eq $expectedPreviousCanonical) {
         continue

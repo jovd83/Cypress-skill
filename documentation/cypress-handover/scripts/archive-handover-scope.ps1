@@ -21,15 +21,18 @@ function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   return $match.Groups["value"].Value.Trim()
 }
 
-function Get-CanonicalPath([string]$Path) {
+function Get-ResolvedPath([string]$Path) {
   if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
     return $Path
   }
+  $normalized = $Path -replace '\\', '/'
   try {
-    return [System.IO.Path]::GetFullPath($Path) -replace '\\', '/'
-  } catch {
-    return $Path -replace '\\', '/'
-  }
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path -replace '\\', '/'
+    }
+  } catch {}
+  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
 }
 
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
@@ -165,15 +168,16 @@ while (-not [string]::IsNullOrWhiteSpace($currentPath)) {
     throw "Previous handover path does not exist while archiving: $currentPath"
   }
 
-  $resolvedCurrentPath = (Resolve-Path -Path $currentPathNormalized).Path
-  if ($visited.Contains($resolvedCurrentPath)) {
-    throw "Previous handover chain contains a cycle while archiving: $resolvedCurrentPath"
+  $resolvedCurrentPath = (Resolve-Path -LiteralPath $currentPathNormalized).Path
+  $resolvedCurrentPathCanonical = Get-ResolvedPath $resolvedCurrentPath
+  if ($visited.Contains($resolvedCurrentPathCanonical)) {
+    throw "Previous handover chain contains a cycle while archiving: $resolvedCurrentPathCanonical"
   }
-  [void]$visited.Add($resolvedCurrentPath)
+  [void]$visited.Add($resolvedCurrentPathCanonical)
 
   $previousValue = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
   $chain.Add([pscustomobject]@{
-    Path = Get-CanonicalPath ($resolvedCurrentPath)
+    Path = Get-ResolvedPath $resolvedCurrentPath
     PreviousHandover = ($previousValue -replace '\\', '/')
   }) | Out-Null
 
@@ -191,7 +195,7 @@ foreach ($entry in $orderedChain) {
   if ((Test-Path -LiteralPath $targetPath) -and (-not $Force)) {
     throw "Archive target already exists: $targetPath"
   }
-  $entryPathCanonical = Get-CanonicalPath ($entry.Path)
+  $entryPathCanonical = Get-ResolvedPath $entry.Path
   $targetPathBySource[$entryPathCanonical] = $targetPath
 }
 
@@ -201,14 +205,14 @@ try {
     $text = Get-Content -Raw -LiteralPath $entry.Path
     $updatedPreviousRaw = $entry.PreviousHandover
     if ($updatedPreviousRaw -ne $noPriorValue) {
-      $lookupKey = Get-CanonicalPath ($updatedPreviousRaw)
+      $lookupKey = Get-ResolvedPath $updatedPreviousRaw
       if ($targetPathBySource.ContainsKey($lookupKey)) {
         $updatedPrevious = $targetPathBySource[$lookupKey] -replace '\\', '/'
         $text = Replace-MetadataLine -Markdown $text -Label "Previous handover" -Value $updatedPrevious
       }
     }
 
-    $entryPathCanonical = Get-CanonicalPath ($entry.Path)
+    $entryPathCanonical = Get-ResolvedPath $entry.Path
     $targetPath = $targetPathBySource[$entryPathCanonical]
     Set-Content -LiteralPath $targetPath -Value $text -Encoding UTF8
     [void]$writtenTargets.Add($targetPath)

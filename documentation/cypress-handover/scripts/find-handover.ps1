@@ -21,15 +21,18 @@ function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   return $match.Groups["value"].Value.Trim()
 }
 
-function Get-CanonicalPath([string]$Path) {
+function Get-ResolvedPath([string]$Path) {
   if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
     return $Path
   }
+  $normalized = $Path -replace '\\', '/'
   try {
-    return [System.IO.Path]::GetFullPath($Path) -replace '\\', '/'
-  } catch {
-    return $Path -replace '\\', '/'
-  }
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path -replace '\\', '/'
+    }
+  } catch {}
+  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
 }
 
 function Normalize-TaskLabel([string]$Value) {
@@ -71,13 +74,13 @@ function Parse-HandoverTimestamp([string]$Value) {
 function Get-ChainDepth([string]$Path) {
   $noPriorValue = "No prior handover found"
   $visited = New-Object 'System.Collections.Generic.HashSet[string]'
-  $resolvedCurrent = Get-CanonicalPath ((Resolve-Path -LiteralPath $Path).Path)
+  $resolvedCurrent = Get-ResolvedPath ((Resolve-Path -LiteralPath $Path).Path)
   [void]$visited.Add($resolvedCurrent)
 
   $depth = 0
   $nextPath = Get-HandoverMetadataValue -Path $resolvedCurrent -Label "Previous handover"
   while (($nextPath -ne $noPriorValue) -and (-not [string]::IsNullOrWhiteSpace($nextPath)) -and (Test-Path -LiteralPath $nextPath -PathType Leaf)) {
-    $resolvedNext = Get-CanonicalPath ((Resolve-Path -LiteralPath $nextPath).Path)
+    $resolvedNext = Get-ResolvedPath ((Resolve-Path -LiteralPath $nextPath).Path)
     if ($visited.Contains($resolvedNext)) {
       break
     }
@@ -153,7 +156,7 @@ $candidates = $inputs | ForEach-Object {
   $scopeKey = ("{0}|{1}|{2}" -f (Normalize-TaskLabel -Value $candidateTaskLabel), (Normalize-WorkspaceRoot -Value $candidateWorkspaceRoot), (Normalize-Branch -Value $candidateBranch))
   [pscustomobject]@{
     Location = $_.Location
-    Path = Get-CanonicalPath ($file.FullName)
+    Path = Get-ResolvedPath $file.FullName
     Timestamp = $candidateTimestamp
     ParsedTimestamp = Parse-HandoverTimestamp -Value $candidateTimestamp
     TaskLabel = $candidateTaskLabel

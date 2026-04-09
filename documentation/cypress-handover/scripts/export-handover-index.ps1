@@ -23,7 +23,21 @@ if ($IncludeHistory -and (-not (Test-Path -LiteralPath $traceScript -PathType Le
   throw "Trace script not found: $traceScript"
 }
 
-$resolvedDocsRoot = (Resolve-Path -LiteralPath $DocsRoot).Path
+function Get-ResolvedPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  $normalized = $Path -replace '\\', '/'
+  try {
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path -replace '\\', '/'
+    }
+  } catch {}
+  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
+}
+
+$resolvedDocsRoot = Get-ResolvedPath $DocsRoot
 $audit = ((& $auditScript -DocsRoot $DocsRoot -Location $Location -Format json) | ConvertFrom-Json)
 $latestScopes = @(((& $overviewScript -DocsRoot $DocsRoot -Location $Location -Format json) | ConvertFrom-Json))
 $exportScopes = @(

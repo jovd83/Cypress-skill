@@ -14,15 +14,18 @@ function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   return $match.Groups["value"].Value.Trim()
 }
 
-function Get-CanonicalPath([string]$Path) {
+function Get-ResolvedPath([string]$Path) {
   if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
     return $Path
   }
+  $normalized = $Path -replace '\\', '/'
   try {
-    return [System.IO.Path]::GetFullPath($Path) -replace '\\', '/'
-  } catch {
-    return $Path -replace '\\', '/'
-  }
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path -replace '\\', '/'
+    }
+  } catch {}
+  return ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
 }
 
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
@@ -100,8 +103,8 @@ function Assert-PreviousHandoverChain(
   }
 
   $visited = New-Object 'System.Collections.Generic.HashSet[string]'
-  $currentResolvedPath = Get-CanonicalPath ((Resolve-Path -LiteralPath $CurrentPath).Path)
-  [void]$visited.Add($currentResolvedPath)
+  $currentResolvedPathCanonical = Get-ResolvedPath ((Resolve-Path -LiteralPath $CurrentPath).Path)
+  [void]$visited.Add($currentResolvedPathCanonical)
   $expectedWorkspaceRoot = Normalize-WorkspaceRoot -Value $WorkspaceRoot
   $expectedBranch = (($Branch -replace '\s+', ' ').Trim()).ToLowerInvariant()
   $newerTimestamp = $CurrentTimestamp
@@ -113,7 +116,7 @@ function Assert-PreviousHandoverChain(
       throw "validate-handover failed: Previous handover path does not exist"
     }
 
-    $resolvedPath = Get-CanonicalPath ((Resolve-Path -Path $nextPathNormalized).Path)
+    $resolvedPath = Get-ResolvedPath ((Resolve-Path -LiteralPath $nextPathNormalized).Path)
     if ($visited.Contains($resolvedPath)) {
       throw "validate-handover failed: Previous handover chain contains a cycle"
     }
