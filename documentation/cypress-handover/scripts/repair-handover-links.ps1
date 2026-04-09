@@ -29,14 +29,10 @@ function Get-ResolvedPath([string]$Path) {
   try {
     $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
     if ($null -ne $resolved) {
-      $resolvedPath = $resolved.Path -replace '\\', '/'
-      Write-Host "DEBUG: Get-ResolvedPath resolved '$normalized' -> '$resolvedPath'"
-      return $resolvedPath
+      return $resolved.Path
     }
   } catch {}
-  $fallback = ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
-  Write-Host "DEBUG: Get-ResolvedPath fallback '$normalized' -> '$fallback'"
-  return $fallback
+  return [System.IO.Path]::GetFullPath($normalized)
 }
 
 function Resolve-HandoverLink([string]$ContainingFilePath, [string]$LinkValue) {
@@ -103,10 +99,11 @@ if (-not (Test-Path -LiteralPath $validatorScript -PathType Leaf)) {
   throw "Validator script not found: $validatorScript"
 }
 
-$handoverDir = Join-Path $DocsRoot "handovers"
+$resolvedDocsRoot = Get-ResolvedPath $DocsRoot
+$handoverDir = Join-Path $resolvedDocsRoot "handovers"
 $handoverDirNormalized = $handoverDir -replace '\\', '/'
-if (-not (Test-Path -Path $handoverDirNormalized -PathType Container)) {
-  throw "Handover directory not found: $handoverDir"
+if (-not (Test-Path -LiteralPath $handoverDirNormalized -PathType Container)) {
+  throw "Handover directory does not exist: $handoverDirNormalized"
 }
 
 $archiveDir = Join-Path $handoverDir "archive"

@@ -20,22 +20,29 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+function Get-ResolvedPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  $normalized = $Path -replace '\\', '/'
+  try {
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path
+    }
+  } catch {}
+  return [System.IO.Path]::GetFullPath($normalized)
+}
+
 $overviewScript = Join-Path $PSScriptRoot "overview-handovers.ps1"
 if (-not (Test-Path -LiteralPath $overviewScript -PathType Leaf)) {
   throw "Overview script not found: $overviewScript"
 }
 
 $parameters = @{
-  DocsRoot = $DocsRoot
+  DocsRoot = (Get-ResolvedPath $DocsRoot)
   Location = $Location
   Format = "json"
-  GroupBy = $GroupBy
-  Sort = $Sort
-  StaleAfterDays = $StaleAfterDays
-}
-
-if (-not [string]::IsNullOrWhiteSpace($TaskLabel)) {
-  $parameters.TaskLabel = $TaskLabel
 }
 
 if (-not [string]::IsNullOrWhiteSpace($WorkspaceRoot)) {

@@ -29,14 +29,10 @@ function Get-ResolvedPath([string]$Path) {
   try {
     $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
     if ($null -ne $resolved) {
-      $resolvedPath = $resolved.Path -replace '\\', '/'
-      Write-Host "DEBUG: Get-ResolvedPath resolved '$normalized' -> '$resolvedPath'"
-      return $resolvedPath
+      return $resolved.Path
     }
   } catch {}
-  $fallback = ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
-  Write-Host "DEBUG: Get-ResolvedPath fallback '$normalized' -> '$fallback'"
-  return $fallback
+  return [System.IO.Path]::GetFullPath($normalized)
 }
 
 function Resolve-HandoverLink([string]$ContainingFilePath, [string]$LinkValue) {
@@ -122,18 +118,27 @@ function Get-SectionBody([string]$Markdown, [string]$Heading) {
   return ($match.Groups["body"].Value -replace '\s+', ' ').Trim()
 }
 
-$handoverDir = Join-Path $DocsRoot "handovers"
-$handoverDirNormalized = $handoverDir -replace '\\', '/'
-if (-not (Test-Path -Path $handoverDirNormalized -PathType Container)) {
-  throw "Handover directory not found: $handoverDir"
+$resolvedDocsRoot = Get-ResolvedPath $DocsRoot
+$handoverDir = Join-Path $resolvedDocsRoot "handovers"
+$activeDir = $handoverDir
+$archiveDir = Join-Path $activeDir "archive"
+
+if (-not (Test-Path -LiteralPath $handoverDir -PathType Container)) {
+  $empty = @()
+  if ($Format -eq "json") { return $empty | ConvertTo-Json -Compress }
+  return $empty
 }
 
-$archiveDir = Join-Path $handoverDir "archive"
-$archiveDirNormalized = $archiveDir -replace '\\', '/'
+$dirs = @(
+  @{ Path = $activeDir; Location = "active" }
+)
+if ($Location -eq "all") {
+  $dirs += @{ Path = $archiveDir; Location = "archive" }
+}
 $inputs = New-Object 'System.Collections.Generic.List[object]'
 
 if (($Location -eq "active") -or ($Location -eq "all")) {
-  foreach ($file in (Get-ChildItem -Path $handoverDirNormalized -File -Filter "*_CypressSkillHandover.md" | Sort-Object FullName)) {
+  foreach ($file in (Get-ChildItem -LiteralPath $handoverDir -File -Filter "*_CypressSkillHandover.md" | Sort-Object FullName)) {
     $inputs.Add([pscustomobject]@{
       Location = "active"
       File = $file
@@ -142,12 +147,12 @@ if (($Location -eq "active") -or ($Location -eq "all")) {
 }
 
 if (($Location -eq "archive") -or ($Location -eq "all")) {
-  if (-not (Test-Path -Path $archiveDirNormalized -PathType Container)) {
+  if (-not (Test-Path -LiteralPath $archiveDir -PathType Container)) {
     if ($Location -eq "archive") {
       throw "Archive directory not found: $archiveDir"
     }
   } else {
-    foreach ($file in (Get-ChildItem -Path $archiveDirNormalized -File -Filter "*_CypressSkillHandover.md" | Sort-Object FullName)) {
+    foreach ($file in (Get-ChildItem -LiteralPath $archiveDir -File -Filter "*_CypressSkillHandover.md" | Sort-Object FullName)) {
       $inputs.Add([pscustomobject]@{
         Location = "archive"
         File = $file
@@ -175,7 +180,6 @@ $candidates = $inputs | ForEach-Object {
   $candidateTimestamp = Get-HandoverMetadataValue -Path $file.FullName -Label "Timestamp"
   $scopeKey = ("{0}|{1}|{2}" -f (Normalize-TaskLabel -Value $candidateTaskLabel), (Normalize-WorkspaceRoot -Value $candidateWorkspaceRoot), (Normalize-Branch -Value $candidateBranch))
   $candidatePath = Get-ResolvedPath $file.FullName
-  Write-Host "DEBUG: find candidate: '$candidatePath'"
   [pscustomobject]@{
     Location = $_.Location
     Path = $candidatePath

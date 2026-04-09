@@ -12,6 +12,20 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+function Get-ResolvedPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  $normalized = $Path -replace '\\', '/'
+  try {
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path
+    }
+  } catch {}
+  return [System.IO.Path]::GetFullPath($normalized)
+}
+
 function Normalize-TaskLabel([string]$Value) {
   if ($null -eq $Value) { return "" }
   $normalized = $Value.Trim().ToLowerInvariant()
@@ -48,7 +62,8 @@ if ([string]::IsNullOrWhiteSpace($normalizedTaskLabel)) {
 $normalizedWorkspaceRoot = Normalize-WorkspaceRoot -Value $WorkspaceRoot
 $normalizedBranch = Normalize-Branch -Value $Branch
 
-$audit = ((& $auditScript -DocsRoot $DocsRoot -Location all -Format json) | ConvertFrom-Json)
+$resolvedDocsRoot = Get-ResolvedPath $DocsRoot
+$audit = ((& $auditScript -DocsRoot $resolvedDocsRoot -Location all -Format json) | ConvertFrom-Json)
 $matchingCollisions = @(
   $audit.CrossLocationScopeCollisions |
     Where-Object {

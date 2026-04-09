@@ -31,14 +31,10 @@ function Get-ResolvedPath([string]$Path) {
   try {
     $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
     if ($null -ne $resolved) {
-      $resolvedPath = $resolved.Path -replace '\\', '/'
-      Write-Host "DEBUG: Get-ResolvedPath resolved '$normalized' -> '$resolvedPath'"
-      return $resolvedPath
+      return $resolved.Path
     }
   } catch {}
-  $fallback = ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
-  Write-Host "DEBUG: Get-ResolvedPath fallback '$normalized' -> '$fallback'"
-  return $fallback
+  return [System.IO.Path]::GetFullPath($normalized)
 }
 
 $resolvedDocsRoot = Get-ResolvedPath $DocsRoot

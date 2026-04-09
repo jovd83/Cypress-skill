@@ -22,14 +22,10 @@ function Get-ResolvedPath([string]$Path) {
   try {
     $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
     if ($null -ne $resolved) {
-      $resolvedPath = $resolved.Path -replace '\\', '/'
-      Write-Host "DEBUG: Get-ResolvedPath resolved '$normalized' -> '$resolvedPath'"
-      return $resolvedPath
+      return $resolved.Path
     }
   } catch {}
-  $fallback = ([System.IO.Path]::GetFullPath($normalized)) -replace '\\', '/'
-  Write-Host "DEBUG: Get-ResolvedPath fallback '$normalized' -> '$fallback'"
-  return $fallback
+  return [System.IO.Path]::GetFullPath($normalized)
 }
 
 function Resolve-HandoverLink([string]$ContainingFilePath, [string]$LinkValue) {
@@ -129,13 +125,11 @@ function Assert-PreviousHandoverChain(
   $nextPath = $PreviousHandover
   while ($nextPath -ne $noPriorValue) {
     $nextPathNormalized = $nextPath -replace '\\', '/'
-    Write-Host "DEBUG: validation traversal: checking '$nextPathNormalized'"
     if (-not (Test-Path -LiteralPath $nextPathNormalized -PathType Leaf)) {
       throw "validate-handover failed: Previous handover path does not exist"
     }
 
     $resolvedPath = Resolve-HandoverLink -ContainingFilePath $currentResolvedPathCanonical -LinkValue $nextPath
-    Write-Host "DEBUG: validation traversal: resolved to '$resolvedPath'"
     if ($visited.Contains($resolvedPath)) {
       throw "validate-handover failed: Previous handover chain contains a cycle"
     }

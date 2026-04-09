@@ -49,6 +49,20 @@ function Is-UsableValidation([string]$Value) {
   return ($normalized -notlike 'not run*') -and ($normalized -notlike 'unknown*')
 }
 
+function Get-ResolvedPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  $normalized = $Path -replace '\\', '/'
+  try {
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path
+    }
+  } catch {}
+  return [System.IO.Path]::GetFullPath($normalized)
+}
+
 function Get-ScopedCommandSuffix([pscustomobject]$Scope) {
   $parts = @(
     ('-TaskLabel "{0}"' -f $Scope.TaskLabel)
@@ -76,10 +90,31 @@ if (-not (Test-Path -LiteralPath $resolveConflictScript -PathType Leaf)) {
   throw "Location-conflict resolver not found: $resolveConflictScript"
 }
 
-$resolvedDocsRoot = (Resolve-Path -Path ($DocsRoot -replace '\\', '/')).Path
+$resolvedDocsRoot = Get-ResolvedPath $DocsRoot
 $normalizedTaskLabel = Normalize-TaskLabel -Value $TaskLabel
 $normalizedWorkspaceRoot = Normalize-WorkspaceRoot -Value $WorkspaceRoot
 $normalizedBranch = Normalize-Branch -Value $Branch
+
+$findParams = @{
+  DocsRoot = $resolvedDocsRoot
+  Location = $Location
+  Format = "json"
+}
+if (-not [string]::IsNullOrWhiteSpace($TaskLabel)) { $findParams.TaskLabel = $TaskLabel }
+if (-not [string]::IsNullOrWhiteSpace($WorkspaceRoot)) { $findParams.WorkspaceRoot = $WorkspaceRoot }
+if (-not [string]::IsNullOrWhiteSpace($Branch)) { $findParams.Branch = $Branch }
+
+$found = ((& $findScript @findParams | Out-String).Trim() | ConvertFrom-Json)
+$scope = $null
+if ($found -is [array]) {
+  $scope = $found | Select-Object -First 1
+} else {
+  $scope = $found
+}
+
+if ($null -eq $scope -or [string]::IsNullOrWhiteSpace($scope.TaskLabel)) {
+  throw "No handover found matching label '$TaskLabel' at location '$Location'"
+}
 
 $audit = ((& $auditScript -DocsRoot $DocsRoot -Location $Location -Format json) | ConvertFrom-Json)
 $matchingCrossLocationCollisions = @(
@@ -90,13 +125,6 @@ $matchingCrossLocationCollisions = @(
       ([string]::IsNullOrWhiteSpace($normalizedBranch) -or ((Normalize-Branch -Value $_.Branch) -eq $normalizedBranch))
     }
 )
-
-$findLocation = $Location
-if (($matchingCrossLocationCollisions.Count -gt 0) -and ($Location -eq "all")) {
-  $findLocation = "active"
-}
-
-$scope = ((& $findScript -DocsRoot $DocsRoot -Location $findLocation -TaskLabel $TaskLabel -WorkspaceRoot $WorkspaceRoot -Branch $Branch -Format json) | ConvertFrom-Json)
 
 $matchingInvalids = @(
   $audit.InvalidHandovers |

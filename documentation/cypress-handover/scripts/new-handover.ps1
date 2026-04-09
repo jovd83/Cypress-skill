@@ -78,11 +78,27 @@ function Get-HandoverEntries([string]$SearchDir) {
 
 function Get-HandoverEntryByResolvedPath([object[]]$Entries, [string]$ResolvedPath) {
   foreach ($entry in $Entries) {
-    if ((Resolve-Path -LiteralPath $entry.Path).Path -eq $ResolvedPath) {
+    $entryResolved = Get-ResolvedPath $entry.Path
+    if ($entryResolved -eq $ResolvedPath) {
       return $entry
     }
   }
   return $null
+}
+
+# Helper to resolve symlinks and return absolute, canonical paths with forward slashes.
+function Get-ResolvedPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  $normalized = $Path -replace '\\', '/'
+  try {
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path
+    }
+  } catch {}
+  return [System.IO.Path]::GetFullPath($normalized)
 }
 
 function Test-PathUnderDirectory([string]$Path, [string]$Directory) {
@@ -109,8 +125,11 @@ if (-not (Test-Path -LiteralPath $templatePath -PathType Leaf)) {
   throw "Template not found: $templatePath"
 }
 
-$handoverDir = Join-Path $DocsRoot "handovers"
-New-Item -ItemType Directory -Path $handoverDir -Force | Out-Null
+$resolvedDocsRoot = Get-ResolvedPath $DocsRoot
+$handoverDir = Join-Path $resolvedDocsRoot "handovers"
+if (-not (Test-Path -LiteralPath $handoverDir -PathType Container)) {
+  New-Item -ItemType Directory -Path $handoverDir -Force | Out-Null
+}
 $archiveDir = Join-Path $handoverDir "archive"
 
 $timestamp = Get-Date -Format "yyyyMMdd_HHmm"
@@ -122,7 +141,7 @@ if ((Test-Path -LiteralPath $outputPath) -and (-not $Force)) {
 
 $workspaceRoot = Get-GitValue -Arguments @("rev-parse", "--show-toplevel")
 if ([string]::IsNullOrWhiteSpace($workspaceRoot)) {
-  $workspaceRoot = (Resolve-Path -LiteralPath ".").Path
+  $workspaceRoot = (Get-ResolvedPath ".")
 }
 
 $branch = Get-GitValue -Arguments @("branch", "--show-current")

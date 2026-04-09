@@ -155,7 +155,7 @@ try {
       Get-ChildItem -LiteralPath $activeDir -File -Filter "*_CypressSkillHandover.md" |
         Select-Object -ExpandProperty FullName
     )
-    & $scriptPaths.new -TaskLabel 'checkout auth fix' -DocsRoot 'docs/tests' | Out-Null
+      & $scriptPaths.new -TaskLabel 'checkout auth fix' -DocsRoot 'docs/tests'
     $newPath = @(
       Get-ChildItem -LiteralPath $activeDir -File -Filter "*_CypressSkillHandover.md" |
         Select-Object -ExpandProperty FullName |

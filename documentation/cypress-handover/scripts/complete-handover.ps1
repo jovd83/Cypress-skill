@@ -12,6 +12,20 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+function Get-ResolvedPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) {
+    return $Path
+  }
+  $normalized = $Path -replace '\\', '/'
+  try {
+    $resolved = Resolve-Path -LiteralPath $normalized -ErrorAction SilentlyContinue
+    if ($null -ne $resolved) {
+      return $resolved.Path
+    }
+  } catch {}
+  return [System.IO.Path]::GetFullPath($normalized)
+}
+
 function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $text = Get-Content -Raw -LiteralPath $Path
@@ -118,7 +132,8 @@ if (-not (Test-Path -LiteralPath $validatorScript -PathType Leaf)) {
   throw "Validator script not found: $validatorScript"
 }
 
-$handoverDir = Join-Path $DocsRoot "handovers"
+$resolvedDocsRoot = Get-ResolvedPath $DocsRoot
+$handoverDir = Join-Path $resolvedDocsRoot "handovers"
 if (-not (Test-Path -LiteralPath $handoverDir -PathType Container)) {
   throw "Handover directory not found: $handoverDir"
 }
