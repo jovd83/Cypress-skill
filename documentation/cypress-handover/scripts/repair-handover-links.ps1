@@ -168,6 +168,7 @@ $entries = @(
       NormalizedBranch = $normalizedEntryBranch
       ScopeKey = ("{0}|{1}|{2}" -f $normalizedEntryTaskLabel, $normalizedEntryWorkspace, $normalizedEntryBranch)
       LocationScopeKey = ("{0}|{1}" -f $_.Location, ("{0}|{1}|{2}" -f $normalizedEntryTaskLabel, $normalizedEntryWorkspace, $normalizedEntryBranch))
+      # Ensure metadata stored in pscustomobject is normalized for cross-platform consistency
       PreviousHandover = (Get-HandoverMetadataValue -Path $file.FullName -Label "Previous handover" -replace '\\', '/')
     }
   }
@@ -227,7 +228,7 @@ try {
       Set-Content -LiteralPath $entry.Path -Value $updatedText -Encoding UTF8
       [void]$changedPaths.Add($entry.Path)
       [void]$updatedPaths.Add($entry.Path)
-      $entry.PreviousHandover = $expectedPrevious
+      $entry.PreviousHandover = $expectedPreviousStored
     }
 
     foreach ($entry in $orderedEntries) {

@@ -228,8 +228,8 @@ $template = Get-Content -Raw -LiteralPath $templatePath
 $content = $template `
   -replace '\{\{TIMESTAMP\}\}', (Get-Date -Format "yyyy-MM-dd HH:mm") `
   -replace '\{\{TASK_LABEL\}\}', $normalizedTaskLabel `
-  -replace '\{\{WORKSPACE_ROOT\}\}', $workspaceRoot `
-  -replace '\{\{BRANCH\}\}', $branch `
+  -replace '\{\{WORKSPACE_ROOT\}\}', $normalizedWorkspaceRoot `
+  -replace '\{\{BRANCH\}\}', $normalizedBranch `
   -replace '\{\{PREVIOUS_HANDOVER\}\}', $PreviousHandover
 
 Set-Content -LiteralPath $outputPath -Value $content -Encoding UTF8

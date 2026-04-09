@@ -83,7 +83,7 @@ Describe "Cypress handover package" {
 
     $script:workspace = $script:tempRoot
     $script:branch = 'Unknown'
-    $script:otherWorkspace = 'C:\projects\other-app'
+    $script:otherWorkspace = Join-Path $script:tempRoot 'other-app'
     $script:otherBranch = 'feature/other'
 
     $script:activeScoped = Join-Path $script:activeDir '20260312_0900_CypressSkillHandover.md'
