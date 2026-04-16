@@ -151,13 +151,13 @@ function Assert-PreviousHandoverChain(
       throw "validate-handover failed: Previous handover must have the same Branch"
     }
 
-    $previousTimestampRaw = Get-HandoverMetadataValue -Markdown $previousText -Label "Timestamp"
-    $previousTimestamp = Parse-HandoverTimestamp -Value $previousTimestampRaw -ContextLabel "Previous handover"
-    if ($previousTimestamp -ge $newerTimestamp) {
-      throw "validate-handover failed: Previous handover chain must move backward in time"
+    $previousTimestamp = Get-HandoverMetadataValue -Markdown $previousText -Label "Timestamp"
+    $parsedPreviousTimestamp = Parse-HandoverTimestamp -Value $previousTimestamp -ContextLabel "Previous handover"
+    if ($parsedPreviousTimestamp -ge $newerTimestamp) {
+      throw "validate-handover failed: Previous handover must have an older timestamp than its successor"
     }
+    $newerTimestamp = $parsedPreviousTimestamp
 
-    $currentResolvedPathCanonical = $resolvedPath
     $nextPath = Get-HandoverMetadataValue -Markdown $previousText -Label "Previous handover"
     if ([string]::IsNullOrWhiteSpace($nextPath)) {
       throw "validate-handover failed: Previous handover chain contains a missing ancestor link"

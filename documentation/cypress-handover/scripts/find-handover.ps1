@@ -11,10 +11,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
+function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
-  $text = Get-Content -Raw -LiteralPath $Path
-  $match = [regex]::Match($text, $pattern)
+  $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
     return ""
   }
@@ -172,19 +171,18 @@ $normalizedTaskLabel = Normalize-TaskLabel -Value $TaskLabel
 $normalizedWorkspaceRoot = Normalize-WorkspaceRoot -Value $WorkspaceRoot
 $normalizedBranch = Normalize-Branch -Value $Branch
 
-$candidates = $inputs | ForEach-Object {
-  $file = $_.File
-  $candidateTaskLabel = Get-HandoverMetadataValue -Path $file.FullName -Label "Task label"
-  $candidateWorkspaceRoot = Get-HandoverMetadataValue -Path $file.FullName -Label "Workspace root"
-  $candidateBranch = Get-HandoverMetadataValue -Path $file.FullName -Label "Branch"
-  $candidateTimestamp = Get-HandoverMetadataValue -Path $file.FullName -Label "Timestamp"
-  $scopeKey = ("{0}|{1}|{2}" -f (Normalize-TaskLabel -Value $candidateTaskLabel), (Normalize-WorkspaceRoot -Value $candidateWorkspaceRoot), (Normalize-Branch -Value $candidateBranch))
+$candidates = foreach ($input in $inputs) {
+  $file = $input.File
+  $text = Get-Content -Raw -LiteralPath $file.FullName
+  $taskLabel = Get-HandoverMetadataValue -Markdown $text -Label "Task label"
+  $workspaceRoot = Get-HandoverMetadataValue -Markdown $text -Label "Workspace root"
+  $branch = Get-HandoverMetadataValue -Markdown $text -Label "Branch"
+  $timestamp = Get-HandoverMetadataValue -Markdown $text -Label "Timestamp"
+  $scopeKey = ("{0}|{1}|{2}" -f (Normalize-TaskLabel -Value $taskLabel), (Normalize-WorkspaceRoot -Value $workspaceRoot), (Normalize-Branch -Value $branch))
   $candidatePath = Get-ResolvedPath $file.FullName
   [pscustomobject]@{
-    Location = $_.Location
+    Location = $input.Location
     Path = $candidatePath
-    Timestamp = $candidateTimestamp
-    ParsedTimestamp = Parse-HandoverTimestamp -Value $candidateTimestamp
     TaskLabel = $candidateTaskLabel
     NormalizedTaskLabel = Normalize-TaskLabel -Value $candidateTaskLabel
     WorkspaceRoot = $candidateWorkspaceRoot

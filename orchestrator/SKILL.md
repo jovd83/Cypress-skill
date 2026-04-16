@@ -18,6 +18,12 @@ metadata:
 
 Use this skill when the user asks for Cypress help but the exact workflow is not yet obvious. Its job is to classify the task, route to the right subskill, and keep the work moving.
 
+
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `python scripts/dispatch_logger.py --skill <skill_name> --intent <intent> --reason <reason>`
+
 ## Deterministic First Question
 
 If the user already gave enough context, do not ask this question. Route immediately.

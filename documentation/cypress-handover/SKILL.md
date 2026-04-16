@@ -18,6 +18,12 @@ metadata:
 
 Create a clear handover document at task completion summarizing completed work, current state, session state, blockers, and the exact next step so a human or a later agent can resume without rediscovery.
 
+
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `python scripts/dispatch_logger.py --skill <skill_name> --intent <intent> --reason <reason>`
+
 ## 1. Storage and Naming
 
 - **Directory**: `<test_documentation_root>/handovers/`

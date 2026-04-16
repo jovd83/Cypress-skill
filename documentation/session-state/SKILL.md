@@ -22,6 +22,12 @@ Use the canonical session-state guidance embedded in [../cypress-handover/SKILL.
 
 Do not introduce a second persistent-memory workflow here. This path is a thin routing alias only.
 
+
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `python scripts/dispatch_logger.py --skill <skill_name> --intent <intent> --reason <reason>`
+
 ## Why This Path Exists
 
 Use this path only when an older workflow, a parity check, or an external reference still points to `documentation/session-state/`.

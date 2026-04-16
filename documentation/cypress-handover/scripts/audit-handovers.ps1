@@ -9,10 +9,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
+function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
-  $text = Get-Content -Raw -LiteralPath $Path
-  $match = [regex]::Match($text, $pattern)
+  $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
     return ""
   }
@@ -129,10 +128,11 @@ if ($inputs.Count -eq 0) {
 
 $results = foreach ($input in $inputs) {
   $file = $input.File
-  $taskLabel = Get-HandoverMetadataValue -Path $file.FullName -Label "Task label"
-  $workspaceRoot = Get-HandoverMetadataValue -Path $file.FullName -Label "Workspace root"
-  $branch = Get-HandoverMetadataValue -Path $file.FullName -Label "Branch"
-  $timestamp = Get-HandoverMetadataValue -Path $file.FullName -Label "Timestamp"
+  $text = Get-Content -Raw -LiteralPath $file.FullName
+  $taskLabel = Get-HandoverMetadataValue -Markdown $text -Label "Task label"
+  $workspaceRoot = Get-HandoverMetadataValue -Markdown $text -Label "Workspace root"
+  $branch = Get-HandoverMetadataValue -Markdown $text -Label "Branch"
+  $timestamp = Get-HandoverMetadataValue -Markdown $text -Label "Timestamp"
   $parsedTimestamp = Parse-HandoverTimestamp -Value $timestamp
 
   $isValid = $true

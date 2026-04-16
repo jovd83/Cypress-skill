@@ -11,10 +11,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
+function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
-  $text = Get-Content -Raw -LiteralPath $Path
-  $match = [regex]::Match($text, $pattern)
+  $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
     return ""
   }
@@ -198,7 +197,8 @@ while ((-not [string]::IsNullOrWhiteSpace($currentPath)) -and ($currentPath -ne 
   }
   [void]$visited.Add($resolvedCurrentPathCanonical)
 
-  $previousValue = Get-HandoverMetadataValue -Path $resolvedCurrentPath -Label "Previous handover"
+  $text = Get-Content -Raw -LiteralPath $resolvedCurrentPath
+  $previousValue = Get-HandoverMetadataValue -Markdown $text -Label "Previous handover"
   Write-Host "DEBUG: archive traversal: read PreviousValue='$previousValue' inside '$resolvedCurrentPathCanonical'"
   $resolvedPreviousValue = Resolve-HandoverLink -ContainingFilePath $resolvedCurrentPath -LinkValue $previousValue
   
@@ -228,7 +228,7 @@ try {
     $text = Get-Content -Raw -LiteralPath $entry.Path
     $updatedPreviousRaw = $entry.PreviousHandover
     if ($updatedPreviousRaw -ne $noPriorValue) {
-      $lookupKey = Get-ResolvedPath $updatedPreviousRaw
+      $lookupKey = Resolve-HandoverLink -ContainingFilePath $entry.Path -LinkValue $updatedPreviousRaw
       if ($targetPathBySource.ContainsKey($lookupKey)) {
         $updatedPrevious = $targetPathBySource[$lookupKey] -replace '\\', '/'
         $text = Replace-MetadataLine -Markdown $text -Label "Previous handover" -Value $updatedPrevious
