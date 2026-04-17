@@ -1,4 +1,4 @@
-param(
+﻿param(
   [string]$TaskLabel = "",
   [string]$DocsRoot = "docs/tests",
   [ValidateSet("active", "archive", "all")]
@@ -26,7 +26,7 @@ function Get-ResolvedPath([string]$Path) {
 }
 
 function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
-  $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $text = Get-Content -Raw -LiteralPath $Path
   $match = [regex]::Match($text, $pattern)
   if (-not $match.Success) {
@@ -252,3 +252,4 @@ switch ($Format) {
     }
   }
 }
+

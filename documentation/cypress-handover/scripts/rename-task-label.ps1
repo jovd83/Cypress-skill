@@ -1,4 +1,4 @@
-param(
+﻿param(
   [Parameter(Mandatory = $true)]
   [string]$OldTaskLabel,
   [Parameter(Mandatory = $true)]
@@ -27,7 +27,7 @@ function Get-ResolvedPath([string]$Path) {
 }
 
 function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
-  $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $text = Get-Content -Raw -LiteralPath $Path
   $match = [regex]::Match($text, $pattern)
   if (-not $match.Success) {
@@ -210,7 +210,7 @@ try {
   foreach ($entry in $targetEntries) {
     $updatedText = [regex]::Replace(
       $originalContentByPath[$entry.Path],
-      '(?m)^- Task label:\s*.+$',
+      '(?mi)^(?:\s*-\s*|\s*)Task label:\s*.+$',
       ("- Task label: {0}" -f $normalizedNewTaskLabel)
     )
     Set-Content -LiteralPath $entry.Path -Value $updatedText -Encoding UTF8
@@ -236,3 +236,4 @@ Write-Host ("Scope: workspace={0} | branch={1}" -f $targetScope.WorkspaceRoot, $
 foreach ($entry in $renamedEntries) {
   Write-Host ("- {0}" -f $entry.Path)
 }
+

@@ -1,4 +1,4 @@
-param(
+﻿param(
   [string]$TaskLabel = "",
   [string]$DocsRoot = "docs/tests",
   [ValidateSet("active", "archive", "all")]
@@ -12,7 +12,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
-  $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
     return ""
@@ -283,3 +283,4 @@ switch ($Format) {
     ) | ForEach-Object { Write-Host $_ }
   }
 }
+

@@ -1,4 +1,4 @@
-param(
+﻿param(
   [Parameter(Mandatory = $true)]
   [string]$TaskLabel,
   [string]$DocsRoot = "docs/tests",
@@ -12,7 +12,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
-  $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
     return ""
@@ -93,7 +93,7 @@ function Parse-HandoverTimestamp([string]$Value) {
 }
 
 function Replace-MetadataLine([string]$Markdown, [string]$Label, [string]$Value) {
-  $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*.+$'
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*.+$'
   $replacement = ('- {0}: {1}' -f $Label, $Value)
   return [regex]::Replace($Markdown, $pattern, $replacement, 1)
 }
@@ -284,3 +284,4 @@ switch ($Format) {
     }
   }
 }
+

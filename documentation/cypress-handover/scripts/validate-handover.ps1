@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
-  $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
     return ""
@@ -207,7 +207,8 @@ $requiredMetadataLines = @(
 
 $missingMetadata = @()
 foreach ($metadataLine in $requiredMetadataLines) {
-  if ($text -notmatch ("(?m)^" + [regex]::Escape($metadataLine) + "\s+.+$")) {
+  $cleanLabel = $metadataLine -replace "^- ", ""
+  if ($text -notmatch ("(?mi)^(?:\s*-\s*|\s*)" + [regex]::Escape($cleanLabel) + "\s+.+$")) {
     $missingMetadata += $metadataLine
   }
 }
@@ -256,7 +257,7 @@ if ($text -match '\{\{[A-Z0-9_]+\}\}') {
   throw "validate-handover failed: unresolved template placeholders remain"
 }
 
-$workspaceMetadata = [regex]::Match($text, '(?m)^- Workspace root:\s*(?<value>.+)$')
+$workspaceMetadata = [regex]::Match($text, '(?mi)^(?:\s*-\s*|\s*)Workspace root:\s*(?<value>.+)$')
 if (-not $workspaceMetadata.Success -or [string]::IsNullOrWhiteSpace($workspaceMetadata.Groups["value"].Value.Trim())) {
   throw "validate-handover failed: Workspace root must not be empty"
 }
@@ -275,7 +276,7 @@ if ((Normalize-TaskLabel -Value $taskLabel) -ne $taskLabel) {
   throw "validate-handover failed: Task label must already be normalized"
 }
 
-$branchMetadata = [regex]::Match($text, '(?m)^- Branch:\s*(?<value>.+)$')
+$branchMetadata = [regex]::Match($text, '(?mi)^(?:\s*-\s*|\s*)Branch:\s*(?<value>.+)$')
 if (-not $branchMetadata.Success -or [string]::IsNullOrWhiteSpace($branchMetadata.Groups["value"].Value.Trim())) {
   throw "validate-handover failed: Branch must not be empty"
 }
@@ -339,7 +340,7 @@ $fileCategoryRules = @(
 )
 
 foreach ($category in $fileCategoryRules) {
-  $match = [regex]::Match($text, '(?m)^- ' + [regex]::Escape($category) + ':\s*(?<value>.+)$')
+  $match = [regex]::Match($text, '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($category) + ':\s*(?<value>.+)$')
   if (-not $match.Success) {
     throw ("validate-handover failed: Files added/modified missing category '{0}'" -f $category)
   }
@@ -356,3 +357,5 @@ foreach ($category in $fileCategoryRules) {
 }
 
 Write-Verbose "validate-handover: OK"
+
+

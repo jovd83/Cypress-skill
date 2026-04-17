@@ -48,9 +48,9 @@ Get-ChildItem -Path $rootAbs -Recurse -File -Filter SKILL.md | ForEach-Object {
 
   $hasInterface = $yaml -match '^\s*interface:\s*$'
   $hasPolicy = $yaml -match '^\s*policy:\s*$'
-  $displayLine = $yaml | Where-Object { $_ -match "^\s*display_name:\s*['\"].+['\"]\s*$" } | Select-Object -First 1
-  $shortLine = $yaml | Where-Object { $_ -match "^\s*short_description:\s*['\"].+['\"]\s*$" } | Select-Object -First 1
-  $promptLine = $yaml | Where-Object { $_ -match "^\s*default_prompt:\s*['\"].+['\"]\s*$" } | Select-Object -First 1
+  $displayLine = $yaml | Where-Object { $_ -match '^\s*display_name:\s*[''"].+[''"]\s*$' } | Select-Object -First 1
+  $shortLine = $yaml | Where-Object { $_ -match '^\s*short_description:\s*[''"].+[''"]\s*$' } | Select-Object -First 1
+  $promptLine = $yaml | Where-Object { $_ -match '^\s*default_prompt:\s*[''"].+[''"]\s*$' } | Select-Object -First 1
   $allowLine = $yaml | Where-Object { $_ -match '^\s*allow_implicit_invocation:\s*true\s*$' } | Select-Object -First 1
 
   if (-not $hasInterface) {
@@ -65,7 +65,7 @@ Get-ChildItem -Path $rootAbs -Recurse -File -Filter SKILL.md | ForEach-Object {
   if (-not $shortLine) {
     Add-Violation -File $relAgent -Message "missing or unquoted interface.short_description"
   } else {
-    if ($shortLine -match "^\s*short_description:\s*['\"](.+)['\"]\s*$") {
+    if ($shortLine -match '^\s*short_description:\s*[''"](.+)[''"]\s*$') {
       $short = $Matches[1]
       if ($short.Length -lt 25 -or $short.Length -gt 64) {
         Add-Violation -File $relAgent -Message "short_description length must be 25..64"
@@ -81,7 +81,7 @@ Get-ChildItem -Path $rootAbs -Recurse -File -Filter SKILL.md | ForEach-Object {
   if (-not $promptLine) {
     Add-Violation -File $relAgent -Message "missing or unquoted interface.default_prompt"
   } else {
-    if ($promptLine -match "^\s*default_prompt:\s*['\"](.+)['\"]\s*$") {
+    if ($promptLine -match '^\s*default_prompt:\s*[''"](.+)[''"]\s*$') {
       $prompt = $Matches[1]
       $expectedRef = '$' + $name
       $expectedPrefixPattern = "^Use\s+\$" + [regex]::Escape($name) + "\s+to\s+.+"

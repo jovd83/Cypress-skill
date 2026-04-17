@@ -1,4 +1,4 @@
-param(
+﻿param(
   [Parameter(Mandatory = $true)]
   [string]$TaskLabel,
   [Parameter(Mandatory = $true)]
@@ -33,7 +33,7 @@ function Get-ResolvedPath([string]$Path) {
 }
 
 function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
-  $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $text = Get-Content -Raw -LiteralPath $Path
   $match = [regex]::Match($text, $pattern)
   if (-not $match.Success) {
@@ -122,7 +122,7 @@ function Get-HandoverEntries([string]$SearchDir) {
 }
 
 function Replace-MetadataLine([string]$Markdown, [string]$Label, [string]$Value) {
-  $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*.+$'
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*.+$'
   $replacement = ('- {0}: {1}' -f $Label, $Value)
   return [regex]::Replace($Markdown, $pattern, $replacement, 1)
 }
@@ -257,3 +257,4 @@ try {
 }
 
 Write-Host $outputPath
+
