@@ -30,11 +30,12 @@ jobs:
 
       - name: Run repository quality gate
         shell: pwsh
-        run: ./scripts/quality-gate.ps1
+        run: ./scripts/quality-gate.ps1 -Verbose
 
       - name: Run Cypress handover Pester suite
+        if: always()
         shell: pwsh
-        run: ./scripts/check-cypress-handover-pester.ps1 -ResultsPath ./artifacts/pester/cypress-handover.xml
+        run: ./scripts/check-cypress-handover-pester.ps1 -ResultsPath ./artifacts/pester/cypress-handover.xml -Verbose
 
       - name: Upload Cypress handover Pester results
         if: always()

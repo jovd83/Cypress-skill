@@ -2,7 +2,8 @@ param(
   [string]$Root = ".",
   [string]$SourceRoot = "..\Playwright-skill",
   [switch]$StrictResidue,
-  [switch]$RequireParitySource
+  [switch]$RequireParitySource,
+  [switch]$Verbose
 )
 
 $ErrorActionPreference = "Stop"
@@ -150,7 +151,7 @@ Invoke-Check -Name "Cypress handover package smoke" -Check {
 }
 
 Invoke-Check -Name "Cypress handover Pester suite" -Check {
-  & "$scriptRoot\check-cypress-handover-pester.ps1" -Root $Root
+  & "$scriptRoot\check-cypress-handover-pester.ps1" -Root $Root -Verbose:$Verbose
 }
 
 Invoke-Check -Name "Planning/reporting skill section contract" -Check {

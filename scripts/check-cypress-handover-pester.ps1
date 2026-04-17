@@ -1,6 +1,7 @@
 param(
   [string]$Root = ".",
-  [string]$ResultsPath = ""
+  [string]$ResultsPath = "",
+  [switch]$Verbose
 )
 
 $ErrorActionPreference = "Stop"
