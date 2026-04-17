@@ -9,7 +9,7 @@ function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
-    return ""
+    return $null
   }
   return $match.Groups["value"].Value.Trim()
 }
@@ -42,8 +42,8 @@ function Resolve-HandoverLink([string]$ContainingFilePath, [string]$LinkValue) {
 }
 
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
-  $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
-  $match = [regex]::Match($Markdown, $pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
+  $pattern = '(?smi)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
+  $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
     return ""
   }
@@ -242,7 +242,7 @@ $requiredHeadings = @(
 
 $missing = @()
 foreach ($heading in $requiredHeadings) {
-  if ($text -notmatch "(?m)^$([regex]::Escape($heading))\s*$") {
+  if ($text -notmatch ("(?mi)^" + [regex]::Escape($heading) + "\s*$")) {
     $missing += $heading
   }
 }
@@ -296,8 +296,7 @@ Assert-PreviousHandoverChain `
 
 $statusMatch = [regex]::Match(
   $text,
-  '(?s)^### Current status\s*(?<body>.*?)^\s*### ',
-  [System.Text.RegularExpressions.RegexOptions]::Multiline
+  '(?smi)^### Current status\s*(?<body>.*?)^\s*### '
 )
 
 if (-not $statusMatch.Success) {

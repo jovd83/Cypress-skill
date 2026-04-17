@@ -1,4 +1,4 @@
-﻿param(
+param(
   [Parameter(Mandatory = $true)]
   [string]$TaskLabel,
   [string]$DocsRoot = "docs/tests",
@@ -15,7 +15,7 @@ function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
-    return ""
+    return $null
   }
   return $match.Groups["value"].Value.Trim()
 }
@@ -48,8 +48,8 @@ function Resolve-HandoverLink([string]$ContainingFilePath, [string]$LinkValue) {
 }
 
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
-  $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
-  $match = [regex]::Match($Markdown, $pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
+  $pattern = '(?smi)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
+  $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
     return ""
   }
@@ -175,7 +175,7 @@ if (($scopeCount -gt 1) -and [string]::IsNullOrWhiteSpace($normalizedWorkspaceRo
 $latest = $candidates | Select-Object -First 1
 $latestText = Get-Content -Raw -LiteralPath $latest.Path
 $latestStatus = Get-SectionBody -Markdown $latestText -Heading "### Current status"
-if (($latestStatus -ne "Completed") -and (-not $Force)) {
+if (([string]::IsNullOrWhiteSpace($latestStatus) -or ($latestStatus.ToLowerInvariant() -ne "completed")) -and (-not $Force)) {
   throw "Only completed handover scopes can be archived. Use -Force to archive an in-progress or blocked handover."
 }
 

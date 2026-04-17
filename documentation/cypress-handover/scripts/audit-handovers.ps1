@@ -1,4 +1,4 @@
-﻿param(
+param(
   [string]$DocsRoot = "docs/tests",
   [ValidateSet("active", "archive", "all")]
   [string]$Location = "active",
@@ -13,7 +13,7 @@ function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
-    return ""
+    return $null
   }
   return $match.Groups["value"].Value.Trim()
 }

@@ -1,4 +1,4 @@
-﻿param(
+param(
   [Parameter(Mandatory = $true)]
   [string]$TaskLabel,
   [Parameter(Mandatory = $true)]
@@ -33,18 +33,20 @@ function Get-ResolvedPath([string]$Path) {
 }
 
 function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
-  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+  if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
   $text = Get-Content -Raw -LiteralPath $Path
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($text, $pattern)
   if (-not $match.Success) {
-    return ""
+    return $null
   }
   return $match.Groups["value"].Value.Trim()
 }
 
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
-  $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
-  $match = [regex]::Match($Markdown, $pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
+  if ([string]::IsNullOrWhiteSpace($Markdown)) { return "" }
+  $pattern = '(?smi)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
+  $match = [regex]::Match($Markdown, $pattern)
   if (-not $match.Success) {
     return ""
   }
