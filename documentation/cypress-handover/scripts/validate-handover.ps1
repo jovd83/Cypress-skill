@@ -154,7 +154,7 @@ function Assert-PreviousHandoverChain(
     $previousTimestamp = Get-HandoverMetadataValue -Markdown $previousText -Label "Timestamp"
     $parsedPreviousTimestamp = Parse-HandoverTimestamp -Value $previousTimestamp -ContextLabel "Previous handover"
     if ($parsedPreviousTimestamp -ge $newerTimestamp) {
-      throw "validate-handover failed: Previous handover must have an older timestamp than its successor"
+      throw "validate-handover failed: Previous handover chain must move backward in time"
     }
     $newerTimestamp = $parsedPreviousTimestamp
 
@@ -162,8 +162,6 @@ function Assert-PreviousHandoverChain(
     if ([string]::IsNullOrWhiteSpace($nextPath)) {
       throw "validate-handover failed: Previous handover chain contains a missing ancestor link"
     }
-
-    $newerTimestamp = $previousTimestamp
   }
 }
 

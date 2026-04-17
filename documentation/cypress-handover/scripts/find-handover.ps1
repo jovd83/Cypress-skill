@@ -171,24 +171,27 @@ $normalizedTaskLabel = Normalize-TaskLabel -Value $TaskLabel
 $normalizedWorkspaceRoot = Normalize-WorkspaceRoot -Value $WorkspaceRoot
 $normalizedBranch = Normalize-Branch -Value $Branch
 
-$candidates = foreach ($input in $inputs) {
-  $file = $input.File
+$candidates = $inputs | ForEach-Object {
+  $file = $_.File
   $text = Get-Content -Raw -LiteralPath $file.FullName
   $taskLabel = Get-HandoverMetadataValue -Markdown $text -Label "Task label"
   $workspaceRoot = Get-HandoverMetadataValue -Markdown $text -Label "Workspace root"
   $branch = Get-HandoverMetadataValue -Markdown $text -Label "Branch"
   $timestamp = Get-HandoverMetadataValue -Markdown $text -Label "Timestamp"
+  $parsedTimestamp = Parse-HandoverTimestamp -Value $timestamp
   $scopeKey = ("{0}|{1}|{2}" -f (Normalize-TaskLabel -Value $taskLabel), (Normalize-WorkspaceRoot -Value $workspaceRoot), (Normalize-Branch -Value $branch))
   $candidatePath = Get-ResolvedPath $file.FullName
   [pscustomobject]@{
-    Location = $input.Location
+    Location = $_.Location
     Path = $candidatePath
-    TaskLabel = $candidateTaskLabel
-    NormalizedTaskLabel = Normalize-TaskLabel -Value $candidateTaskLabel
-    WorkspaceRoot = $candidateWorkspaceRoot
-    NormalizedWorkspaceRoot = Normalize-WorkspaceRoot -Value $candidateWorkspaceRoot
-    Branch = $candidateBranch
-    NormalizedBranch = Normalize-Branch -Value $candidateBranch
+    Timestamp = $timestamp
+    ParsedTimestamp = $parsedTimestamp
+    TaskLabel = $taskLabel
+    NormalizedTaskLabel = Normalize-TaskLabel -Value $taskLabel
+    WorkspaceRoot = $workspaceRoot
+    NormalizedWorkspaceRoot = Normalize-WorkspaceRoot -Value $workspaceRoot
+    Branch = $branch
+    NormalizedBranch = Normalize-Branch -Value $branch
     ScopeKey = $scopeKey
     LocationScopeKey = ("{0}|{1}" -f $_.Location, $scopeKey)
   }

@@ -132,10 +132,11 @@ $normalizedBranch = Normalize-Branch -Value $Branch
 $candidates = @(
   Get-ChildItem -Path $handoverDirNormalized -File -Filter "*_CypressSkillHandover.md" | ForEach-Object {
     $candidatePathNormalized = $_.FullName -replace '\\', '/'
-    $candidateTaskLabel = Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Task label"
-    $candidateWorkspaceRoot = Get-HandoverMetadataValue -Path $candidatePathNormalized -Label "Workspace root"
-    $candidateBranch = Get-HandoverMetadataValue -Path $_.FullName -Label "Branch"
-    $candidateTimestamp = Get-HandoverMetadataValue -Path $_.FullName -Label "Timestamp"
+    $text = Get-Content -Raw -LiteralPath $_.FullName
+    $candidateTaskLabel = Get-HandoverMetadataValue -Markdown $text -Label "Task label"
+    $candidateWorkspaceRoot = Get-HandoverMetadataValue -Markdown $text -Label "Workspace root"
+    $candidateBranch = Get-HandoverMetadataValue -Markdown $text -Label "Branch"
+    $candidateTimestamp = Get-HandoverMetadataValue -Markdown $text -Label "Timestamp"
     [pscustomobject]@{
       Path = $_.FullName
       Timestamp = $candidateTimestamp
