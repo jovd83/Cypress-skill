@@ -90,7 +90,8 @@ function Get-ChainDepth([string]$Path) {
   [void]$visited.Add($resolvedCurrent)
 
   $depth = 0
-  $nextPath = Get-HandoverMetadataValue -Path $resolvedCurrent -Label "Previous handover"
+  $text = Get-Content -Raw -LiteralPath $resolvedCurrent
+  $nextPath = Get-HandoverMetadataValue -Markdown $text -Label "Previous handover"
   while (($nextPath -ne $noPriorValue) -and (-not [string]::IsNullOrWhiteSpace($nextPath))) {
     $resolvedNext = Resolve-HandoverLink -ContainingFilePath $resolvedCurrent -LinkValue $nextPath
     if (-not (Test-Path -LiteralPath $resolvedNext -PathType Leaf)) {
@@ -102,7 +103,8 @@ function Get-ChainDepth([string]$Path) {
     [void]$visited.Add($resolvedNext)
     $depth++
     $resolvedCurrent = $resolvedNext
-    $nextPath = Get-HandoverMetadataValue -Path $resolvedCurrent -Label "Previous handover"
+    $text = Get-Content -Raw -LiteralPath $resolvedCurrent
+    $nextPath = Get-HandoverMetadataValue -Markdown $text -Label "Previous handover"
   }
 
   return $depth
@@ -241,7 +243,7 @@ $result = [pscustomobject]@{
   TaskLabel = $selected.TaskLabel
   WorkspaceRoot = $selected.WorkspaceRoot
   Branch = $selected.Branch
-  PreviousHandover = Get-HandoverMetadataValue -Path $selected.Path -Label "Previous handover"
+  PreviousHandover = Get-HandoverMetadataValue -Markdown $text -Label "Previous handover"
   ChainDepth = Get-ChainDepth -Path $selected.Path
   ParsedTimestamp = $selected.ParsedTimestamp
   CurrentStatus = Get-SectionBody -Markdown $text -Heading "### Current status"
