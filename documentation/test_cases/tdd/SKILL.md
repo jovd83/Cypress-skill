@@ -14,15 +14,14 @@ metadata:
   dispatcher-writes-files: true
 ---
 
-# Documenting Test Cases: TDD format
-
-Use this skill when the team wants formal, traceable test-case documents rather than lightweight notes.
-
-
 ## Telemetry & Logging
 > [!IMPORTANT]
 > All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
-> `python scripts/dispatch_logger.py --skill <skill_name> --intent <intent> --reason <reason>`
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --reason <reason>` (or `./log-dispatch.sh` on Linux)
+
+# Documenting Test Cases: TDD format
+
+Use this skill when the team wants formal, traceable test-case documents rather than lightweight notes.
 
 ## 1. Storage & Organization
 

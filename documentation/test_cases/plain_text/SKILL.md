@@ -14,15 +14,14 @@ metadata:
   dispatcher-writes-files: true
 ---
 
-# Documenting Test Cases: Plain Text format
-
-Use this skill when the goal is fast, lightweight documentation rather than a formal template.
-
-
 ## Telemetry & Logging
 > [!IMPORTANT]
 > All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
-> `python scripts/dispatch_logger.py --skill <skill_name> --intent <intent> --reason <reason>`
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --reason <reason>` (or `./log-dispatch.sh` on Linux)
+
+# Documenting Test Cases: Plain Text format
+
+Use this skill when the goal is fast, lightweight documentation rather than a formal template.
 
 ## Structure
 

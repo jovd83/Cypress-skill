@@ -14,6 +14,11 @@ metadata:
   dispatcher-writes-files: true
 ---
 
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --reason <reason>` (or `./log-dispatch.sh` on Linux)
+
 # Handover
 
 This compatibility entrypoint exists for structural parity with the sibling skill tree.
@@ -21,12 +26,6 @@ This compatibility entrypoint exists for structural parity with the sibling skil
 Use the canonical handover workflow in [../cypress-handover/SKILL.md](../cypress-handover/SKILL.md).
 
 Do not create a separate handover model here. This path is a thin routing alias only.
-
-
-## Telemetry & Logging
-> [!IMPORTANT]
-> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
-> `python scripts/dispatch_logger.py --skill <skill_name> --intent <intent> --reason <reason>`
 
 ## Why This Path Exists
 

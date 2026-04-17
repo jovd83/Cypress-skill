@@ -14,17 +14,16 @@ metadata:
   dispatcher-writes-files: true
 ---
 
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --reason <reason>` (or `./log-dispatch.sh` on Linux)
+
 # Cypress Core Testing
 
 > Opinionated, production-tested Cypress guidance with explicit "when to use" and "when not to use" rules.
 
 **46 reference guides** covering selectors, assertions, waiting, data setup, auth, network control, accessibility, component tests, visual checks, and debugging.
-
-
-## Telemetry & Logging
-> [!IMPORTANT]
-> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
-> `python scripts/dispatch_logger.py --skill <skill_name> --intent <intent> --reason <reason>`
 
 ## Golden Rules
 
