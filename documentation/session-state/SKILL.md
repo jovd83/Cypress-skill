@@ -3,7 +3,7 @@ name: cypress-session-state-compat
 description: Use when you need the legacy Cypress session-state entrypoint path; record session state in the canonical Cypress handover workflow.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: session-state, cypress-session-state
   dispatcher-accepted-intents: record_cypress_session_state

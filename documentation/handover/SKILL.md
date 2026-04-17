@@ -3,7 +3,7 @@ name: cypress-handover-compat
 description: Use when you need the legacy Cypress handover entrypoint path; follow the canonical Cypress handover workflow in documentation/cypress-handover.
 metadata:
   author: jovd83
-  version: "1.1.0"
+  version: 1.1.0
   dispatcher-category: testing
   dispatcher-capabilities: handover-compatibility, cypress-handover-compat
   dispatcher-accepted-intents: create_cypress_handover

@@ -3,7 +3,7 @@ name: cypress-migration
 description: Migration skill for moving existing UI automation to Cypress. Use when Codex needs to translate Playwright or Selenium/WebDriver patterns, plan incremental migration, preserve coverage during framework change, or explain architectural differences that affect the suite design.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: framework-migration, cypress-migration
   dispatcher-accepted-intents: migrate_to_cypress

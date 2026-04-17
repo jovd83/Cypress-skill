@@ -3,7 +3,7 @@ name: cypress-documentation-root-cause
 description: Failure-analysis skill for Cypress runs. Use when Codex needs to investigate a failing test, distinguish likely product bugs from test issues, and produce a concise developer-focused root-cause report backed by evidence.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: failure-analysis, cypress-root-cause
   dispatcher-accepted-intents: analyze_cypress_test_failure

@@ -3,7 +3,7 @@ name: cypress-pom
 description: Test-architecture skill for Cypress page objects, fixtures, helpers, and custom commands. Use when Codex needs to decide whether to introduce a Page Object Model, how to structure page objects, and how to separate browser state, UI behavior, and stateless utilities cleanly.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: test-architecture, cypress-pom-design
   dispatcher-accepted-intents: design_cypress_test_architecture

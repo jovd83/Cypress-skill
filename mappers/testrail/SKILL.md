@@ -3,7 +3,7 @@ name: cypress-mapper-testrail
 description: Test-management mapping skill for TestRail. Use when Codex needs to apply authoritative TestRail case IDs back into local Cypress docs, titles, or annotations so the repository can trace automation to imported TestRail records.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: test-management-mapping, cypress-test-management-mapping
   dispatcher-accepted-intents: map_cypress_test_management_ids

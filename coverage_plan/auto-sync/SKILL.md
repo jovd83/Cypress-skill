@@ -3,7 +3,7 @@ name: cypress-coverage-matrix-auto-sync
 description: Coverage-maintenance skill for Cypress planning and documentation. Use when Codex needs to synchronize coverage plans, scenario IDs, traceability links, and summary counts after tests, requirements, or narrative test documents change.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: coverage-maintenance, cypress-coverage-sync
   dispatcher-accepted-intents: sync_cypress_coverage_artifacts

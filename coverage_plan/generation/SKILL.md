@@ -3,7 +3,7 @@ name: cypress-coverage-plan-generation
 description: Coverage-planning skill for Cypress work. Use when Codex needs to turn confirmed requirements into a structured, risk-aware Cypress coverage plan with scenarios, execution types, priorities, and traceability.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: coverage-planning, cypress-coverage-planning
   dispatcher-accepted-intents: plan_cypress_coverage, generate_cypress_test_coverage_plan

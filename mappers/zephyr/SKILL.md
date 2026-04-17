@@ -3,7 +3,7 @@ name: cypress-mapper-zephyr
 description: Test-management mapping skill for Zephyr Scale. Use when Codex needs to apply authoritative Zephyr case IDs back into local Cypress docs, titles, or annotations so the repository can trace automation to imported Zephyr records.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: test-management-mapping, cypress-test-management-mapping
   dispatcher-accepted-intents: map_cypress_test_management_ids

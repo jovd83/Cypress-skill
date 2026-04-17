@@ -3,7 +3,7 @@ name: cypress-installer-intellij-junie
 description: Editor-setup skill for Cypress plus Junie in IntelliJ IDEA. Use when Codex needs to help configure a practical JetBrains environment for Cypress authoring, execution, debugging, and local skill usage.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: editor-setup, cypress-editor-setup
   dispatcher-accepted-intents: setup_cypress_editor

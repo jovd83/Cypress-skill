@@ -3,7 +3,7 @@ name: cypress-mapper-testlink
 description: Test-management mapping skill for TestLink. Use when Codex needs to apply authoritative TestLink case IDs back into local Cypress docs, titles, or annotations so the repository can trace automation to imported TestLink records.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: test-management-mapping, cypress-test-management-mapping
   dispatcher-accepted-intents: map_cypress_test_management_ids

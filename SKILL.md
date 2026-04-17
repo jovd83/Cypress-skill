@@ -2,8 +2,8 @@
 name: cypress-skill
 description: Flagship Cypress skill pack for planning, authoring, debugging, documenting, and operationalizing Cypress work. Use when Codex needs Cypress guidance or routing across E2E, API, component, visual, accessibility, CI/CD, coverage planning, documentation, CLI browser automation, or optional handoff workflows.
 metadata:
-    dispatcher-layer: execution
-    dispatcher-lifecycle: active
+  dispatcher-layer: execution
+  dispatcher-lifecycle: active
   author: jovd83
   version: "1.2"
   dispatcher-category: testing

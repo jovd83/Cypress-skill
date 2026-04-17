@@ -3,7 +3,7 @@ name: cypress-reporter-testrail
 description: Test-management reporting skill for TestRail. Use when Codex needs to publish Cypress execution results into TestRail using the project's mappings, environment configuration, and chosen reporting flow.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: test-management-reporting, cypress-test-management-reporting
   dispatcher-accepted-intents: report_cypress_test_results

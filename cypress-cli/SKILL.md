@@ -1,10 +1,10 @@
 ---
 name: cypress-cli
 description: Automates browser interactions for web testing, form filling, screenshots, and data extraction using cypress-cli. Use when the user needs to navigate websites, interact with web pages, fill forms, take screenshots, test web applications, extract information from web pages, mock network requests, manage browser sessions, or generate test code.
-allowed-tools: Bash(cypress-cli:*)
+  allowed-tools: Bash(cypress-cli:*)
 metadata:
   author: jovd83
-  version: "1.0"
+  version: '1.0'
   dispatcher-category: testing
   dispatcher-capabilities: browser-automation-cli, cypress-cli-automation
   dispatcher-accepted-intents: drive_cypress_browser_cli

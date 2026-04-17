@@ -3,7 +3,7 @@ name: cypress-reporting-stakeholder
 description: Stakeholder-reporting skill for Cypress execution results. Use when Codex needs to turn raw Cypress runs into a concise, non-technical summary of tested scope, release health, business impact, and recommended next actions.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: stakeholder-reporting, cypress-stakeholder-reporting
   dispatcher-accepted-intents: summarize_cypress_test_results

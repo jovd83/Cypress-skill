@@ -3,7 +3,7 @@ name: cypress-documentation-plaintext
 description: Legacy Cypress-specific alias for plain-text case formatting. Prefer the standalone `test-artifact-export-skill` skill for lightweight narrative case output, and use this only when Cypress-local conventions must be preserved explicitly.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: test-artifact-formatting, cypress-legacy-test-case-formatting
   dispatcher-accepted-intents: render_test_artifact, export_test_cases

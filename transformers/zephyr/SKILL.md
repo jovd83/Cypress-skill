@@ -3,7 +3,7 @@ name: cypress-transformer-zephyr
 description: Legacy Cypress-specific alias for Zephyr case export. Prefer the standalone `test-artifact-export-skill` skill for transforming approved test cases into Zephyr-ready artifacts, and use this only when Cypress-local conventions must be preserved explicitly.
 metadata:
   author: jovd83
-  version: "1.1"
+  version: '1.1'
   dispatcher-category: testing
   dispatcher-capabilities: test-artifact-formatting, cypress-legacy-export-transform
   dispatcher-accepted-intents: render_test_artifact, export_test_cases
