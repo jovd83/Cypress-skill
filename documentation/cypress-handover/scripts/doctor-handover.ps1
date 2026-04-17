@@ -1,4 +1,4 @@
-param(
+﻿param(
   [Parameter(Mandatory = $true)]
   [string]$TaskLabel,
   [string]$DocsRoot = "docs/tests",
@@ -269,3 +269,4 @@ switch ($Format) {
     Write-Host ("Path: {0}" -f $result.Path)
   }
 }
+

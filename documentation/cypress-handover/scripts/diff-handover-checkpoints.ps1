@@ -29,18 +29,14 @@ function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $text = Get-Content -Raw -LiteralPath $Path
   $match = [regex]::Match($text, $pattern)
-  if (-not $match.Success) {
-    return ""
-  }
+  if (-not $match.Success) { return "" }
   return $match.Groups["value"].Value.Trim()
 }
 
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
   $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
   $match = [regex]::Match($Markdown, $pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
-  if (-not $match.Success) {
-    return ""
-  }
+  if (-not $match.Success) { return "" }
   return ($match.Groups["body"].Value -replace '\s+', ' ').Trim()
 }
 
@@ -280,4 +276,5 @@ switch ($Format) {
     Write-Host ("Unchanged tracked fields: {0}" -f $result.UnchangedFieldCount)
   }
 }
+
 

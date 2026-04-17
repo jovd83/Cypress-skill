@@ -1,4 +1,4 @@
-param(
+﻿param(
   [string]$DocsRoot = "docs/tests",
   [ValidateSet("active", "archive", "all")]
   [string]$Location = "all",
@@ -133,3 +133,4 @@ switch ($Format) {
     }
   }
 }
+

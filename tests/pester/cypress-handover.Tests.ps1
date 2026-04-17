@@ -70,7 +70,7 @@ Describe "Cypress handover package" {
 
     $content = Get-Content -Raw -LiteralPath $Path
     $content = $content -replace "`r", ""
-    $pattern = '(?m)^- ' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+    $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
     $match = [regex]::Match($content, $pattern)
     if (-not $match.Success) { return "" }
     return $match.Groups["value"].Value.Trim()

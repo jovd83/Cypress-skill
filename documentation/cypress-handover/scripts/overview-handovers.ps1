@@ -1,4 +1,4 @@
-param(
+﻿param(
   [string]$DocsRoot = "docs/tests",
   [ValidateSet("active", "archive", "all")]
   [string]$Location = "active",
@@ -36,13 +36,11 @@ function Get-ResolvedPath([string]$Path) {
 }
 
 function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
-  if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
+  if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return "" }
   $text = Get-Content -Raw -LiteralPath $Path
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($text, $pattern)
-  if (-not $match.Success) {
-    return $null
-  }
+  if (-not $match.Success) { return "" }
   return $match.Groups["value"].Value.Trim()
 }
 
@@ -112,9 +110,7 @@ function Get-ChainDepth([string]$Path) {
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
   $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
   $match = [regex]::Match($Markdown, $pattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
-  if (-not $match.Success) {
-    return ""
-  }
+  if (-not $match.Success) { return "" }
   return ($match.Groups["body"].Value -replace '\s+', ' ').Trim()
 }
 
@@ -305,4 +301,5 @@ switch ($Format) {
     }
   }
 }
+
 

@@ -1,4 +1,4 @@
-param(
+﻿param(
   [string]$DocsRoot = "docs/tests",
   [ValidateSet("active", "archive", "all")]
   [string]$Location = "active",
@@ -131,3 +131,4 @@ switch ($Format) {
     Write-Host ("Path: {0}" -f $result.Path)
   }
 }
+

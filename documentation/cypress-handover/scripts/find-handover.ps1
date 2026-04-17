@@ -1,4 +1,4 @@
-param(
+﻿param(
   [string]$TaskLabel = "",
   [string]$DocsRoot = "docs/tests",
   [ValidateSet("active", "archive", "all")]
@@ -14,9 +14,7 @@ $ErrorActionPreference = "Stop"
 function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($Markdown, $pattern)
-  if (-not $match.Success) {
-    return $null
-  }
+  if (-not $match.Success) { return "" }
   return $match.Groups["value"].Value.Trim()
 }
 
@@ -113,9 +111,7 @@ function Get-ChainDepth([string]$Path) {
 function Get-SectionBody([string]$Markdown, [string]$Heading) {
   $pattern = '(?smi)^' + [regex]::Escape($Heading) + '\s*(?<body>.*?)(?=^### |\z)'
   $match = [regex]::Match($Markdown, $pattern)
-  if (-not $match.Success) {
-    return ""
-  }
+  if (-not $match.Success) { return "" }
   return ($match.Groups["body"].Value -replace '\s+', ' ').Trim()
 }
 
@@ -283,4 +279,5 @@ switch ($Format) {
     ) | ForEach-Object { Write-Host $_ }
   }
 }
+
 

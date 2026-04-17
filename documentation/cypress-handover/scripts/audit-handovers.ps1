@@ -1,4 +1,4 @@
-param(
+﻿param(
   [string]$DocsRoot = "docs/tests",
   [ValidateSet("active", "archive", "all")]
   [string]$Location = "active",
@@ -12,9 +12,7 @@ $ErrorActionPreference = "Stop"
 function Get-HandoverMetadataValue([string]$Markdown, [string]$Label) {
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
   $match = [regex]::Match($Markdown, $pattern)
-  if (-not $match.Success) {
-    return $null
-  }
+  if (-not $match.Success) { return "" }
   return $match.Groups["value"].Value.Trim()
 }
 
@@ -322,4 +320,5 @@ switch ($Format) {
 if ($FailOnIssues -and (($invalidHandovers.Count -gt 0) -or ($duplicateTaskLabelCollisions.Count -gt 0) -or ($crossLocationScopeCollisions.Count -gt 0))) {
   throw "audit-handovers failed: detected invalid handovers, duplicate task-label collisions, or active/archive scope duplication"
 }
+
 

@@ -1,4 +1,4 @@
-param(
+﻿param(
   [Parameter(Mandatory = $true)]
   [string]$TaskLabel,
   [string]$DocsRoot = "docs/tests",
@@ -128,3 +128,4 @@ switch ($Format) {
     }
   }
 }
+
