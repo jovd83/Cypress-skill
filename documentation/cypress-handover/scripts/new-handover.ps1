@@ -1,4 +1,4 @@
-param(
+﻿param(
   [string]$TaskLabel = "task",
   [string]$DocsRoot = "docs/tests",
   [string]$PreviousHandover = "",
@@ -23,7 +23,7 @@ function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   }
 
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
-  $text = Get-Content -Raw -LiteralPath $Path
+  $text = Get-Content -Raw -LiteralPath $Path`n  $text = $text -replace "`r", ""
   $match = [regex]::Match($text, $pattern)
   if (-not $match.Success) { return "" }
 
@@ -232,5 +232,6 @@ $content = $template `
 
 Set-Content -LiteralPath $outputPath -Value $content -Encoding UTF8
 Write-Host $outputPath
+
 
 

@@ -28,7 +28,7 @@ function Get-ResolvedPath([string]$Path) {
 
 function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
-  $text = Get-Content -Raw -LiteralPath $Path
+  $text = Get-Content -Raw -LiteralPath $Path`n  $text = $text -replace "`r", ""
   $match = [regex]::Match($text, $pattern)
   if (-not $match.Success) { return "" }
   return $match.Groups["value"].Value.Trim()
@@ -234,5 +234,6 @@ Write-Host ("Scope: workspace={0} | branch={1}" -f $targetScope.WorkspaceRoot, $
 foreach ($entry in $renamedEntries) {
   Write-Host ("- {0}" -f $entry.Path)
 }
+
 
 

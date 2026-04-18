@@ -28,7 +28,7 @@ function Get-ResolvedPath([string]$Path) {
 function Get-HandoverMetadataValue([string]$Path, [string]$Label) {
   if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return "" }
   $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
-  $text = Get-Content -Raw -LiteralPath $Path
+  $text = Get-Content -Raw -LiteralPath $Path`n  $text = $text -replace "`r", ""
   $match = [regex]::Match($text, $pattern)
   if (-not $match.Success) { return "" }
   return $match.Groups["value"].Value.Trim()
@@ -250,5 +250,6 @@ switch ($Format) {
     }
   }
 }
+
 
 
