@@ -1,85 +1,86 @@
+$script:here = $PSScriptRoot
+if (-not $script:here) { $script:here = "." }
+$script:repoRoot = (Resolve-Path (Join-Path $script:here "..\..")).Path
+$script:skillRoot = Join-Path $script:repoRoot "documentation/cypress-handover"
+$script:examplePath = Join-Path $script:skillRoot "references/blocked-handover-example.md"
+
+$script:scriptPaths = @{
+  audit = Join-Path $script:skillRoot "scripts/audit-handovers.ps1"
+  archive = Join-Path $script:skillRoot "scripts/archive-handover-scope.ps1"
+  doctor = Join-Path $script:skillRoot "scripts/doctor-handover.ps1"
+  export = Join-Path $script:skillRoot "scripts/export-handover-index.ps1"
+  find = Join-Path $script:skillRoot "scripts/find-handover.ps1"
+  new = Join-Path $script:skillRoot "scripts/new-handover.ps1"
+  repair = Join-Path $script:skillRoot "scripts/repair-handover-links.ps1"
+  resolve = Join-Path $script:skillRoot "scripts/resolve-handover-location-conflict.ps1"
+  restore = Join-Path $script:skillRoot "scripts/restore-handover-scope.ps1"
+  validate = Join-Path $script:skillRoot "scripts/validate-handover.ps1"
+}
+
+function New-HandoverFixtureFile {
+  param(
+    [string]$Path,
+    [string]$Timestamp,
+    [string]$TaskLabel,
+    [string]$WorkspaceRoot,
+    [string]$Branch,
+    [string]$Status = "Blocked",
+    [string]$PreviousHandover = "No prior handover found",
+    [string]$NextAction = "Take the next scoped action and record the result."
+  )
+
+  $content = Get-Content -Raw -LiteralPath $script:examplePath
+  $content = $content -replace "`r", ""
+
+  # Use string.Replace for values that may contain backslashes or special chars.
+  $content = $content.Replace("2026-03-11 15:30", $Timestamp)
+  $content = $content.Replace("checkout-auth-fix", $TaskLabel)
+  $content = $content.Replace('C:\projects\shop-app', $WorkspaceRoot)
+  $content = $content.Replace("fix/checkout-auth-refresh", $Branch)
+  $content = $content.Replace("No prior handover found", $PreviousHandover)
+
+  # Use regex for section bodies.
+  $content = [regex]::Replace($content, '(?m)^### Current status\n.+$', ("### Current status`n" + $Status))
+  $content = [regex]::Replace($content, '(?sm)^### Next action\n.*?(?=^### |\z)', ("### Next action`n" + $NextAction + "`n`n"))
+
+  Set-Content -LiteralPath $Path -Value $content -Encoding UTF8
+}
+
+function Set-HandoverSectionBody {
+  param(
+    [string]$Path,
+    [string]$Heading,
+    [string]$Body
+  )
+
+  $content = Get-Content -Raw -LiteralPath $Path
+  $content = $content -replace "`r", ""
+  $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\n.*?(?=^### |\z)'
+  $replacement = $Heading + "`n" + $Body + "`n`n"
+  $updated = [regex]::Replace($content, $pattern, $replacement, 1)
+  Set-Content -LiteralPath $Path -Value $updated -Encoding UTF8
+}
+
+function Get-HandoverMetadataLineValue {
+  param(
+    [string]$Path,
+    [string]$Label
+  )
+
+  $content = Get-Content -Raw -LiteralPath $Path
+  $content = $content -replace "`r", ""
+  $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
+  $match = [regex]::Match($content, $pattern)
+  if (-not $match.Success) { return "" }
+  return $match.Groups["value"].Value.Trim()
+}
+
+function Normalize-TestPath([string]$Path) {
+  if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) { return $Path }
+  return ($Path -replace '\\', '/').ToLowerInvariant().TrimEnd('/')
+}
+
 Describe "Cypress handover package" {
-  $script:here = $PSScriptRoot
-  if (-not $script:here) { $script:here = "." }
-  $script:repoRoot = (Resolve-Path (Join-Path $script:here "..\..")).Path
-  $script:skillRoot = Join-Path $script:repoRoot "documentation/cypress-handover"
-  $script:examplePath = Join-Path $script:skillRoot "references/blocked-handover-example.md"
-
-  $script:scriptPaths = @{
-    audit = Join-Path $script:skillRoot "scripts/audit-handovers.ps1"
-    archive = Join-Path $script:skillRoot "scripts/archive-handover-scope.ps1"
-    doctor = Join-Path $script:skillRoot "scripts/doctor-handover.ps1"
-    export = Join-Path $script:skillRoot "scripts/export-handover-index.ps1"
-    find = Join-Path $script:skillRoot "scripts/find-handover.ps1"
-    new = Join-Path $script:skillRoot "scripts/new-handover.ps1"
-    repair = Join-Path $script:skillRoot "scripts/repair-handover-links.ps1"
-    resolve = Join-Path $script:skillRoot "scripts/resolve-handover-location-conflict.ps1"
-    restore = Join-Path $script:skillRoot "scripts/restore-handover-scope.ps1"
-    validate = Join-Path $script:skillRoot "scripts/validate-handover.ps1"
-  }
-
-  function New-HandoverFixtureFile {
-    param(
-      [string]$Path,
-      [string]$Timestamp,
-      [string]$TaskLabel,
-      [string]$WorkspaceRoot,
-      [string]$Branch,
-      [string]$Status = "Blocked",
-      [string]$PreviousHandover = "No prior handover found",
-      [string]$NextAction = "Take the next scoped action and record the result."
-    )
-
-    $content = Get-Content -Raw -LiteralPath $script:examplePath
-    $content = $content -replace "`r", ""
-    
-    # Use string.Replace for values that may contain backslashes or special chars
-    $content = $content.Replace("2026-03-11 15:30", $Timestamp)
-    $content = $content.Replace("checkout-auth-fix", $TaskLabel)
-    $content = $content.Replace('C:\projects\shop-app', $WorkspaceRoot)
-    $content = $content.Replace("fix/checkout-auth-refresh", $Branch)
-    $content = $content.Replace("No prior handover found", $PreviousHandover)
-    
-    # Use regex for section bodies
-    $content = [regex]::Replace($content, '(?m)^### Current status\n.+$', ("### Current status`n" + $Status))
-    $content = [regex]::Replace($content, '(?sm)^### Next action\n.*?(?=^### |\z)', ("### Next action`n" + $NextAction + "`n`n"))
-    
-    Set-Content -LiteralPath $Path -Value $content -Encoding UTF8
-  }
-
-  function Set-HandoverSectionBody {
-    param(
-      [string]$Path,
-      [string]$Heading,
-      [string]$Body
-    )
-
-    $content = Get-Content -Raw -LiteralPath $Path
-    $content = $content -replace "`r", ""
-    $pattern = '(?sm)^' + [regex]::Escape($Heading) + '\n.*?(?=^### |\z)'
-    $replacement = $Heading + "`n" + $Body + "`n`n"
-    $updated = [regex]::Replace($content, $pattern, $replacement, 1)
-    Set-Content -LiteralPath $Path -Value $updated -Encoding UTF8
-  }
-
-  function Get-HandoverMetadataLineValue {
-    param(
-      [string]$Path,
-      [string]$Label
-    )
-
-    $content = Get-Content -Raw -LiteralPath $Path
-    $content = $content -replace "`r", ""
-    $pattern = '(?mi)^(?:\s*-\s*|\s*)' + [regex]::Escape($Label) + ':\s*(?<value>.+)$'
-    $match = [regex]::Match($content, $pattern)
-    if (-not $match.Success) { return "" }
-    return $match.Groups["value"].Value.Trim()
-  }
-
-  function Normalize-TestPath([string]$Path) {
-    if ([string]::IsNullOrWhiteSpace($Path) -or ($Path -eq "No prior handover found")) { return $Path }
-    return ($Path -replace '\\', '/').ToLowerInvariant().TrimEnd('/')
-  }
 
   BeforeEach {
     $script:tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('cypress-handover-pester-' + [guid]::NewGuid().ToString('N'))

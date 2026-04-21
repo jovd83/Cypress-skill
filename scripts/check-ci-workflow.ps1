@@ -24,7 +24,7 @@ if ($content -notmatch '(?m)^\s*push:\s*$') {
 if ($content -notmatch '(?m)^\s*shell:\s*pwsh\s*$') {
   $issues += "missing pwsh shell for gate step"
 }
-if ($content -notmatch '(?m)^\s*run:\s*\./scripts/quality-gate\.ps1\s*$') {
+if ($content -notmatch '(?m)^\s*run:\s*\./scripts/quality-gate\.ps1(?:\s+.+)?\s*$') {
   $issues += "missing run command './scripts/quality-gate.ps1'"
 }
 if ($content -notmatch '(?m)^\s*run:\s*\./scripts/check-cypress-handover-pester\.ps1(?:\s+.+)?\s*$') {

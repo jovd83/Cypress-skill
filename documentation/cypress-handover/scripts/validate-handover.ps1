@@ -196,7 +196,8 @@ if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
   throw "Handover file not found: $Path"
 }
 
-$text = Get-Content -Raw -LiteralPath $Path`n  $text = $text -replace "`r", ""
+$text = Get-Content -Raw -LiteralPath $Path
+$text = $text -replace "`r", ""
 $requiredMetadataLines = @(
   "- Timestamp:",
   "- Task label:",
