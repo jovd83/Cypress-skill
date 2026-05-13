@@ -324,10 +324,12 @@ $sectionRules = @(
 foreach ($rule in $sectionRules) {
   $body = Get-SectionBody -Markdown $text -Heading $rule.Heading
   $normalizedBody = Normalize-SectionBody -Body $body
+  $isLowSignal = Test-LowSignalBody -Body $body
+  Write-Host "DEBUG: Section=$($rule.Label), NormalizedBody='$normalizedBody', IsLowSignal=$isLowSignal"
   if ($normalizedBody.Length -lt $rule.MinimumLength) {
     throw ("validate-handover failed: {0} is too short to be useful" -f $rule.Label)
   }
-  if ((-not $rule.AllowLowSignal) -and (Test-LowSignalBody -Body $body)) {
+  if ((-not $rule.AllowLowSignal) -and $isLowSignal) {
     throw ("validate-handover failed: {0} contains low-signal filler" -f $rule.Label)
   }
 }
