@@ -52,7 +52,8 @@ function Get-SectionBody([string]$Markdown, [string]$Heading) {
 
 function Normalize-SectionBody([string]$Body) {
   if ($null -eq $Body) { return "" }
-  return (($Body -replace '\s+', ' ').Trim())
+  # Replace all whitespace (including non-breaking spaces and line endings) with a single space, then trim.
+  return ([regex]::Replace($Body, '\s+', ' ').Trim())
 }
 
 function Normalize-TaskLabel([string]$Value) {
