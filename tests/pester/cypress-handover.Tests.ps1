@@ -182,7 +182,7 @@ Describe "Cypress handover package" {
     try {
       & $script:scriptPaths.archive -DocsRoot $script:docsRoot -TaskLabel 'archive-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/archive' -Format json | Out-Null
     } catch {
-      Write-Host "DEBUG: Caught error: $($_.ToString())"
+      Write-Warning "DEBUG: Caught error: $($_.ToString())"
       $failedAsExpected = ($_.Exception.Message -match "validate-handover failed") -or ($_.ToString() -match "validate-handover failed")
     }
 
@@ -224,7 +224,7 @@ Describe "Cypress handover package" {
     try {
       & $script:scriptPaths.restore -DocsRoot $script:docsRoot -TaskLabel 'restore-validation-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/restore-validation' -Format json | Out-Null
     } catch {
-      Write-Host "DEBUG: Caught error: $($_.ToString())"
+      Write-Warning "DEBUG: Caught error: $($_.ToString())"
       $failedAsExpected = ($_.Exception.Message -match "validate-handover failed") -or ($_.ToString() -match "validate-handover failed")
     }
 
@@ -244,7 +244,7 @@ Describe "Cypress handover package" {
     try {
       & $script:scriptPaths.repair -DocsRoot $script:docsRoot -Location active -TaskLabel 'repair-rollback' -WorkspaceRoot $script:workspace -Branch 'rollback/repair' -Format json | Out-Null
     } catch {
-      Write-Host "DEBUG: Caught error: $($_.ToString())"
+      Write-Warning "DEBUG: Caught error: $($_.ToString())"
       $failedAsExpected = ($_.Exception.Message -match "validate-handover failed") -or ($_.ToString() -match "validate-handover failed")
     }
 
@@ -260,7 +260,7 @@ Describe "Cypress handover package" {
     try {
       & $script:scriptPaths.resolve -DocsRoot $script:docsRoot -TaskLabel 'duplicate-scope' -WorkspaceRoot $script:workspace -Branch 'dup/branch' -KeepLocation active -Format json | Out-Null
     } catch {
-      Write-Host "DEBUG: Caught error: $($_.ToString())"
+      Write-Warning "DEBUG: Caught error: $($_.ToString())"
       $failedAsExpected = ($_.Exception.Message -match "validate-handover failed") -or ($_.ToString() -match "validate-handover failed")
     }
 
