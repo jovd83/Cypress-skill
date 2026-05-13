@@ -14,6 +14,11 @@ metadata:
   dispatcher-writes-files: true
 ---
 
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --model <model_name> --reason <reason>` (or `./log-dispatch.sh` on Linux)
+
 # Documenting Test Cases: Plain Text format
 
 Use this skill when the goal is fast, lightweight documentation rather than a formal template.

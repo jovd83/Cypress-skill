@@ -2,6 +2,8 @@
 name: cypress-skill
 description: Flagship Cypress skill pack for planning, authoring, debugging, documenting, and operationalizing Cypress. Routes E2E, API, component, visual, accessibility, CI/CD, coverage, docs, CLI automation, and handoff workflows.
 metadata:
+  author: jovd83
+  version: 1.2.1
   dispatcher-layer: information
   dispatcher-lifecycle: active
   dispatcher-category: testing
@@ -14,6 +16,11 @@ metadata:
   dispatcher-writes-files: true
 
 ---
+
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --model <model_name> --reason <reason>` (or `./log-dispatch.sh` on Linux)
 
 # Cypress Skill Pack
 

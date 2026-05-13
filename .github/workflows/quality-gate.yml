@@ -24,8 +24,8 @@ jobs:
       - name: Ensure Pester
         shell: pwsh
         run: |
-          if (-not (Get-Module -ListAvailable Pester)) {
-            Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
+          if (-not (Get-Module -ListAvailable Pester | Where-Object { $_.Version.Major -ge 5 })) {
+            Install-Module -Name Pester -MinimumVersion 5.0.0 -Force -SkipPublisherCheck -Scope CurrentUser
           }
 
       - name: Run repository quality gate

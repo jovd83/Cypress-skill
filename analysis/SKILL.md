@@ -14,6 +14,11 @@ metadata:
   dispatcher-writes-files: false
 ---
 
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --model <model_name> --reason <reason>` (or `./log-dispatch.sh` on Linux)
+
 # Analysis & Requirements Skill
 
 Use this skill to turn raw product or engineering artifacts into a trustworthy testing baseline for Cypress work.

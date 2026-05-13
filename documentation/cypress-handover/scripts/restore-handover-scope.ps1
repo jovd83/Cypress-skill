@@ -1,4 +1,4 @@
-﻿param(
+param(
   [Parameter(Mandatory = $true)]
   [string]$TaskLabel,
   [string]$DocsRoot = "docs/tests",
@@ -217,7 +217,7 @@ try {
     $text = Get-Content -Raw -LiteralPath $entry.Path
     $updatedPreviousRaw = $entry.PreviousHandover
     if ($updatedPreviousRaw -ne $noPriorValue) {
-      $lookupKey = Get-ResolvedPath $updatedPreviousRaw
+      $lookupKey = Resolve-HandoverLink -ContainingFilePath $entry.Path -LinkValue $updatedPreviousRaw
       if ($targetPathBySource.ContainsKey($lookupKey)) {
         $updatedPrevious = $targetPathBySource[$lookupKey] -replace '\\', '/'
         $text = Replace-MetadataLine -Markdown $text -Label "Previous handover" -Value $updatedPrevious

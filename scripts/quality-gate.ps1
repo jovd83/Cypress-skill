@@ -16,9 +16,8 @@ function Invoke-Check([string]$Name, [scriptblock]$Check) {
     & $Check
     Write-Host "PASS: $Name"
   } catch {
-    Write-Host "FAIL: $Name"
-    Write-Host $_.Exception.Message
     $script:failures++
+    Write-Host ("- [FAIL] {0}: {1}" -f $Name, $_) -ForegroundColor Red
   }
 }
 

@@ -44,13 +44,14 @@ function New-HandoverFile {
   )
 
   $content = Get-Content -Raw -LiteralPath $script:examplePath
+  $content = $content -replace "`r", ""
   $content = [regex]::Replace($content, '(?m)^- Timestamp:\s*.+$', ('- Timestamp: ' + $Timestamp))
   $content = [regex]::Replace($content, '(?m)^- Task label:\s*.+$', ('- Task label: ' + $TaskLabel))
   $content = [regex]::Replace($content, '(?m)^- Workspace root:\s*.+$', ('- Workspace root: ' + $WorkspaceRoot))
   $content = [regex]::Replace($content, '(?m)^- Branch:\s*.+$', ('- Branch: ' + $Branch))
   $content = [regex]::Replace($content, '(?m)^- Previous handover:\s*.+$', ('- Previous handover: ' + $PreviousHandover))
-  $content = [regex]::Replace($content, '(?m)^### Current status\r?\n.+$', ("### Current status`r`n" + $Status))
-  $content = [regex]::Replace($content, '(?sm)^### Next action\r?\n.*?(?=^### |\z)', ("### Next action`r`n" + $NextAction + "`r`n`r`n"))
+  $content = [regex]::Replace($content, '(?m)^### Current status\n.+$', ("### Current status`n" + $Status))
+  $content = [regex]::Replace($content, '(?sm)^### Next action\n.*?(?=^### |\z)', ("### Next action`n" + $NextAction + "`n`n"))
   Set-Content -LiteralPath $Path -Value $content -Encoding UTF8
 }
 

@@ -1,0 +1,1 @@
+throw "validate-handover failed"

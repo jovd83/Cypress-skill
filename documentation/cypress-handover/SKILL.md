@@ -14,6 +14,11 @@ metadata:
   dispatcher-writes-files: true
 ---
 
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --model <model_name> --reason <reason>` (or `./log-dispatch.sh` on Linux)
+
 # Handover to Human-in-the-Loop
 
 Create a clear handover document at task completion summarizing completed work, current state, session state, blockers, and the exact next step so a human or a later agent can resume without rediscovery.
