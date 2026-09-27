@@ -157,10 +157,6 @@ Invoke-Check -Name "Planning/reporting skill section contract" -Check {
   & "$scriptRoot\check-planning-reporting-skill-sections.ps1" -Root $Root
 }
 
-Invoke-Check -Name "Test-management integration skill section contract" -Check {
-  & "$scriptRoot\check-tm-integration-skill-sections.ps1" -Root $Root
-}
-
 Invoke-Check -Name "Installer skill section contract" -Check {
   & "$scriptRoot\check-installer-skill-sections.ps1" -Root $Root
 }

@@ -161,9 +161,22 @@ function Get-FrontmatterValues([string]$skillFile) {
   }
 
   return [pscustomobject]@{
-    Name = $name
-    Description = $description
+    Name = Unquote-YamlScalar $name
+    Description = Unquote-YamlScalar $description
   }
+}
+
+# Frontmatter values may be YAML-quoted (a description containing ": " must be). Strip the quotes
+# so they do not leak into the generated agents metadata.
+function Unquote-YamlScalar([string]$value) {
+  $t = $value.Trim()
+  if ($t.Length -ge 2 -and $t.StartsWith('"') -and $t.EndsWith('"')) {
+    return ($t.Substring(1, $t.Length - 2) -replace '\\"', '"')
+  }
+  if ($t.Length -ge 2 -and $t.StartsWith("'") -and $t.EndsWith("'")) {
+    return ($t.Substring(1, $t.Length - 2) -replace "''", "'")
+  }
+  return $t
 }
 
 function Build-YamlLines([string]$skillName, [string]$description) {

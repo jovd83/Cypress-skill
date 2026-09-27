@@ -1,7 +1,0 @@
-﻿interface:
-  display_name: "Cypress Reporter Xray"
-  short_description: "Test-management reporting skill for Xray"
-  default_prompt: "Use $cypress-reporter-xray to help with test-management reporting skill for Xray."
-
-policy:
-  allow_implicit_invocation: true

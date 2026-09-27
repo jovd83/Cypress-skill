@@ -38,10 +38,10 @@ Do not ask a menu question after the user already requested a concrete deliverab
 | Set up or debug CI execution | `ci` | Ask which CI provider only when examples differ materially |
 | Derive requirements from tickets or specs | `analysis` | Ask for the strongest available source if none was provided |
 | Produce or refine a coverage plan | `coverage_plan/generation` and `coverage_plan/review` | Clarify approval needs only for large or costly plans |
-| Write test documentation or convert case formats | Dispatch `render_test_artifact` through `skill-dispatcher` or use `documentation/tests` | Ask for the desired format only if it is not inferable |
+| Write test documentation or convert case formats | The `test-management-sync` skill (export job) or `documentation/tests` | Ask for the desired format only if it is not inferable |
 | Create handoff or session-state artifacts | `documentation/cypress-handover` or `documentation/session-state` | Confirm task scope only when multiple scopes exist |
-| Export test cases to TestLink, TestRail, Xray, or Zephyr | Dispatch `render_test_artifact` through `skill-dispatcher` | Ask for the target system if not stated |
-| Report execution to TestLink, TestRail, Xray, or Zephyr | relevant `mappers/*` or `reporters/*` | Ask for the target system if not stated |
+| Export test cases to TestLink, TestRail, Xray, or Zephyr | The `test-management-sync` skill (export job) | Ask for the target system if not stated |
+| Map IDs or report execution to TestLink, TestRail, Xray, or Zephyr | The `test-management-sync` skill (map-IDs and publish-results jobs) | Ask for the target system if not stated |
 | Summarize Cypress results for stakeholders | `reporting/stakeholder` | Ask for release context if the report would otherwise be misleading |
 | Migrate from another framework or Selenium/WebDriver | `migration` | Ask for source stack if missing |
 | Drive a browser from the terminal | `cypress-cli` | Ask whether the need is interaction, scraping, mocking, or diagnostics only if it changes the workflow |

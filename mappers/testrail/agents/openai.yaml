@@ -1,7 +1,0 @@
-﻿interface:
-  display_name: "Cypress Mapper Testrail"
-  short_description: "Test-management mapping skill for TestRail"
-  default_prompt: "Use $cypress-mapper-testrail to help with test-management mapping skill for TestRail."
-
-policy:
-  allow_implicit_invocation: true

@@ -1,7 +1,0 @@
-﻿interface:
-  display_name: "Cypress Reporter Testlink"
-  short_description: "Test-management reporting skill for TestLink"
-  default_prompt: "Use $cypress-reporter-testlink to help with test-management reporting skill for TestLink."
-
-policy:
-  allow_implicit_invocation: true

@@ -2,6 +2,16 @@
 
 All notable changes to the `cypress-skill` will be documented in this file.
 
+## [2.0.0] - 2026-09-27
+
+### Removed
+- `transformers/`, `mappers/` and `reporters/` for TestRail, Xray, Zephyr and TestLink (12 sub-skills). They were near-identical copies of the same work in the other framework skill packs. Exporting cases, mapping tool IDs back into tests, and publishing results now live in the standalone `test-management-sync` skill (formerly `test-artifact-export-skill`).
+
+### Changed
+- Routing names `test-management-sync` directly, instead of going through the retired skill-dispatcher with a hard-coded `C:\projects\skills\...` fallback path.
+- The legacy test-case formatting aliases point to `test-management-sync`.
+- Version markers reconciled: the README badge said 1.1 while SKILL.md and this changelog were at 1.2.1. The quality gate no longer runs `check-tm-integration-skill-sections.ps1`, which is removed with the folders it checked, and the release archive no longer packages them.
+
 ## [1.2.1] - 2026-04-30
 
 ### Changed

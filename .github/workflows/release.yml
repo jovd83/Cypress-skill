@@ -52,15 +52,12 @@ jobs:
             "./cypress-cli",
             "./documentation",
             "./installers",
-            "./mappers",
             "./migration",
             "./orchestrator",
             "./pom",
-            "./reporters",
             "./reporting",
             "./reports",
             "./scripts",
-            "./transformers",
             "./tests"
           )
           Compress-Archive -Path $items -DestinationPath $artifactPath -Force

@@ -1,7 +1,0 @@
-﻿interface:
-  display_name: "Cypress Mapper Zephyr"
-  short_description: "Test-management mapping skill for Zephyr Scale"
-  default_prompt: "Use $cypress-mapper-zephyr to help with test-management mapping skill for Zephyr Scale."
-
-policy:
-  allow_implicit_invocation: true

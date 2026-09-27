@@ -3,7 +3,7 @@ name: cypress-skill
 description: Flagship Cypress skill pack for planning, authoring, debugging, documenting, and operationalizing Cypress. Routes E2E, API, component, visual, accessibility, CI/CD, coverage, docs, CLI automation, and handoff workflows.
 metadata:
   author: jovd83
-  version: 1.2.1
+  version: 2.0.0
   dispatcher-layer: information
   dispatcher-lifecycle: active
   dispatcher-category: testing
@@ -19,7 +19,7 @@ metadata:
 
 # Cypress Skill Pack
 
-> **Author:** jovd83 | **Version:** 1.2.1
+> **Author:** jovd83 | **Version:** 2.0.0
 
 
 Use this root skill as the package entrypoint for general Cypress requests. It is responsible for routing work to the smallest useful subskill, applying the shared standards of this repository, and keeping the package boundaries clear.
@@ -55,11 +55,11 @@ Do not load every guide by default. Read only the subskill and reference files t
 | Requirements extraction | [analysis/SKILL.md](analysis/SKILL.md) |
 | Coverage planning | [coverage_plan/generation/SKILL.md](coverage_plan/generation/SKILL.md) and [coverage_plan/review/SKILL.md](coverage_plan/review/SKILL.md) |
 | Coverage-plan maintenance | [coverage_plan/auto-sync/SKILL.md](coverage_plan/auto-sync/SKILL.md) |
-| Narrative test documentation or format conversion | Dispatch `render_test_artifact` through `skill-dispatcher`; fall back to `C:\projects\skills\test-artifact-export-skill\SKILL.md` when needed |
+| Narrative test documentation or format conversion | The `test-management-sync` skill (export job) |
 | Automation-code documentation or failure diagnosis | [documentation/tests/SKILL.md](documentation/tests/SKILL.md) or [documentation/root_cause/SKILL.md](documentation/root_cause/SKILL.md) |
 | Human or agent handoff workflows | [documentation/cypress-handover/SKILL.md](documentation/cypress-handover/SKILL.md) and [documentation/session-state/SKILL.md](documentation/session-state/SKILL.md) |
-| Test-case export to Xray, Zephyr, TestLink, or TestRail | Dispatch `render_test_artifact` through `skill-dispatcher`; fall back to `C:\projects\skills\test-artifact-export-skill\SKILL.md` when needed |
-| Test-management integrations after export exists | [mappers/](mappers/), and [reporters/](reporters/) subskills |
+| Test-case export to Xray, Zephyr, TestLink, or TestRail | The `test-management-sync` skill (export job) |
+| Mapping TestRail, Xray, Zephyr or TestLink IDs into tests, or publishing results there | The `test-management-sync` skill (map-IDs and publish-results jobs) |
 | IDE-specific setup help | [installers/](installers/) subskills |
 | Non-technical summary reporting | [reporting/stakeholder/SKILL.md](reporting/stakeholder/SKILL.md) |
 
@@ -102,8 +102,8 @@ Do not load every guide by default. Read only the subskill and reference files t
 - `core/`, `ci/`, `pom/`, `migration/`, and `cypress-cli/` are the reusable testing foundation.
 - `analysis/`, `coverage_plan/`, and `documentation/` add planning and traceability workflows.
 - `documentation/cypress-handover/` and `documentation/session-state/` are optional operational workflows for multi-session or multi-operator work.
-- `mappers/`, `reporters/`, `reporting/`, and `installers/` are optional extensions, not prerequisites for ordinary Cypress authoring.
-- The standalone `test-artifact-export-skill` skill is the canonical formatter/exporter for narrative test cases and tool-ready artifacts, but reach it through `skill-dispatcher` first when cross-skill routing is available.
+- `reporting/` and `installers/` are optional extensions, not prerequisites for ordinary Cypress authoring.
+- Test-management work (export, ID mapping, result publishing) lives in the standalone `test-management-sync` skill; this pack no longer carries its own copies.
 
 ## Use the Root Skill Well
 
