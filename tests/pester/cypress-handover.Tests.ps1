@@ -1,29 +1,26 @@
-$script:here = $PSScriptRoot
-if (-not $script:here) { $script:here = "." }
-$script:repoRoot = (Resolve-Path (Join-Path $script:here "..\..")).Path
-$script:skillRoot = Join-Path $script:repoRoot "documentation/cypress-handover"
-$script:examplePath = Join-Path $script:skillRoot "references/blocked-handover-example.md"
-
-$script:scriptPaths = @{
-  audit = Join-Path $script:skillRoot "scripts/audit-handovers.ps1"
-  archive = Join-Path $script:skillRoot "scripts/archive-handover-scope.ps1"
-  doctor = Join-Path $script:skillRoot "scripts/doctor-handover.ps1"
-  export = Join-Path $script:skillRoot "scripts/export-handover-index.ps1"
-  find = Join-Path $script:skillRoot "scripts/find-handover.ps1"
-  new = Join-Path $script:skillRoot "scripts/new-handover.ps1"
-  repair = Join-Path $script:skillRoot "scripts/repair-handover-links.ps1"
-  resolve = Join-Path $script:skillRoot "scripts/resolve-handover-location-conflict.ps1"
-  restore = Join-Path $script:skillRoot "scripts/restore-handover-scope.ps1"
-  validate = Join-Path $script:skillRoot "scripts/validate-handover.ps1"
-}
-
-$script:NewHandoverFixtureFile = $null
-$script:SetHandoverSectionBody = $null
-$script:GetHandoverMetadataLineValue = $null
-$script:NormalizeTestPath = $null
-
 Describe "Cypress handover package" {
   BeforeAll {
+    # Paths are set here, not at the top of the file: Pester 5 runs top-level code only during
+    # discovery, so variables set there are empty when the tests run (CI failed on exactly that).
+    $script:here = $PSScriptRoot
+    if (-not $script:here) { $script:here = "." }
+    $script:repoRoot = (Resolve-Path (Join-Path $script:here "../..")).Path
+    $script:skillRoot = Join-Path $script:repoRoot "documentation/cypress-handover"
+    $script:examplePath = Join-Path $script:skillRoot "references/blocked-handover-example.md"
+
+    $script:scriptPaths = @{
+      audit = Join-Path $script:skillRoot "scripts/audit-handovers.ps1"
+      archive = Join-Path $script:skillRoot "scripts/archive-handover-scope.ps1"
+      doctor = Join-Path $script:skillRoot "scripts/doctor-handover.ps1"
+      export = Join-Path $script:skillRoot "scripts/export-handover-index.ps1"
+      find = Join-Path $script:skillRoot "scripts/find-handover.ps1"
+      new = Join-Path $script:skillRoot "scripts/new-handover.ps1"
+      repair = Join-Path $script:skillRoot "scripts/repair-handover-links.ps1"
+      resolve = Join-Path $script:skillRoot "scripts/resolve-handover-location-conflict.ps1"
+      restore = Join-Path $script:skillRoot "scripts/restore-handover-scope.ps1"
+      validate = Join-Path $script:skillRoot "scripts/validate-handover.ps1"
+    }
+
     $script:NewHandoverFixtureFile = {
       param(
         [string]$Path,
@@ -128,28 +125,28 @@ Describe "Cypress handover package" {
   It "find-handover discovers active and archived files" {
     $found = ((& $script:scriptPaths.audit -DocsRoot $script:docsRoot -Location all -Format json) | ConvertFrom-Json)
     if ($null -eq $found.Summary) { throw "audit-handovers returned null Summary from docsRoot=$script:docsRoot" }
-    $found.Summary.TotalFiles | Should Be 5
-    $found.Summary.ActiveFiles | Should Be 3
-    $found.Summary.ArchivedFiles | Should Be 2
+    $found.Summary.TotalFiles | Should -Be 5
+    $found.Summary.ActiveFiles | Should -Be 3
+    $found.Summary.ArchivedFiles | Should -Be 2
   }
 
   It "doctor recommendations are correct for conflicts" {
     $doctor = ((& $script:scriptPaths.doctor -TaskLabel 'duplicate-scope' -DocsRoot $script:docsRoot -Location all -Format json) | ConvertFrom-Json)
-    $doctor.RecommendedAction | Should Be "repair"
+    $doctor.RecommendedAction | Should -Be "repair"
   }
 
   It "doctor recommends restore for archived-only scopes" {
     $doctor = ((& $script:scriptPaths.doctor -TaskLabel 'archived-only-scope' -DocsRoot $script:docsRoot -Location all -Format json) | ConvertFrom-Json)
-    $doctor.RecommendedAction | Should Be "restore"
+    $doctor.RecommendedAction | Should -Be "restore"
   }
 
   It "archive creates archive directory and moves files" {
     $archiveResult = ((& $script:scriptPaths.archive -TaskLabel 'checkout-auth-fix' -DocsRoot $script:docsRoot -WorkspaceRoot $script:workspace -Branch $script:branch -Force -Format json) | ConvertFrom-Json)
-    $archiveResult.ArchivedCount | Should Be 1
-    (& $script:NormalizeTestPath $archiveResult.ArchiveDirectory) | Should Be (& $script:NormalizeTestPath $script:archiveDir)
-    Test-Path -LiteralPath $script:activeScoped | Should Be $false
+    $archiveResult.ArchivedCount | Should -Be 1
+    (& $script:NormalizeTestPath $archiveResult.ArchiveDirectory) | Should -Be (& $script:NormalizeTestPath $script:archiveDir)
+    Test-Path -LiteralPath $script:activeScoped | Should -Be $false
     $targetPath = Join-Path $script:archiveDir (Split-Path -Leaf $script:activeScoped)
-    Test-Path -LiteralPath $targetPath | Should Be $true
+    Test-Path -LiteralPath $targetPath | Should -Be $true
   }
 
   It "archive and restore preserve a two-file completed chain" {
@@ -159,16 +156,16 @@ Describe "Cypress handover package" {
     & $script:NewHandoverFixtureFile -Path $latest -ExamplePath $script:examplePath -Timestamp '2026-03-02 09:00' -TaskLabel 'chain-test' -WorkspaceRoot $script:workspace -Branch $script:branch -Status 'Completed' -PreviousHandover $older -NextAction 'Latest checkpoint.'
 
     $archiveResult = ((& $script:scriptPaths.archive -TaskLabel 'chain-test' -DocsRoot $script:docsRoot -WorkspaceRoot $script:workspace -Branch $script:branch -Format json) | ConvertFrom-Json)
-    $archiveResult.ArchivedCount | Should Be 2
-    (& $script:NormalizeTestPath $archiveResult.ArchiveDirectory) | Should Be (& $script:NormalizeTestPath $script:archiveDir)
+    $archiveResult.ArchivedCount | Should -Be 2
+    (& $script:NormalizeTestPath $archiveResult.ArchiveDirectory) | Should -Be (& $script:NormalizeTestPath $script:archiveDir)
 
     $restoreResult = ((& $script:scriptPaths.restore -TaskLabel 'chain-test' -DocsRoot $script:docsRoot -WorkspaceRoot $script:workspace -Branch $script:branch -Format json) | ConvertFrom-Json)
-    $restoreResult.RestoredCount | Should Be 2
-    Test-Path -LiteralPath $older | Should Be $true
-    Test-Path -LiteralPath $latest | Should Be $true
+    $restoreResult.RestoredCount | Should -Be 2
+    Test-Path -LiteralPath $older | Should -Be $true
+    Test-Path -LiteralPath $latest | Should -Be $true
 
     $restoredPrevious = & $script:GetHandoverMetadataLineValue -Path $latest -Label 'Previous handover'
-    (& $script:NormalizeTestPath $restoredPrevious) | Should Be (& $script:NormalizeTestPath $older)
+    (& $script:NormalizeTestPath $restoredPrevious) | Should -Be (& $script:NormalizeTestPath $older)
   }
 
   It "archive rollback removes written archive copies when validation fails" {
@@ -250,7 +247,7 @@ Describe "Cypress handover package" {
 
     if (-not $failedAsExpected) { throw "Expected repair to fail" }
     $currentPrevious = & $script:GetHandoverMetadataLineValue -Path $latest -Label 'Previous handover'
-    (& $script:NormalizeTestPath $currentPrevious) | Should Be (& $script:NormalizeTestPath $originalPrevious)
+    (& $script:NormalizeTestPath $currentPrevious) | Should -Be (& $script:NormalizeTestPath $originalPrevious)
   }
 
   It "resolve conflict does not delete either location when kept files fail validation" {

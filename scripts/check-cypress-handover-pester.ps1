@@ -16,6 +16,12 @@ $module = Get-Module -ListAvailable Pester | Sort-Object Version -Descending | S
 if ($null -eq $module) {
   throw "check-cypress-handover-pester failed: Pester module not found"
 }
+# The suite uses the dashed Should syntax (Should -Be), which Pester 3 does not know. Windows
+# PowerShell ships Pester 3.4.0, so say how to get a current Pester instead of failing test by test.
+if ($module.Version.Major -lt 4) {
+  throw ("check-cypress-handover-pester failed: Pester $($module.Version) is too old (the suite needs Pester 5, as in CI). " +
+         "Install it with: Install-Module Pester -MinimumVersion 5.0.0 -Scope CurrentUser -Force -SkipPublisherCheck")
+}
 
 Import-Module $module.Path -Force | Out-Null
 
