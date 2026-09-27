@@ -17,11 +17,6 @@ metadata:
 
 ---
 
-## Telemetry & Logging
-> [!IMPORTANT]
-> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
-> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --model <model_name> --reason <reason>` (or `./log-dispatch.sh` on Linux)
-
 # Cypress Skill Pack
 
 > **Author:** jovd83 | **Version:** 1.2.1
@@ -43,14 +38,9 @@ Do not load every guide by default. Read only the subskill and reference files t
 - Do not treat this repository as shared-memory infrastructure. If durable cross-agent knowledge is needed beyond one repo or skill, integrate an external shared-memory skill instead of storing it here implicitly.
 - Do not silently promote runtime notes into persistent artifacts. Persistent outputs should be deliberate, named, and stored in a documented workflow such as `coverage_plan/` or `documentation/`.
 
-## Dispatcher Integration
+## Working With Other Skills
 
-Use `skill-dispatcher` as the primary integration layer whenever this package needs help from another skill or when a broader orchestrator is deciding whether Cypress is the right execution layer.
-
-- Prefer dispatcher-led routing by intent, especially for tasks such as `implement_ui_confirmation_test`, `render_test_artifact`, and `review_automation_quality`.
 - Prefer the repository's native browser automation stack over Cypress when repo evidence points elsewhere.
-- Treat direct paths to sibling skills as a compatibility fallback, not as the primary routing contract.
-- Keep shared-memory usage limited to stable cross-project policy supplied externally, never task-local routing state.
 
 ## Routing Map
 
