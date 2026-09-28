@@ -1,6 +1,6 @@
 ---
 name: cypress-installer-vscode-codex
-description: Editor-setup skill for Cypress plus OpenAI Codex in Visual Studio Code. Use when Codex needs to help configure a practical VS Code environment for Cypress authoring, execution, debugging, and local skill usage.
+description: Editor-setup skill for Cypress plus OpenAI Codex in Visual Studio Code. Use when the agent needs to help configure a practical VS Code environment for Cypress authoring, execution, debugging, and local skill usage.
 metadata:
   author: jovd83
   version: '1.1'

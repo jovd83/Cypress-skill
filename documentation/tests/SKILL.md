@@ -1,6 +1,6 @@
 ---
 name: cypress-documentation-tests
-description: Automation-code documentation skill for Cypress suites. Use when Codex needs to add or improve human-readable comments, docblocks, or file-level explanations around existing Cypress tests without drowning the code in redundant commentary.
+description: Automation-code documentation skill for Cypress suites. Use when the agent needs to add or improve human-readable comments, docblocks, or file-level explanations around existing Cypress tests without drowning the code in redundant commentary.
 metadata:
   author: jovd83
   version: '1.1'

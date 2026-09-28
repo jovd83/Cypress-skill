@@ -1,6 +1,6 @@
 ---
 name: cypress-analysis-requirements
-description: Requirements-analysis skill for Cypress planning and implementation. Use when Codex needs to extract testable behaviors, acceptance criteria, risks, dependencies, or open questions from tickets, specs, markdown docs, or other requirement sources before writing tests or coverage plans.
+description: Requirements-analysis skill for Cypress planning and implementation. Use when the agent needs to extract testable behaviors, acceptance criteria, risks, dependencies, or open questions from tickets, specs, markdown docs, or other requirement sources before writing tests or coverage plans.
 metadata:
   author: jovd83
   version: '1.1'

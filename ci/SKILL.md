@@ -1,6 +1,6 @@
 ---
 name: cypress-ci
-description: CI and delivery skill for Cypress automation. Use when Codex needs to design, debug, or optimize Cypress execution in GitHub Actions, GitLab CI, CircleCI, Azure DevOps, Jenkins, Docker, sharded pipelines, artifact workflows, or shared setup and teardown.
+description: CI and delivery skill for Cypress automation. Use when the agent needs to design, debug, or optimize Cypress execution in GitHub Actions, GitLab CI, CircleCI, Azure DevOps, Jenkins, Docker, sharded pipelines, artifact workflows, or shared setup and teardown.
 metadata:
   author: jovd83
   version: '1.1'

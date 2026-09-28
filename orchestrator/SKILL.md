@@ -1,6 +1,6 @@
 ---
 name: cypress-orchestrator
-description: Central entrypoint for broad or ambiguous Cypress requests. Use when Codex needs to classify the user's testing goal, choose the right Cypress subskill, and move from intent to implementation, planning, documentation, execution, or reporting without unnecessary menu-driven back-and-forth.
+description: Central entrypoint for broad or ambiguous Cypress requests. Use when the agent needs to classify the user's testing goal, choose the right Cypress subskill, and move from intent to implementation, planning, documentation, execution, or reporting without unnecessary menu-driven back-and-forth.
 metadata:
   author: jovd83
   version: '1.1'

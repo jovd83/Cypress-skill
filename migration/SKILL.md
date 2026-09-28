@@ -1,6 +1,6 @@
 ---
 name: cypress-migration
-description: Migration skill for moving existing UI automation to Cypress. Use when Codex needs to translate Playwright or Selenium/WebDriver patterns, plan incremental migration, preserve coverage during framework change, or explain architectural differences that affect the suite design.
+description: Migration skill for moving existing UI automation to Cypress. Use when the agent needs to translate Playwright or Selenium/WebDriver patterns, plan incremental migration, preserve coverage during framework change, or explain architectural differences that affect the suite design.
 metadata:
   author: jovd83
   version: '1.1'
