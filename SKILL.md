@@ -35,7 +35,7 @@ Do not load every guide by default. Read only the subskill and reference files t
 ## Boundaries
 
 - Do not duplicate deep implementation guidance that already lives in a focused subskill.
-- Do not treat this repository as shared-memory infrastructure. If durable cross-agent knowledge is needed beyond one repo or skill, integrate an external shared-memory skill instead of storing it here implicitly.
+- Do not treat this repository as shared-memory infrastructure. If durable cross-agent knowledge is needed beyond one repo or skill, keep it in the agent's own memory (for example CLAUDE.md or AGENTS.md) instead of storing it here implicitly.
 - Do not silently promote runtime notes into persistent artifacts. Persistent outputs should be deliberate, named, and stored in a documented workflow such as `coverage_plan/` or `documentation/`.
 
 ## Working With Other Skills
